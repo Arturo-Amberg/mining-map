@@ -313,14 +313,17 @@ elif ANCHOR_JS in new_html:
 else:
     print("WARNING: JS anchor not found")
 
-# ── Patch onFcMineChange ──────────────────────────────────────────────────────
-OLD_CALL = "  buildFcBestChart(d, mk);"
-NEW_CALL = "  buildReservasPanel(mk, d);\n  buildFcBestChart(d, mk);"
-if NEW_CALL not in new_html:
+# ── Patch onFcMineChange (busca la cadena exacta dentro de esa función) ───────
+# Usa la línea que sigue como ancla para no aterrizar en otra función
+OLD_CALL = "  buildFcBestChart(d, mk);\n  buildFcCompare(d);\n  if(fcSections.ann)"
+NEW_CALL = "  buildReservasPanel(mk, d);\n  buildFcBestChart(d, mk);\n  buildFcCompare(d);\n  if(fcSections.ann)"
+if NEW_CALL in new_html:
+    print("onFcMineChange already patched — skipped")
+elif OLD_CALL in new_html:
     new_html = new_html.replace(OLD_CALL, NEW_CALL, 1)
     print("Patched onFcMineChange ✓")
 else:
-    print("onFcMineChange already patched — skipped")
+    print("WARNING: onFcMineChange anchor not found")
 
 # ── Panel HTML (idempotente) ──────────────────────────────────────────────────
 RESERVES_PANEL = """
