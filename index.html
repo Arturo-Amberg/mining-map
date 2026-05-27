@@ -11,60 +11,121 @@
 *{box-sizing:border-box;margin:0;padding:0}
 
 /* ═══════════════════════════════════════════════════════
-   VOLCANIC GRAPHITE THEME — warm ash-black, molten amber
+   IPHONE WHITE THEME — Clean, High-Contrast Light Mode
    ═══════════════════════════════════════════════════════ */
-:root{
-  /* Warm volcanic blacks — obsidian, basalt, ash */
-  --bg:#0e0c0a;--bg2:#1b1814;--bg3:#2e2b27;--bg4:#47423d;
-  /* Accents */
-  --accent:#f59e0b;--accent2:#c2956b;
+:root {
+  /* System Backgrounds */
+  --bg: oklch(100% 0 0);           /* Pure White */
+  --bg2: oklch(98% 0.005 250);     /* System Gray 6 (Soft Silver) */
+  --bg3: oklch(94% 0.01 250);      /* System Gray 5 (Dividers) */
+  --bg4: oklch(88% 0.015 250);     /* System Gray 4 (Borders) */
+  
+  /* iOS Blue & Accent */
+  --accent: oklch(58% 0.2 250);    /* Classic iOS Blue */
+  --accent2: oklch(45% 0.18 250);  /* Deep Navy */
+  
   /* Status */
-  --green:#4ade80;--red:#f87171;
-  /* Warm off-whites */
-  --text:#ede9e3;--text2:#9c9187;--text3:#635e58;
-  --sidebar:480px;
-  /* Extended tokens */
-  --amber-tint:rgba(245,158,11,0.07);
-  --amber-border:rgba(245,158,11,0.22);
-  --amber-glow:rgba(245,158,11,0.14);
+  --green: oklch(65% 0.25 150);    /* Vibrant Green */
+  --red: oklch(60% 0.25 25);       /* Alert Red */
+  
+  /* Typography (Charcoal) */
+  --text: oklch(20% 0.01 250);     /* Almost Black */
+  --text2: oklch(45% 0.02 250);    /* Dark Gray */
+  --text3: oklch(65% 0.03 250);    /* Medium Gray */
+  
+  --sidebar: 480px;
+  
+  /* Effects */
+  --amber-tint: oklch(58% 0.2 250 / 0.05);
+  --amber-border: oklch(58% 0.2 250 / 0.2);
+  --amber-glow: oklch(58% 0.2 250 / 0.1);
 }
 
-/* Grain noise overlay — very faint mineral texture on sidebar + panels */
-#sidebar::after,#opt-panel::after,#sigex-box::after{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:9999;
-  opacity:.028;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23g)'/%3E%3C/svg%3E");
-  background-size:200px 200px;
+/* Sidebar Tab Styles */
+.sidebar-tabs {
+  display: flex;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--bg4);
+  padding: 0 16px;
+  gap: 20px;
+  flex-shrink: 0;
 }
 
-html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;
-          background:var(--bg);color:var(--text);font-size:13px}
+.sidebar-tab {
+  padding: 14px 2px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text3);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-tab:hover {
+  color: var(--text2);
+}
+
+.sidebar-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.tab-content {
+  display: none;
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Layer Grouping Styles */
+.layer-group {
+  margin-bottom: 8px;
+}
+.layer-group-title {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 4px 12px;
+  background: oklch(100% 0 0 / 0.03);
+}
+
+/* Remove dark noise for light theme */
+#sidebar::after,#opt-panel::after,#sigex-box::after{ display: none; }
+
+html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;
+          background:var(--bg);color:var(--text);font-size:13px; -webkit-font-smoothing: antialiased;}
 #app{display:flex;height:100vh}
 #sidebar{width:var(--sidebar);min-width:var(--sidebar);height:100%;
-         background:
-           repeating-linear-gradient(180deg,transparent 0px,transparent 56px,
-             rgba(255,255,255,0.007) 56px,rgba(255,255,255,0.007) 57px),
-           var(--bg2);
+         background:var(--bg2);
          display:flex;flex-direction:column;position:relative;
-         border-right:1px solid rgba(71,66,61,0.8);overflow:hidden;z-index:1000}
+         border-right:1px solid var(--bg4);overflow:hidden;z-index:1000}
 #map{flex:1;height:100%}
 /* SIGEX FILTER BOX */
-#sigex-box{display:none;position:absolute;top:8px;right:8px;z-index:1100;
-           background:var(--bg2);border:1px solid rgba(71,66,61,0.7);border-radius:8px;
-           padding:10px 12px;width:220px;font-size:11px;position:relative;overflow:hidden;
-           box-shadow:0 4px 20px rgba(0,0,0,.55)}
+#sigex-box{display:none;position:absolute;top:12px;right:12px;z-index:1100;
+           background:var(--bg);border:1px solid var(--bg4);border-radius:12px;
+           padding:12px 16px;width:240px;font-size:11px;
+           box-shadow:0 8px 32px rgba(0,0,0,0.12); backdrop-filter: blur(10px);}
 #sigex-box.open{display:block}
-.sf-section{margin-bottom:8px}
+.sf-section{margin-bottom:12px}
 .sf-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;
-          letter-spacing:.05em;margin-bottom:4px}
-.sf-pills{display:flex;flex-wrap:wrap;gap:3px}
-.sf-pill{font-size:10px;padding:2px 7px;border-radius:10px;border:1px solid var(--bg4);
-         background:var(--bg3);color:var(--text3);cursor:pointer;transition:all .15s;white-space:nowrap}
-.sf-pill.on{border-color:var(--accent);color:var(--accent);background:var(--amber-tint)}
-.sf-select{width:100%;background:var(--bg3);border:1px solid var(--bg4);
-           color:var(--text);border-radius:5px;padding:3px 6px;font-size:11px}
-#sigex-count{font-size:10px;color:var(--text3);margin-top:6px;padding-top:6px;
-             border-top:1px solid rgba(71,66,61,0.5)}
+          letter-spacing:.05em;margin-bottom:6px}
+.sf-pills{display:flex;flex-wrap:wrap;gap:4px}
+.sf-pill{font-size:10px;padding:4px 10px;border-radius:12px;border:1px solid var(--bg4);
+         background:var(--bg);color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap}
+.sf-pill.on{border-color:var(--accent);color:var(--accent);background:var(--amber-tint);font-weight:600}
+.sf-select{width:100%;background:var(--bg);border:1px solid var(--bg4);
+           color:var(--text);border-radius:8px;padding:5px 8px;font-size:11px; outline:none;}
+#sigex-count{font-size:10px;color:var(--text3);margin-top:8px;padding-top:8px;
+             border-top:1px solid var(--bg3)}
 
 /* FORECAST COLUMN */
 #fc-tab{width:14px;flex-shrink:0;height:100%;background:var(--bg3);
@@ -76,98 +137,112 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-seri
 #forecast-col{width:0;overflow:hidden;transition:width .3s ease;background:var(--bg2);
               border-right:1px solid rgba(71,66,61,0.6);flex-shrink:0;height:100%;
               display:flex;flex-direction:column}
-#forecast-col.open{width:390px}
-#fc-inner{width:390px;height:100%;overflow-y:auto;padding:12px 14px;
-          scrollbar-width:thin;scrollbar-color:var(--bg4) transparent}
+#forecast-col.open{width:400px}
+#fc-inner{padding:20px;height:100%;overflow-y:auto}
 
 
 /* HEADER */
-#s-header{padding:12px 14px 8px;
-          /* Amber glow line at bottom — like ore seam */
-          border-bottom:none;
-          box-shadow:0 1px 0 var(--amber-border),0 2px 10px rgba(0,0,0,.5);
-          background:var(--bg);flex-shrink:0}
-#s-title{font-size:15px;font-weight:600;letter-spacing:-.01em;
-         color:var(--accent);margin-bottom:8px}
-#s-title span{color:var(--text);font-weight:400;letter-spacing:.01em}
-.year-row{display:flex;align-items:center;gap:8px}
-.year-label{font-size:11px;color:var(--text2)}
-#year-val{font-size:15px;font-weight:700;color:var(--accent);min-width:38px;
+/* TOP ACCENT BAR */
+#top-accent{height:4px;background:linear-gradient(90deg,var(--accent),var(--accent2));position:fixed;top:0;left:0;right:0;z-index:9999}
+
+#s-header{padding:28px 24px 20px;
+          border-bottom:1px solid var(--bg4);
+          background:var(--bg);flex-shrink:0; position:relative;}
+#s-header::after{content:'v3.1 Light';position:absolute;top:10px;right:14px;font-size:8px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+#s-title{font-size:20px;font-weight:800;letter-spacing:-.03em;
+         color:var(--text);margin-bottom:12px}
+#s-title span{color:var(--accent);font-weight:400; opacity:0.8;}
+.year-row{display:flex;align-items:center;gap:12px}
+.year-label{font-size:12px;color:var(--text3); font-weight: 500;}
+#year-val{font-size:16px;font-weight:700;color:var(--accent);min-width:40px;
           font-variant-numeric:tabular-nums}
 #year-slider{flex:1;accent-color:var(--accent);cursor:pointer}
 
 /* LAYER BUTTONS */
-#layer-controls{display:flex;flex-wrap:wrap;gap:5px;padding:8px 12px;
-                border-bottom:1px solid rgba(71,66,61,0.5);
-                background:rgba(0,0,0,0.18);flex-shrink:0}
-.layer-btn{display:flex;align-items:center;gap:5px;padding:4px 9px;
-           border-radius:20px;border:1px solid rgba(71,66,61,0.7);cursor:pointer;
-           font-size:11px;background:var(--bg3);color:var(--text3);
-           transition:all .15s ease;user-select:none;white-space:nowrap}
-.layer-btn:hover{background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.28);
-                 color:var(--text2)}
-.layer-btn.active{border-color:rgba(245,158,11,0.48);color:var(--accent);
-                  background:rgba(245,158,11,0.09);
-                  box-shadow:inset 0 0 14px rgba(245,158,11,0.06);
-                  text-shadow:0 0 8px rgba(245,158,11,0.3)}
+#layer-controls{display:flex;flex-wrap:wrap;gap:5px;padding:12px 16px;
+                border-bottom:1px solid var(--bg4);
+                background:var(--bg);flex-shrink:0}
+.layer-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;
+           border-radius:18px;border:1px solid var(--bg4);cursor:pointer;
+           font-size:11px;background:var(--bg);color:var(--text2);
+           transition:all .2s cubic-bezier(0.4, 0, 0.2, 1);user-select:none;white-space:nowrap;
+           box-shadow: 0 1px 2px rgba(0,0,0,0.03);}
+.layer-btn:hover{background:var(--bg2);border-color:var(--bg4);color:var(--text)}
+.layer-btn.active{border-color:var(--accent);color:var(--accent);
+                  background:var(--amber-tint); font-weight: 600;
+                  box-shadow: 0 2px 8px var(--amber-border);}
 .layer-btn .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
 /* SEARCH */
-#search-wrap{padding:7px 12px;border-bottom:1px solid rgba(71,66,61,0.45);
-             background:rgba(0,0,0,0.12);flex-shrink:0}
-#search-input{width:100%;background:var(--bg3);border:1px solid var(--bg4);
-              color:var(--text);border-radius:6px;padding:5px 10px;font-size:12px;
-              outline:none;transition:border-color .15s,box-shadow .15s}
+#search-wrap{padding:12px 16px;border-bottom:1px solid var(--bg4);
+             background:var(--bg2);flex-shrink:0}
+#search-input{width:100%;background:var(--bg);border:1px solid var(--bg4);
+              color:var(--text);border-radius:10px;padding:8px 12px;font-size:13px;
+              outline:none; transition: all 0.2s;}
 #search-input::placeholder{color:var(--text3)}
-#search-input:focus{border-color:var(--accent);
-                    box-shadow:0 0 0 3px var(--amber-glow),0 0 12px rgba(245,158,11,.06)}
+#search-input:focus{border-color:var(--accent); box-shadow: 0 0 0 3px var(--amber-border);}
 
 /* BODY */
 #s-body{flex:1;overflow-y:auto;scrollbar-width:thin;
         scrollbar-color:var(--bg3) transparent}
 /* Warm scrollbars throughout */
 *{scrollbar-width:thin;scrollbar-color:var(--bg4) transparent}
-#s-body::-webkit-scrollbar{width:4px}
+#s-body::-webkit-scrollbar{width:6px}
 #s-body::-webkit-scrollbar-track{background:transparent}
-#s-body::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
-#s-body::-webkit-scrollbar-thumb:hover{background:rgba(100,95,89,0.7)}
+#s-body::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:10px;border:2px solid var(--bg2)}
+#s-body::-webkit-scrollbar-thumb:hover{background:var(--text3)}
 
 /* CLUSTER LIST */
-#cluster-list{padding:8px 10px}
-.cl-item{display:flex;align-items:center;gap:10px;padding:9px 10px;
-         border-radius:8px;cursor:pointer;transition:background .15s;
-         margin-bottom:3px;border-left:3px solid transparent}
+#cluster-list{padding:12px 12px}
+.cl-item{display:flex;align-items:center;gap:12px;padding:12px;
+         border-radius:12px;cursor:pointer;transition:all .2s;
+         margin-bottom:4px;border:1px solid transparent;}
 .cl-item:hover{background:var(--bg3)}
-.cl-item.selected{background:var(--amber-tint);border-left-color:var(--accent);
-                  box-shadow:inset 0 0 24px rgba(245,158,11,0.04)}
-.cl-dot{width:13px;height:13px;border-radius:3px;flex-shrink:0}
-.cl-mine{font-size:12px;font-weight:700;line-height:1.2;color:var(--text)}
-.cl-sub{font-size:10px;color:var(--text3);margin-top:1px}
-.cl-right{text-align:right;font-size:10px;color:var(--text2);flex-shrink:0}
+.cl-item.selected{background:var(--bg);border-color:var(--accent);
+                  box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+.cl-dot{width:14px;height:14px;border-radius:4px;flex-shrink:0}
+.cl-mine{font-size:13px;font-weight:600;line-height:1.2;color:var(--text)}
+.cl-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.cl-right{text-align:right;font-size:11px;color:var(--text2);flex-shrink:0}
 
 /* CLUSTER DETAIL */
 #cluster-detail{display:none;padding:12px 14px}
-#back-btn{display:flex;align-items:center;gap:6px;cursor:pointer;
-          color:var(--accent2);font-size:12px;margin-bottom:12px;
-          background:none;border:none;padding:0;transition:color .12s}
-#back-btn:hover{color:var(--accent);text-decoration:none}
+#back-btn{display:flex;align-items:center;gap:8px;cursor:pointer;
+          color:var(--accent);font-size:13px;margin-bottom:20px;
+          background:var(--amber-tint);border:1px solid var(--amber-border);
+          padding:8px 16px;border-radius:20px;font-weight:600;
+          transition:all .2s cubic-bezier(0.4, 0, 0.2, 1); width:fit-content;}
+#back-btn:hover{background:var(--accent); color:white; transform:translateX(-2px); border-color:var(--accent);}
 .det-id{font-size:20px;font-weight:800;letter-spacing:-.02em;color:var(--accent)}
 .det-region{font-size:11px;color:var(--text2);margin-top:2px}
 .det-mine{font-size:12px;color:var(--accent2);margin-top:4px;font-style:italic}
 
 /* KPI */
-.kpi-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:12px 0}
-.kpi{background:var(--bg);border:1px solid rgba(71,66,61,0.5);border-radius:8px;
-     padding:9px;text-align:center;
-     box-shadow:inset 0 1px 0 rgba(255,255,255,0.03),0 2px 6px rgba(0,0,0,.3)}
-.kpi-val{font-size:17px;font-weight:700;color:var(--accent);
-         font-variant-numeric:tabular-nums}
-.kpi-lbl{font-size:9px;color:var(--text3);margin-top:2px;text-transform:uppercase;
-         letter-spacing:.5px}
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 20px}
+.kpi-row.compact{grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 20px}
+.kpi{background:var(--bg);border:1px solid var(--bg4);border-radius:14px;
+     padding:12px 8px;text-align:center;position:relative;
+     box-shadow:0 2px 8px rgba(0,0,0,0.04);transition:all .2s ease}
+.kpi:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+.kpi-val{font-size:19px;font-weight:700;color:var(--accent);
+         font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi-lbl{font-size:9px;color:var(--text3);margin-top:6px;text-transform:uppercase;
+         letter-spacing:.05em;font-weight:600}
 
 /* SECTION TITLE */
-.sec{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;
-     letter-spacing:.7px;margin:13px 0 7px;display:flex;align-items:center;gap:6px}
+.sec{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;
+     letter-spacing:.05em;margin:24px 20px 12px;display:flex;align-items:center;gap:10px;
+     padding-bottom:8px;border-bottom:1px solid var(--bg3)}
+.sec::before{content:'';width:4px;height:4px;background:var(--accent);border-radius:50%}
+
+/* COLLAPSIBLE */
+details.sec-wrap summary{list-style:none;cursor:pointer;outline:none}
+details.sec-wrap summary::-webkit-details-marker{display:none}
+details.sec-wrap[open] summary{margin-bottom:0}
+details.sec-wrap .sec{margin-top:10px;cursor:pointer;transition:color .2s}
+details.sec-wrap .sec:hover{color:var(--text)}
+details.sec-wrap .sec-arrow{margin-left:auto;font-size:12px;transition:transform .2s;color:var(--accent)}
+details.sec-wrap[open] .sec-arrow{transform:rotate(90deg)}
 
 /* CHART */
 .chart-wrap{background:var(--bg);border:1px solid rgba(71,66,61,0.4);
@@ -262,20 +337,26 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-seri
               font-size:9px;padding:1px 5px;border-radius:10px;
               font-weight:700;margin-left:5px;vertical-align:middle}
 
-/* LEAFLET */
-.leaflet-container{background:#0b0906 !important}
+/* LEAFLET OVERRIDES */
+.leaflet-container{background:var(--bg2) !important}
+.leaflet-bar{border:none !important; box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;}
+.leaflet-bar a{background:var(--bg) !important; color:var(--text2) !important; border:1px solid var(--bg4) !important;}
+.leaflet-bar a:first-child{border-radius:12px 12px 0 0 !important;}
+.leaflet-bar a:last-child{border-radius:0 0 12px 12px !important;}
+.leaflet-control-layers{border:none !important; border-radius:12px !important; box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;}
+.leaflet-control-attribution{background:rgba(255,255,255,0.7) !important; color:var(--text3) !important; font-size:10px !important;}
+
 .cluster-tooltip,.faena-tooltip{
-  background:var(--bg2);color:var(--text);
-  border:1px solid rgba(71,66,61,0.7);border-top:1px solid var(--amber-border);
-  border-radius:6px;font-size:12px;padding:4px 8px;
-  box-shadow:0 4px 16px rgba(0,0,0,.65),0 1px 0 var(--amber-glow) inset}
-.infra-marker{width:25px;height:25px;border-radius:50%;display:flex;
-              align-items:center;justify-content:center;font-size:12px;
-              border:2px solid rgba(255,255,255,.15);cursor:pointer}
-.i-sub{background:#7c2d12} .i-cen{background:#7f1d1d}
-.i-des{background:#1e3a8a} .i-des-mining{background:#1e40af;border-color:var(--accent2);border-width:2.5px}
-.i-rel{background:#3d1708} .i-seia-ec{background:#7c2d12}
-.i-seia-ap{background:#14532d} .i-est{background:#1e1b4b}
+  background:var(--bg);color:var(--text);
+  border:1px solid var(--bg4);border-radius:12px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.1); font-weight:600; padding:8px 12px;}
+.infra-marker{width:28px;height:28px;border-radius:50%;display:flex;
+              align-items:center;justify-content:center;font-size:14px;
+              border:2px solid var(--bg);cursor:pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);}
+.i-sub{background:var(--accent)} .i-cen{background:oklch(60% 0.2 25)}
+.i-des{background:oklch(60% 0.2 230)} .i-des-mining{background:oklch(50% 0.2 250);border-color:var(--accent);border-width:2.5px}
+.i-rel{background:oklch(40% 0.05 45)} .i-seia-ec{background:oklch(70% 0.2 70)}
+.i-seia-ap{background:var(--green)} .i-est{background:oklch(40% 0.1 280)}
 .leaflet-div-icon{background:transparent;border:none}
 
 /* TOOLTIP */
@@ -297,68 +378,69 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-seri
 .rank-badge{display:inline-flex;align-items:center;justify-content:center;
             width:20px;height:20px;border-radius:4px;font-size:9px;font-weight:700;
             background:var(--bg3);color:var(--text3);flex-shrink:0}
-.rank-badge.top3{background:rgba(245,158,11,0.15);color:var(--accent);
-                 border:1px solid rgba(245,158,11,0.3)}
-.yoy{font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;white-space:nowrap;margin-left:3px}
-.yoy-pos{background:rgba(74,222,128,0.12);color:#4ade80}
-.yoy-neg{background:rgba(248,113,113,0.12);color:#f87171}
-.yoy-neu{background:var(--bg3);color:var(--text3)}
+.rank-badge.top3{background:var(--amber-tint);color:var(--accent);
+                 border:1px solid var(--amber-border)}
+.yoy{font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;white-space:nowrap;margin-left:4px}
+.yoy-pos{background:oklch(90% 0.15 150 / 0.1);color:oklch(50% 0.2 150)}
+.yoy-neg{background:oklch(90% 0.15 25 / 0.1);color:oklch(50% 0.2 25)}
+.yoy-neu{background:var(--bg3);color:var(--text2)}
 
 /* NATIONAL TOTAL BAR */
-#nat-total{font-size:10px;color:var(--text2);margin-top:6px;padding-top:6px;
-           border-top:1px solid rgba(71,66,61,0.45);display:flex;align-items:center;
+#nat-total{font-size:11px;color:var(--text2);margin-top:8px;padding-top:8px;
+           border-top:1px solid var(--bg3);display:flex;align-items:center;
            justify-content:space-between;flex-wrap:wrap;gap:4px}
-#nat-total b{color:var(--accent)}
+#nat-total b{color:var(--accent); font-weight: 700;}
 
 /* TREND / LIFECYCLE BADGE */
-.trend-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;
-             border-radius:12px;font-size:10px;font-weight:700}
-.trend-up  {background:rgba(74,222,128,0.1);color:#4ade80}
-.trend-flat{background:rgba(245,158,11,0.1);color:#f59e0b}
-.trend-down{background:rgba(239,68,68,0.12);color:#ef4444}
+.trend-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;
+             border-radius:20px;font-size:10px;font-weight:700}
+.trend-up  {background:oklch(90% 0.15 150 / 0.1);color:oklch(50% 0.2 150)}
+.trend-flat{background:oklch(90% 0.15 70 / 0.1);color:oklch(50% 0.2 70)}
+.trend-down{background:oklch(90% 0.15 25 / 0.1);color:oklch(50% 0.2 25)}
 .trend-nd  {background:var(--bg3);color:var(--text3)}
 
 /* SPARKLINE inline SVG wrapper */
-.sparkline-wrap{display:flex;justify-content:flex-end;margin:3px 0 2px}
+.sparkline-wrap{display:flex;justify-content:flex-end;margin:4px 0}
 
 /* RISK PANEL */
-.risk-badge{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;
-            border-radius:10px;font-size:9px;font-weight:700;white-space:nowrap}
-.risk-hi{background:rgba(239,68,68,0.18);color:#ef4444;border:1px solid rgba(239,68,68,0.3)}
-.risk-md{background:rgba(245,158,11,0.18);color:#f59e0b;border:1px solid rgba(245,158,11,0.3)}
-.risk-lo{background:rgba(34,197,94,0.18);color:#22c55e;border:1px solid rgba(34,197,94,0.3)}
+.risk-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;
+            border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap}
+.risk-hi{background:oklch(90% 0.15 25 / 0.1);color:oklch(50% 0.2 25);border:1px solid oklch(50% 0.2 25 / 0.2)}
+.risk-md{background:oklch(90% 0.15 70 / 0.1);color:oklch(50% 0.2 70);border:1px solid oklch(50% 0.2 70 / 0.2)}
+.risk-lo{background:oklch(90% 0.15 150 / 0.1);color:oklch(50% 0.2 150);border:1px solid oklch(50% 0.2 150 / 0.2)}
 .risk-na{background:var(--bg3);color:var(--text3)}
-.mine-risk-row{display:flex;flex-direction:column;gap:4px;padding:7px 9px;
-              background:var(--bg);border-radius:7px;margin-bottom:4px;
-              border-left:3px solid transparent}
-.mine-risk-row.danger{border-left-color:#ef4444}
-.mine-risk-row.alert{border-left-color:#f59e0b}
-.mine-risk-row.ok{border-left-color:#22c55e}
-.mine-risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:10px;color:var(--text2)}
+.mine-risk-row{display:flex;flex-direction:column;gap:6px;padding:12px;
+              background:var(--bg);border-radius:12px;margin-bottom:6px;
+              border:1px solid var(--bg4); border-left-width: 4px;}
+.mine-risk-row.danger{border-left-color:oklch(50% 0.2 25)}
+.mine-risk-row.alert{border-left-color:oklch(50% 0.2 70)}
+.mine-risk-row.ok{border-left-color:oklch(50% 0.2 150)}
+.mine-risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:11px;color:var(--text2)}
 /* PORT MARKER */
 .i-pue{background:#0c4a6e}
 
 /* SCENARIO TOGGLE */
-.sc-btn{background:var(--bg3);border:1px solid var(--bg4);color:var(--text3);
-        border-radius:4px;padding:2px 6px;font-size:9px;cursor:pointer;transition:all .15s}
-.sc-btn.active{background:rgba(56,189,248,0.15);border-color:#38bdf8;color:#38bdf8;font-weight:700}
+.sc-btn{background:var(--bg);border:1px solid var(--bg4);color:var(--text3);
+        border-radius:12px;padding:3px 10px;font-size:10px;cursor:pointer;transition:all .2s;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.02);}
+.sc-btn.active{background:var(--amber-tint);border-color:var(--accent);color:var(--accent);font-weight:700}
 /* CIUDAD LAYER */
 .i-pob{background:#581c87;border-color:#e879f9;border-width:2px}
 
 /* ── OPT CLUSTER DETAIL (left sidebar) ──────────────────────────────────── */
-#opt-cluster-section{border-top:1px solid var(--amber-border);margin-top:12px;padding-top:4px}
-.opt-score-table{width:100%;border-collapse:separate;border-spacing:0 3px;margin-bottom:8px}
-.opt-score-row{cursor:default;border-radius:6px}
-.opt-score-row td{padding:5px 7px;vertical-align:middle}
-.opt-score-row td:first-child{border-radius:6px 0 0 6px;padding-left:9px}
-.opt-score-row td:last-child{border-radius:0 6px 6px 0;padding-right:9px}
-.opt-score-row:hover td{background:var(--bg3)}
-.opt-mid{font-size:11px;font-weight:800;font-family:monospace}
-.opt-mname{font-size:10px;color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.opt-bar-wrap{width:60px}
-.opt-bar-bg{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
-.opt-bar-fill{height:100%;border-radius:2px;transition:width .35s}
-.opt-pct{font-size:10px;font-weight:700;font-family:monospace;text-align:right;white-space:nowrap;min-width:40px}
+#opt-cluster-section{border-top:1px solid var(--bg4);margin-top:20px;padding-top:12px}
+.opt-score-table{width:100%;border-collapse:separate;border-spacing:0 4px;margin-bottom:12px}
+.opt-score-row{cursor:default;border-radius:10px; border:1px solid transparent; transition: all 0.2s;}
+.opt-score-row td{padding:8px 12px;vertical-align:middle}
+.opt-score-row td:first-child{border-radius:10px 0 0 10px;}
+.opt-score-row td:last-child{border-radius:0 10px 10px 0;}
+.opt-score-row:hover td{background:var(--bg2)}
+.opt-mid{font-size:12px;font-weight:700;color:var(--text)}
+.opt-mname{font-size:11px;color:var(--text2);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.opt-bar-wrap{width:70px}
+.opt-bar-bg{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.opt-bar-fill{height:100%;border-radius:3px;transition:width .35s}
+.opt-pct{font-size:11px;font-weight:700;text-align:right;white-space:nowrap;min-width:45px; color:var(--accent2)}
 .opt-m-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;vertical-align:middle;flex-shrink:0}
 .opt-conv-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
 .opt-conv-bar{flex:1;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden}
@@ -411,15 +493,16 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-seri
 .op-sc-val{font-size:10px;font-weight:700;width:38px;text-align:right;
   flex-shrink:0;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
 /* Validation bar */
-.op-val{padding:7px 14px 9px;border-top:1px solid rgba(255,255,255,.05);
-  display:flex;gap:6px;flex-wrap:wrap}
-.op-pill{font-size:9px;font-weight:700;padding:2px 8px;border-radius:9px;
+.op-val{padding:10px 16px;border-top:1px solid var(--bg3);
+  display:flex;gap:8px;flex-wrap:wrap; background: var(--bg)}
+.op-pill{font-size:9px;font-weight:700;padding:3px 10px;border-radius:20px;
   letter-spacing:.03em;white-space:nowrap}
-.op-pill-g{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.22)}
-.op-pill-a{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.22)}
+.op-pill-g{background:oklch(90% 0.15 150 / 0.1);color:oklch(50% 0.2 150);border:1px solid oklch(50% 0.2 150 / 0.2)}
+.op-pill-a{background:var(--amber-tint);color:var(--accent);border:1px solid var(--amber-border)}
 </style>
 </head>
 <body>
+<div id="top-accent"></div>
 <div id="app">
 
 <!-- ══════════════════ SIDEBAR ══════════════════ -->
@@ -435,47 +518,70 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-seri
   </div>
 
   <div id="layer-controls">
-    <div class="layer-btn" id="btn-sub"   onclick="toggleLayer('sub')">
-      <div class="dot" style="background:#7c2d12"></div>⚡ Subestaciones
+    <div class="layer-group">
+      <div class="layer-group-title">Minas & Proyectos</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;padding:4px 12px">
+        <div class="layer-btn" id="btn-seia"  onclick="toggleLayer('seia')">
+          <div class="dot" style="background:#f59e0b"></div>⚙️ SIGEX Sondajes
+        </div>
+        <div class="layer-btn" id="btn-sigexotros" onclick="toggleLayer('sigexotros')">
+          <div class="dot" style="background:#94a3b8"></div>🔍 SIGEX Otros
+        </div>
+        <div class="layer-btn" id="btn-ruido" onclick="toggleLayer('ruido')">
+          <div class="dot" style="background:#6b7280"></div>📍 Sin Clúster
+        </div>
+        <div class="layer-btn" id="btn-opt" onclick="toggleLayer('opt')">
+          <div class="dot" style="background:#a78bfa"></div>🎯 Potencial M5
+        </div>
+      </div>
     </div>
-    <div class="layer-btn" id="btn-cen"   onclick="toggleLayer('cen')">
-      <div class="dot" style="background:#7f1d1d"></div>🏭 Centrales
+
+    <div class="layer-group">
+      <div class="layer-group-title">Infraestructura & Logística</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;padding:4px 12px">
+        <div class="layer-btn" id="btn-sub"   onclick="toggleLayer('sub')">
+          <div class="dot" style="background:#7c2d12"></div>⚡ Subestaciones
+        </div>
+        <div class="layer-btn" id="btn-cen"   onclick="toggleLayer('cen')">
+          <div class="dot" style="background:#7f1d1d"></div>🏭 Centrales
+        </div>
+        <div class="layer-btn" id="btn-pue"   onclick="toggleLayer('pue')">
+          <div class="dot" style="background:#0ea5e9"></div>⚓ Puertos
+        </div>
+        <div class="layer-btn" id="btn-train" onclick="toggleLayer('train')">
+          <div class="dot" style="background:#a78bfa"></div>🚂 Ferrocarriles
+        </div>
+      </div>
     </div>
-    <div class="layer-btn" id="btn-des"   onclick="toggleLayer('des')">
-      <div class="dot" style="background:#1e3a8a"></div>💧 Desaladoras
+
+    <div class="layer-group">
+      <div class="layer-group-title">Ambiental & Social</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;padding:4px 12px">
+        <div class="layer-btn" id="btn-des"   onclick="toggleLayer('des')">
+          <div class="dot" style="background:#1e3a8a"></div>💧 Desaladoras
+        </div>
+        <div class="layer-btn" id="btn-rel"   onclick="toggleLayer('rel')">
+          <div class="dot" style="background:#3d1708"></div>♻️ Relaves
+        </div>
+        <div class="layer-btn" id="btn-ap" onclick="toggleLayer('ap')">
+          <div class="dot" style="background:#16a34a"></div>🌿 Áreas Prot.
+        </div>
+        <div class="layer-btn" id="btn-pob"   onclick="toggleLayer('pob')">
+          <div class="dot" style="background:#e879f9"></div>🏘️ Ciudades
+        </div>
+      </div>
     </div>
-    <div class="layer-btn" id="btn-rel"   onclick="toggleLayer('rel')">
-      <div class="dot" style="background:#3d1708"></div>♻️ Relaves
-    </div>
-    <div class="layer-btn" id="btn-seia"  onclick="toggleLayer('seia')">
-      <div class="dot" style="background:#f59e0b"></div>⚙️ SIGEX Sondajes
-    </div>
-    <div class="layer-btn" id="btn-sigexotros" onclick="toggleLayer('sigexotros')">
-      <div class="dot" style="background:#94a3b8"></div>🔍 SIGEX Otros
-    </div>
-    <div class="layer-btn" id="btn-train" onclick="toggleLayer('train')">
-      <div class="dot" style="background:#a78bfa"></div>🚂 Ferrocarriles
-    </div>
-    <div class="layer-btn" id="btn-ruido" onclick="toggleLayer('ruido')">
-      <div class="dot" style="background:#6b7280"></div>📍 Sin Clúster
-    </div>
-    <div class="layer-btn" id="btn-ap" onclick="toggleLayer('ap')">
-      <div class="dot" style="background:#16a34a"></div>🌿 Áreas Prot.
-    </div>
-    <div class="layer-btn" id="btn-fibra" onclick="toggleLayer('fibra')">
-      <div class="dot" style="background:#f97316"></div>🔶 Fibra Óptica
-    </div>
-    <div class="layer-btn" id="btn-senal" onclick="toggleLayer('senal')">
-      <div class="dot" style="background:#a855f7"></div>📡 Señal Telef.
-    </div>
-    <div class="layer-btn" id="btn-pue"   onclick="toggleLayer('pue')">
-      <div class="dot" style="background:#0ea5e9"></div>⚓ Puertos
-    </div>
-    <div class="layer-btn" id="btn-pob"   onclick="toggleLayer('pob')">
-      <div class="dot" style="background:#e879f9"></div>🏘️ Ciudades
-    </div>
-    <div class="layer-btn" id="btn-opt" onclick="toggleLayer('opt')">
-      <div class="dot" style="background:#a78bfa"></div>🎯 Potencial M5
+
+    <div class="layer-group">
+      <div class="layer-group-title">Conectividad</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;padding:4px 12px">
+        <div class="layer-btn" id="btn-fibra" onclick="toggleLayer('fibra')">
+          <div class="dot" style="background:#f97316"></div>🔶 Fibra Óptica
+        </div>
+        <div class="layer-btn" id="btn-senal" onclick="toggleLayer('senal')">
+          <div class="dot" style="background:#a855f7"></div>📡 Señal Telef.
+        </div>
+      </div>
     </div>
   </div>
 
@@ -488,216 +594,149 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-seri
     <div id="cluster-list"></div>
 
     <div id="cluster-detail">
-      <button id="back-btn" onclick="deselectCluster()">← Volver a clústeres</button>
-
-      <div class="det-id"    id="det-id"></div>
-      <div class="det-region" id="det-label"></div>
-      <div class="det-mine"   id="det-mine"></div>
-      <div id="det-trend" style="margin-top:6px"></div>
-
-      <div class="kpi-row">
-        <div class="kpi"><div class="kpi-val" id="kpi-prod">—</div>
-             <div class="kpi-lbl">Producción (kTM)</div></div>
-        <div class="kpi"><div class="kpi-val" id="kpi-faenas">—</div>
-             <div class="kpi-lbl">Instalaciones</div></div>
-        <div class="kpi"><div class="kpi-val" id="kpi-water">—</div>
-             <div class="kpi-lbl">% del Pico Hist.</div></div>
-        <div class="kpi"><div class="kpi-val" id="kpi-elec">—</div>
-             <div class="kpi-lbl">CAGR 5 Años</div></div>
-        <div class="kpi"><div class="kpi-val" id="kpi-relaves">—</div>
-             <div class="kpi-lbl">Relaves Activos</div></div>
-        <div class="kpi"><div class="kpi-val" id="kpi-ren">—</div>
-             <div class="kpi-lbl">% Energía Renv.</div></div>
+      <div id="cluster-detail-header">
+        <button id="back-btn" onclick="deselectCluster()">← Volver a clústeres</button>
+        <div class="det-id"    id="det-id"></div>
+        <div class="det-region" id="det-label"></div>
+        <div class="det-mine"   id="det-mine"></div>
+        <div id="det-trend" style="margin-top:10px"></div>
       </div>
 
-      <!-- ── 1. INDICADORES DEL VALLE ───────────────────────────────────── -->
-      <div class="sec">📊 Indicadores del Valle</div>
-      <div class="kpi-row" style="grid-template-columns:1fr 1fr">
-        <div class="kpi"><div class="kpi-val" id="kpi-prod-growth">—</div>
-             <div class="kpi-lbl">Crec. Producción (YoY)</div></div>
-        <div class="kpi"><div class="kpi-val" id="kpi-emp-growth">—</div>
-             <div class="kpi-lbl">Crec. Empleo Est.</div></div>
+      <div class="sidebar-tabs">
+        <div class="sidebar-tab active" onclick="switchTab('tab-operacion')">Operación</div>
+        <div class="sidebar-tab" onclick="switchTab('tab-entorno')">Recursos</div>
+        <div class="sidebar-tab" onclick="switchTab('tab-futuro')">Riesgo & Futuro</div>
       </div>
 
-      <!-- ── 2. OPERACIONES EN EL VALLE ─────────────────────────────────── -->
-      <div class="sec">⛏️ Operaciones en el Valle
-        <span id="op-total-badge" style="font-weight:400;font-size:10px;color:var(--text3)"></span>
-      </div>
-      <div id="operaciones-panel" style="margin-bottom:8px"></div>
+      <!-- ── TAB: OPERACIÓN ────────────────────────────────────────────── -->
+      <div id="tab-operacion" class="tab-content active">
+        <div class="kpi-row compact">
+          <div class="kpi" title="Producción total del clúster en el año seleccionado">
+               <div class="kpi-val" id="kpi-prod">—</div>
+               <div class="kpi-lbl">Prod. (kTM) ⓘ</div></div>
+          <div class="kpi" title="Número de sitios mineros e industriales en la zona">
+               <div class="kpi-val" id="kpi-faenas">—</div>
+               <div class="kpi-lbl">Instalac. ⓘ</div></div>
+          <div class="kpi" title="Relación entre la producción actual y el máximo histórico alcanzado">
+               <div class="kpi-val" id="kpi-water">—</div>
+               <div class="kpi-lbl">% Pico ⓘ</div></div>
+          <div class="kpi" title="Tasa de crecimiento anual compuesto (CAGR) de la producción en 5 años">
+               <div class="kpi-val" id="kpi-elec">—</div>
+               <div class="kpi-lbl">CAGR 5A ⓘ</div></div>
+          <div class="kpi" title="Depósitos de relaves en estado activo dentro del clúster">
+               <div class="kpi-val" id="kpi-relaves">—</div>
+               <div class="kpi-lbl">Relaves ⓘ</div></div>
+          <div class="kpi" title="Porcentaje estimado de energía proveniente de fuentes renovables">
+               <div class="kpi-val" id="kpi-ren">—</div>
+               <div class="kpi-lbl">% Renv. ⓘ</div></div>
+          <div class="kpi" title="Crecimiento de la producción respecto al año anterior">
+               <div class="kpi-val" id="kpi-prod-growth" style="font-size:14px">—</div>
+               <div class="kpi-lbl">Prod. YoY</div></div>
+          <div class="kpi" title="Crecimiento estimado del empleo en el valle">
+               <div class="kpi-val" id="kpi-emp-growth" style="font-size:14px">—</div>
+               <div class="kpi-lbl">Crec. Emp.</div></div>
+        </div>
 
-      <!-- ── 3. PRODUCCIÓN HISTÓRICA + CHART ────────────────────────────── -->
-      <div class="sec" style="display:flex;align-items:center;justify-content:space-between">
-        <span>📈 Producción histórica</span>
-        <div style="display:flex;gap:2px;background:var(--bg3);border-radius:6px;padding:2px">
-          <button id="prod-toggle-anual" onclick="setProdMode('annual')"
-            style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;border:none;
-                   cursor:pointer;transition:all .2s;background:var(--accent);color:#000">Anual</button>
-          <button id="prod-toggle-mensual" onclick="setProdMode('monthly')"
-            style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;border:none;
-                   cursor:pointer;transition:all .2s;background:transparent;color:var(--text2)">Mensual</button>
+        <div class="sec">📈 Producción histórica</div>
+        <div class="chart-wrap"><canvas id="prod-chart"></canvas></div>
+
+        <details class="sec-wrap" open>
+          <summary><div class="sec">⛏️ Roster de Operaciones <span id="roster-total" style="font-weight:400;font-size:10px;color:var(--text3);margin-left:4px"></span> <span class="sec-arrow">›</span></div></summary>
+          <div style="padding:0 4px">
+            <table class="mine-table">
+              <thead>
+                <tr>
+                  <th>Mina</th>
+                  <th>Empresa</th>
+                  <th>Prod. avg</th>
+                  <th>% clúster</th>
+                </tr>
+              </thead>
+              <tbody id="mine-roster-tbody"></tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="sec-wrap">
+          <summary><div class="sec">📍 Faenas detalladas <span class="sec-arrow">›</span></div></summary>
+          <div style="padding:0 4px">
+            <div class="faena-list" id="faena-list-det"></div>
+            <div class="scroll-hint">↕ Scroll para ver todas</div>
+          </div>
+        </details>
+      </div>
+
+      <!-- ── TAB: RECURSOS & ENTORNO ───────────────────────────────────── -->
+      <div id="tab-entorno" class="tab-content">
+        <details class="sec-wrap" open>
+          <summary><div class="sec">⛏️ Diversidad del clúster <span class="sec-arrow">›</span></div></summary>
+          <div style="padding:0 4px">
+            <div id="cat-stacked-bar" style="height:18px;border-radius:6px;overflow:hidden;display:flex;align-items:stretch;margin-bottom:8px"></div>
+            <div id="cat-legend" style="display:flex;flex-wrap:wrap;gap:4px 10px;margin-bottom:8px;font-size:10px"></div>
+            <div id="recurso-chips" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px"></div>
+          </div>
+        </details>
+
+        <details class="sec-wrap" open>
+          <summary><div class="sec">🌊 Derechos de Agua (DGA) <span id="agua-count-badge" style="font-size:10px;font-weight:600;color:var(--accent2);margin-left:4px"></span> <span class="sec-arrow">›</span></div></summary>
+          <div style="padding:0 4px">
+            <div id="agua-tipo-bar" style="height:12px;border-radius:4px;overflow:hidden;display:flex;align-items:stretch;margin-bottom:6px"></div>
+            <div id="agua-tipo-legend" style="display:flex;gap:8px;margin-bottom:10px;font-size:10px;flex-wrap:wrap"></div>
+            <div id="agua-uso-panel" style="margin-bottom:12px"></div>
+          </div>
+        </details>
+
+        <details class="sec-wrap" open>
+          <summary><div class="sec">⚡ Energía & Desalación <span class="sec-arrow">›</span></div></summary>
+          <div style="padding:0 4px">
+            <div class="cap-item">
+              <div class="cap-row"><span>Capacidad &lt;150 km</span><span id="cap-elec-val" style="color:var(--accent)">—</span></div>
+              <div class="cap-bar-bg"><div class="cap-bar" id="cap-elec-bar" style="background:var(--accent);width:0%"></div></div>
+            </div>
+            <div id="energy-mix-wrap" style="margin:8px 0;display:flex;flex-direction:column;gap:4px"></div>
+            
+            <div class="cap-item" style="margin-top:12px">
+              <div class="cap-row"><span id="cap-water-label">Desalación Minera</span><span id="cap-water-val" style="color:#38bdf8">—</span></div>
+              <div class="cap-bar-bg"><div class="cap-bar" id="cap-water-bar" style="background:#38bdf8;width:0%"></div></div>
+              <div class="cap-note" id="cap-water-pct"></div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- ── TAB: RIESGO & FUTURO ───────────────────────────────────────── -->
+      <div id="tab-futuro" class="tab-content">
+        <details class="sec-wrap" open>
+          <summary><div class="sec">⚠️ Análisis de Riesgo <span class="sec-arrow">›</span></div></summary>
+          <div style="padding:0 4px">
+            <div id="risk-kpi-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px"></div>
+            <div id="risk-mine-panel"></div>
+          </div>
+        </details>
+
+        <details class="sec-wrap">
+          <summary><div class="sec">♻️ Gestión de Relaves <span class="sec-arrow">›</span></div></summary>
+          <div style="padding:0 4px">
+            <div id="tsf-summary" style="margin-bottom:10px"></div>
+            <table class="rel-table">
+              <thead><tr><th>Instalación</th><th>Estado</th><th>Vol. Disp.</th></tr></thead>
+              <tbody id="rel-tbody"></tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="sec-wrap">
+          <summary><div class="sec">📐 Ratios & Futuro <span class="sec-arrow">›</span></div></summary>
+          <div class="ratio-grid" id="ratio-grid" style="padding:4px"></div>
+        </details>
+
+        <div id="opt-cluster-section" style="display:none;margin-top:15px;padding-top:15px;border-top:1px dashed var(--bg4)">
+          <div class="sec" style="color:var(--accent)">🎯 Potencial de Expansión</div>
+          <table class="opt-score-table" id="opt-score-table"></table>
+          <div class="kpi-row compact" id="opt-kpi-row" style="margin:12px 0"></div>
+          <div id="opt-conv-bars"></div>
         </div>
       </div>
-      <div class="chart-wrap"><canvas id="prod-chart"></canvas></div>
-
-      <!-- ── 4. MINAS DEL CLÚSTER ───────────────────────────────────────── -->
-      <div class="sec">⛏️ Minas del clúster
-        <span id="roster-total" style="font-weight:400;font-size:10px;color:var(--text3)"></span>
-      </div>
-      <table class="mine-table">
-        <thead>
-          <tr>
-            <th>Mina</th>
-            <th>Empresa</th>
-            <th>Prod. avg<br><span style="font-weight:400;font-size:9px">kt/año 2020-25</span></th>
-            <th>% clúster</th>
-          </tr>
-        </thead>
-        <tbody id="mine-roster-tbody"></tbody>
-      </table>
-
-      <!-- ── 5. FAENAS DEL CLÚSTER ──────────────────────────────────────── -->
-      <div class="sec">📍 Faenas del clúster</div>
-      <div class="faena-list" id="faena-list-det"></div>
-      <div class="scroll-hint">↕ Scroll para ver todas</div>
-
-      <!-- ── 6. DIVERSIDAD DEL CLÚSTER ──────────────────────────────────── -->
-      <div class="sec" style="display:flex;align-items:center;justify-content:space-between">
-        <span>⛏️ Diversidad del clúster
-          <span id="div-mine-count" style="font-weight:400;font-size:10px;color:var(--text3)"></span>
-        </span>
-        <span id="div-h-badge" style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px"></span>
-      </div>
-      <div id="cat-stacked-bar" style="height:22px;border-radius:6px;overflow:hidden;display:flex;align-items:stretch;margin-bottom:5px"></div>
-      <div id="cat-legend" style="display:flex;flex-wrap:wrap;gap:4px 10px;margin-bottom:8px;font-size:10px"></div>
-      <div id="recurso-chips" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px"></div>
-      <div id="tipo-dist-panel" style="margin-bottom:8px"></div>
-      <div id="mine-seg-panel" style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap"></div>
-
-      <!-- ── 7. CONTROL POR EMPRESA ─────────────────────────────────────── -->
-      <div class="sec">🏢 Control por empresa
-        <span id="emp-total" style="font-weight:400;font-size:10px;color:var(--text3)"></span>
-      </div>
-      <div id="empresa-bars"></div>
-
-      <!-- ── 8. PRODUCCIÓN POR EMPRESA ──────────────────────────────────── -->
-      <div class="sec">🏭 Producción por empresa
-        <span style="font-weight:400;font-size:10px;color:var(--text3)">prom. 2020-2025</span>
-      </div>
-      <div id="prod-company-bars"></div>
-
-      <!-- ── 9. PRODUCCIÓN POR MINA ──────────────────────────────────────── -->
-      <div class="sec">⛏️ Producción por mina
-        <span style="font-weight:400;font-size:10px;color:var(--text3)">prom. 2020-2025</span>
-      </div>
-      <div id="prod-mine-bars"></div>
-
-      <!-- ── 10. DERECHOS DE AGUA ────────────────────────────────────────── -->
-      <div class="sec">🌊 Derechos de Agua (DGA)
-        <span id="agua-count-badge" style="font-size:10px;font-weight:600;color:#38bdf8;margin-left:auto"></span>
-      </div>
-      <div style="font-size:10px;color:var(--text3);margin-bottom:5px">Tipo (Consuntivo / No Consuntivo)</div>
-      <div id="agua-tipo-bar" style="height:14px;border-radius:4px;overflow:hidden;display:flex;align-items:stretch;margin-bottom:4px"></div>
-      <div id="agua-tipo-legend" style="display:flex;gap:8px;margin-bottom:7px;font-size:10px;flex-wrap:wrap"></div>
-      <div style="font-size:10px;color:var(--text3);margin-bottom:5px">Naturaleza (Subterránea / Superficial)</div>
-      <div id="agua-nat-bar" style="height:10px;border-radius:4px;overflow:hidden;display:flex;align-items:stretch;margin-bottom:4px"></div>
-      <div id="agua-nat-legend" style="display:flex;gap:8px;margin-bottom:7px;font-size:10px;flex-wrap:wrap"></div>
-      <div id="agua-uso-panel" style="margin-bottom:6px"></div>
-      <div style="font-size:10px;color:var(--text3);margin-bottom:3px">Solicitudes por año</div>
-      <div id="agua-year-spark" style="display:flex;align-items:flex-end;gap:1px;height:32px;margin-bottom:3px"></div>
-      <div id="agua-year-label" style="font-size:9px;color:var(--text3);margin-bottom:8px"></div>
-
-      <!-- ── 11. ENERGÍA LOCAL ───────────────────────────────────────────── -->
-      <div class="sec">⚡ Energía local
-        <span id="ren-badge" style="margin-left:auto;font-size:10px;font-weight:400"></span>
-      </div>
-      <div class="cap-item">
-        <div class="cap-row">
-          <span>Capacidad instalada &lt;150 km</span>
-          <span id="cap-elec-val" style="color:var(--accent)">—</span>
-        </div>
-        <div class="cap-bar-bg">
-          <div class="cap-bar" id="cap-elec-bar" style="background:#f59e0b;width:0%"></div>
-        </div>
-        <div class="cap-note" id="cap-elec-pct"></div>
-      </div>
-      <div id="energy-mix-wrap" style="margin-top:5px;display:flex;flex-direction:column;gap:3px"></div>
-
-      <!-- ── 12. AGUA DESALADA ───────────────────────────────────────────── -->
-      <div class="sec">💧 Agua desalada — Minería
-        <span class="mining-badge">MINERÍA</span>
-      </div>
-      <div class="cap-item">
-        <div class="cap-row">
-          <span id="cap-water-label">Desaladoras mineras operativas</span>
-          <span id="cap-water-val" style="color:var(--accent2)">—</span>
-        </div>
-        <div class="cap-bar-bg">
-          <div class="cap-bar" id="cap-water-bar" style="background:#38bdf8;width:0%"></div>
-        </div>
-        <div class="cap-note" id="cap-water-pct"></div>
-      </div>
-      <div id="desal-excl-note" style="font-size:10px;color:var(--text3);margin-top:4px;line-height:1.5"></div>
-      <div style="font-size:9px;color:var(--text3);margin-top:3px;font-style:italic">⚙ Barra = % de la demanda cubierta por desalación. Factores Cochilco 2024: Sulfuros 93 · Óxidos 35 · Mixto 60 m³/t Cu (promedios nacionales). Oferta al 90% util.</div>
-
-      <!-- ── 13. RELAVES ─────────────────────────────────────────────────── -->
-      <div class="sec">♻️ Relaves
-        <span id="rel-total" style="font-weight:400;font-size:10px;color:var(--text3)"></span>
-      </div>
-      <div id="tsf-summary" style="margin-bottom:8px"></div>
-      <div id="rel-filter-btns" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px"></div>
-      <div id="rel-wrap">
-        <table class="rel-table">
-          <thead><tr><th>Instalación</th><th>Tipo</th><th>Estado</th><th>Vol. Disp. (m³)</th><th>Ciudad cercana</th></tr></thead>
-          <tbody id="rel-tbody"></tbody>
-        </table>
-      </div>
-
-      <!-- ── 14. ANÁLISIS DE RIESGO ─────────────────────────────────────── -->
-      <div class="sec">⚠️ Análisis de Riesgo del Clúster</div>
-      <div id="risk-kpi-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:8px"></div>
-      <div id="risk-mine-panel" style="margin-bottom:8px"></div>
-
-      <!-- ── 15. CENTRALES CERCANAS ─────────────────────────────────────── -->
-      <div class="sec">🏭 Centrales cercanas</div>
-      <div class="infra-list" id="infra-cen"></div>
-
-      <!-- ── 16. DESALADORAS CERCANAS ───────────────────────────────────── -->
-      <div class="sec">💧 Desaladoras cercanas</div>
-      <div class="infra-list" id="infra-des"></div>
-
-      <!-- ── 17. RATIOS DE COMPOSICIÓN ──────────────────────────────────── -->
-      <div class="sec">📐 Ratios de composición del clúster</div>
-      <div class="ratio-grid" id="ratio-grid"></div>
-
-      <!-- ── 18. OPTIMIZACIÓN ESPACIAL (visible when OPT layer is active) ── -->
-      <div id="opt-cluster-section" style="display:none">
-        <div class="sec" style="color:var(--accent)">🎯 Potencial de Expansión Minera</div>
-        <div class="opt-radius-label" id="opt-radius-label">📍 Radio de análisis: — km</div>
-
-        <!-- Score table for all models -->
-        <table class="opt-score-table" id="opt-score-table"></table>
-
-        <!-- KPIs from optimization stats -->
-        <div class="kpi-row" id="opt-kpi-row" style="grid-template-columns:1fr 1fr 1fr;margin:8px 0"></div>
-
-        <!-- Convergence bars -->
-        <div class="sec" style="font-size:9px;margin:10px 0 6px">🔗 Convergencia hacia M5 (NPPI)</div>
-        <div id="opt-conv-bars"></div>
-
-        <!-- SEIA projects -->
-        <div class="sec" style="font-size:9px;margin:10px 0 6px">⚙️ Proyectos SEIA aprobados en zona</div>
-        <table class="data-table" id="opt-seia-table"></table>
-
-        <!-- Exploration sites -->
-        <div class="sec" style="font-size:9px;margin:10px 0 6px">🔍 Sitios de exploración</div>
-        <div id="opt-explor-list" style="max-height:160px;overflow-y:auto;margin-bottom:6px"></div>
-
-        <!-- Relaves -->
-        <div class="sec" style="font-size:9px;margin:10px 0 6px">♻️ Relaves (top 5 por volumen)</div>
-        <table class="data-table" id="opt-rel-table"></table>
-      </div>
-
-    </div>
   </div>
 </div>
 
@@ -904,6 +943,13 @@ const RAW = {"clusters":{"I-0":{"id":"I-0","region":"Tarapacá","label":"Tarapac
 const OPT = {"clusters":{"I-0":{"id":"I-0","label":"Tarapacá — Sub-clúster 0","centroid":[-20.97346,-68.73114],"stats":{"n_facilities":36,"n_catA":30,"n_catB":0,"n_explor_surf":6,"n_explor_sub":0,"n_lab":0,"n_explor_total":6,"exploration_ratio":0.167,"n_prod_inst":7,"n_seia_approved":37,"n_seia_pipeline":0,"n_seia_rejected":3,"inv_approved_MMU":11844.3,"inv_pipeline_MMU":0.0,"n_rel_active":2,"n_rel_inactive":1,"n_rel_abandoned":0,"n_rel_total":5,"vol_relaves_m3":745260340.0,"ton_relaves":1080627493.0,"top_seia":[{"name":"PROYECTO MINERO QUEBRADA BLANCA FASE 2","inv":5000.0,"tipo":"i1","lat":-21.008592,"lon":-68.796753},{"name":"Desarrollo de Infraestructura y Mejoramiento de Capacidad Productiva de Collahuasi","inv":3200.0,"tipo":"i1","lat":-20.977937,"lon":-68.705554},{"name":"Compañía Minera Doña Inés de Collahuasi","inv":1700.0,"tipo":"i4","lat":-20.833337,"lon":-68.651542},{"name":"Proyecto Expansión 110 KTPD Planta Concentradora Collahuasi","inv":600.0,"tipo":"i4","lat":-20.833337,"lon":-68.651542},{"name":"Sondaje de Prospección Rosario Oeste","inv":470.0,"tipo":"i4","lat":-20.979824,"lon":-68.689455}],"top_relaves":[{"faena":"COLLAHUASI","inst":"PAMPA PABELLON","estado":"ACTIVO","vol_m3":745260340.0,"ton":1080627493.0,"lat":-20.9432343,"lon":-68.60401418,"tipo":"EMBALSE"},{"faena":"PIRQUINEROS DE CHOJA","inst":"RELAVE 1","estado":"INACTIVO","vol_m3":0.0,"ton":0.0,"lat":-21.06457807,"lon":-68.87800544,"tipo":"EMBALSE"},{"faena":"PIRQUINEROS DE CHOJA","inst":"RELAVE 3","estado":"ELIMINADO","vol_m3":0.0,"ton":0.0,"lat":-21.06454609,"lon":-68.87786176,"tipo":"TRANQUE DE RELAVE"},{"faena":"PIRQUINEROS DE CHOJA","inst":"RELAVE 2","estado":"ELIMINADO","vol_m3":0.0,"ton":0.0,"lat":-21.06457268,"lon":-68.87761868,"tipo":"TRANQUE DE RELAVE"},{"faena":"QUEBRADA BLANCA","inst":"QB2","estado":"ACTIVO","vol_m3":0.0,"ton":0.0,"lat":-21.05444688,"lon":-68.84773161,"tipo":"TRANQUE DE RELAVE"}]},"exploration_sites":[{"empresa":"TECK RESOURCES CHILE LTDA.","tipo":"EXPLORACION DE SUPERFICIE","lat":-21.059877,"lon":-68.829815,"estado":"ACTIVA"},{"empresa":"TECK RESOURCES CHILE LTDA.","tipo":"EXPLORACION DE SUPERFICIE","lat":-21.00293,"lon":-68.807764,"estado":"ACTIVA"},{"empresa":"TECK RESOURCES CHILE LTDA.","tipo":"EXPLORACION DE SUPERFICIE","lat":-21.00293,"lon":-68.807764,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-20.468756,"lon":-68.92527,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-21.051575,"lon":-69.023159,"estado":"ACTIVA"},{"empresa":"TECK RESOURCES CHILE LTDA.","tipo":"EXPLORACION DE SUPERFICIE","lat":-21.073779,"lon":-68.605682,"estado":"ACTIVA"}],"seia_projects":[{"name":"Desarrollo de Infraestructura y Mejoramiento de Capacidad Productiva de Collahuasi","estado":"Aprobado","inv":3200.0,"lat":-20.977937,"lon":-68.705554,"tipo":"i1"},{"name":"Adecuación cronograma y obras Collahuasi","estado":"Aprobado","inv":5.0,"lat":-20.648739,"lon":-68.639812,"tipo":"i1"},{"name":"Obras e Instalaciones Complementarias Área Mina Proyecto QB2","estado":"Aprobado","inv":70.0,"lat":-20.990622,"lon":-68.841094,"tipo":"i1"},{"name":"ADECUACION Y OPTIMIZACION AREA MINA PROYECTO QB2","estado":"Aprobado","inv":0.0,"lat":-20.979731,"lon":-68.810742,"tipo":"i1"},{"name":"PROSPECCIÓN MINERA PROYECTO CHALLACOLLO","estado":"Aprobado","inv":3.3,"lat":-20.915454,"lon":-69.339271,"tipo":"i2"},{"name":"Instalaciones Complementarias para Alcanzar Tratamiento de 170 ktpd","estado":"Aprobado","inv":302.0,"lat":-20.94486,"lon":-68.628348,"tipo":"i1"},{"name":"PROYECTO MINERO QUEBRADA BLANCA FASE 2","estado":"Aprobado","inv":5000.0,"lat":-21.008592,"lon":-68.796753,"tipo":"i1"},{"name":"Aumento Capacidad Pad 1","estado":"Aprobado","inv":50.0,"lat":-20.980672,"lon":-68.617772,"tipo":"i1"},{"name":"ESTUDIO DE IMPACTO AMBIENTAL ACTUALIZACIÓN PROYECTO MINERO QUEBRADA BLANCA","estado":"Aprobado","inv":165.0,"lat":-21.008591,"lon":-68.796752,"tipo":"i1"},{"name":"Continuidad Relaves Convencionales, Depósito Pampa Pabellón","estado":"Aprobado","inv":70.0,"lat":-20.955975,"lon":-68.619472,"tipo":"i3"},{"name":"PROSPECCION MINERA CHALLACOLLO SUR","estado":"Aprobado","inv":0.4,"lat":-21.129554,"lon":-69.20109,"tipo":"i4"},{"name":"Sondaje de Prospección Rosario Oeste","estado":"Aprobado","inv":470.0,"lat":-20.979824,"lon":-68.689455,"tipo":"i4"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=13.4km (Scott)","color":"#22c55e","data":{"lat":-21.008115,"lon":-68.817739,"dist_km":9.8,"score_raw":0.046364,"score_2nd":0.039124,"gap":0.007239,"gap_pct":15.61,"score_norm":0.9515,"n_exploration":3,"n_seia_approved":14,"inv_approved_MMU":5299.7,"inv_approved_tw_MMU":4050.6,"n_seia_eff":7.75,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":4,"dist_to_M5_km":0.0}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-20.985012,"lon":-68.644541,"dist_km":9.1,"score_raw":106.707283,"score_2nd":88.846972,"gap":17.86031,"gap_pct":16.74,"score_norm":1.0,"n_exploration":1,"n_seia_approved":12,"inv_approved_MMU":4211.5,"inv_approved_tw_MMU":3428.4,"n_seia_eff":7.25,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":1,"dist_to_M5_km":18.2}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-20.961908,"lon":-68.694026,"dist_km":4.1,"score_raw":0.066999,"score_2nd":0.038884,"gap":0.028115,"gap_pct":41.96,"score_norm":1.0,"n_exploration":0,"n_seia_approved":17,"inv_approved_MMU":9385.1,"inv_approved_tw_MMU":7390.6,"n_seia_eff":9.89,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":1,"components":{"Relave_n":0.0,"SEIA_rej_n":0.223,"AreaProt_n":0.0},"dist_to_M5_km":13.8}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-21.008115,"lon":-68.817739,"dist_km":9.8,"score_raw":0.804493,"score_2nd":0.547599,"gap":0.256894,"gap_pct":31.93,"score_norm":1.0,"n_exploration":3,"n_seia_approved":14,"inv_approved_MMU":5299.7,"inv_approved_tw_MMU":4050.6,"n_seia_eff":7.75,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":4,"components":{"M1n":0.952,"Gtwn":0.216,"Res_n":1.0,"M3n":0.801,"M4n":0.053}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.89 δ=max(0.15,1−Π)=0.15","color":"#fb923c","data":{"lat":-20.915702,"lon":-68.891966,"dist_km":17.9,"score_raw":0.013641,"score_2nd":0.008157,"gap":0.005484,"gap_pct":40.2,"score_norm":1.0,"n_exploration":0,"n_seia_approved":5,"inv_approved_MMU":108.4,"inv_approved_tw_MMU":79.2,"n_seia_eff":3.06,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"components":{"exp_ratio":0.0,"prosp_grav_n":1.0,"n_fae_local":1.0,"M4n":0.007},"dist_to_M5_km":12.8}}}},"I-1":{"id":"I-1","label":"Tarapacá — Sub-clúster 1","centroid":[-20.15977,-69.08009],"stats":{"n_facilities":64,"n_catA":1,"n_catB":0,"n_explor_surf":3,"n_explor_sub":0,"n_lab":0,"n_explor_total":3,"exploration_ratio":0.031,"n_prod_inst":16,"n_seia_approved":22,"n_seia_pipeline":2,"n_seia_rejected":6,"inv_approved_MMU":893.2,"inv_pipeline_MMU":123.0,"n_rel_active":0,"n_rel_inactive":0,"n_rel_abandoned":0,"n_rel_total":0,"vol_relaves_m3":0.0,"ton_relaves":0.0,"top_seia":[{"name":"Proyecto Continuidad Operacional Cerro Colorado","inv":467.2,"tipo":"i4","lat":-20.073203,"lon":-69.277411},{"name":"Expansión Cerro Colorado","inv":190.0,"tipo":"i4","lat":-20.091653,"lon":-69.294974},{"name":"Proyecto de optimización instalaciones de procesos (e-seia)","inv":64.0,"tipo":"i4","lat":-20.072706,"lon":-69.277082},{"name":"Planta de Beneficio de Sales de Nitrato","inv":60.0,"tipo":"i1","lat":-20.22185437,"lon":-69.79663624},{"name":"Actualización Faena Minera Cerro Colorado","inv":30.0,"tipo":"i4","lat":-20.091653,"lon":-69.294974}],"top_relaves":[]},"exploration_sites":[{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-20.468756,"lon":-68.92527,"estado":"ACTIVA"},{"empresa":"S.C.M. COPIAPO","tipo":"EXPLORACION DE SUPERFICIE","lat":-20.173994,"lon":-69.056895,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-19.916876,"lon":-69.285452,"estado":"ACTIVA"}],"seia_projects":[{"name":"Planta de Beneficio de Sales de Nitrato","estado":"Aprobado","inv":60.0,"lat":-20.22185437,"lon":-69.79663624,"tipo":"i1"},{"name":"Adecuación cronograma y obras Collahuasi","estado":"Aprobado","inv":5.0,"lat":-20.648739,"lon":-68.639812,"tipo":"i1"},{"name":"Adecuaciones en depósitos de lastre, caminos internos y campamento","estado":"Aprobado","inv":12.7,"lat":-20.057431,"lon":-69.248404,"tipo":"i3"},{"name":"Proyecto Continuidad Operacional Cerro Colorado","estado":"Aprobado","inv":467.2,"lat":-20.073203,"lon":-69.277411,"tipo":"i4"},{"name":"Sondajes de Prospección Paguanta","estado":"Aprobado","inv":5.0,"lat":-19.815126,"lon":-69.044392,"tipo":"i4"},{"name":"Aumento Producción de Yodo Cala-Cala  SCM COSAYACH","estado":"Aprobado","inv":5.0,"lat":-20.234822,"lon":-69.79226,"tipo":"i4"},{"name":"Explotación Minera Fase 13 y Fase 14","estado":"Aprobado","inv":1.7,"lat":-20.048732,"lon":-69.27115,"tipo":"i4"},{"name":"Proyecto Sondajes de Prospección Paguanta","estado":"Aprobado","inv":5.0,"lat":-19.815126,"lon":-69.044392,"tipo":"i4"},{"name":"Prospeccion minera Candelabro (e-seia)","estado":"Aprobado","inv":1.5,"lat":-19.641582,"lon":-69.276297,"tipo":"i4"},{"name":"OPTIMIZACION 60 KTPD CERRO COLORADO (e-seia)","estado":"Aprobado","inv":9.0,"lat":-20.059685,"lon":-69.264751,"tipo":"i4"},{"name":"Proyecto de optimización instalaciones de procesos (e-seia)","estado":"Aprobado","inv":64.0,"lat":-20.072706,"lon":-69.277082,"tipo":"i4"},{"name":"Prospeciones Gasíferas y de Petróleo Pica Norte (e-seia)","estado":"Aprobado","inv":20.0,"lat":-20.53431,"lon":-69.285991,"tipo":"i5"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=13.1km (Scott)","color":"#22c55e","data":{"lat":-19.911454,"lon":-69.281127,"dist_km":34.7,"score_raw":0.040606,"score_2nd":0.030599,"gap":0.010007,"gap_pct":24.65,"score_norm":0.6604,"n_exploration":1,"n_seia_approved":0,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.0,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"dist_to_M5_km":15.6}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-20.328625,"lon":-69.132994,"dist_km":19.6,"score_raw":0.0,"score_2nd":0.0,"gap":0.0,"gap_pct":0.0,"score_norm":0.0,"n_exploration":0,"n_seia_approved":1,"inv_approved_MMU":0.3,"inv_approved_tw_MMU":0.1,"n_seia_eff":0.4,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"dist_to_M5_km":33.6}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-20.01078,"lon":-69.386935,"dist_km":36.1,"score_raw":0.063941,"score_2nd":0.030765,"gap":0.033176,"gap_pct":51.88,"score_norm":0.3872,"n_exploration":0,"n_seia_approved":1,"inv_approved_MMU":0.2,"inv_approved_tw_MMU":0.1,"n_seia_eff":0.44,"n_pipeline":1,"inv_pipeline_MMU":60.0,"n_relaves":0,"components":{"Relave_n":0.0,"SEIA_rej_n":0.213,"AreaProt_n":0.0},"dist_to_M5_km":14.0}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-20.050511,"lon":-69.259965,"dist_km":22.4,"score_raw":0.150231,"score_2nd":0.124588,"gap":0.025642,"gap_pct":17.07,"score_norm":1.0,"n_exploration":0,"n_seia_approved":10,"inv_approved_MMU":778.3,"inv_approved_tw_MMU":541.0,"n_seia_eff":5.5,"n_pipeline":1,"inv_pipeline_MMU":60.0,"n_relaves":0,"components":{"M1n":0.027,"Gtwn":0.127,"Res_n":1.0,"M3n":0.0,"M4n":0.003}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.56 δ=max(0.15,1−Π)=0.44","color":"#fb923c","data":{"lat":-20.169703,"lon":-69.069509,"dist_km":1.6,"score_raw":0.014761,"score_2nd":0.008492,"gap":0.006269,"gap_pct":42.47,"score_norm":0.2024,"n_exploration":1,"n_seia_approved":0,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.0,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"exp_ratio":0.1,"prosp_grav_n":0.839,"n_fae_local":16.0,"M4n":0.003},"dist_to_M5_km":23.9}}}},"II-0":{"id":"II-0","label":"Antofagasta — Sub-clúster 0","centroid":[-24.24088,-69.11148],"stats":{"n_facilities":85,"n_catA":80,"n_catB":0,"n_explor_surf":2,"n_explor_sub":0,"n_lab":0,"n_explor_total":2,"exploration_ratio":0.024,"n_prod_inst":20,"n_seia_approved":57,"n_seia_pipeline":0,"n_seia_rejected":3,"inv_approved_MMU":13186.4,"inv_pipeline_MMU":0.0,"n_rel_active":3,"n_rel_inactive":4,"n_rel_abandoned":0,"n_rel_total":7,"vol_relaves_m3":1311133706.0,"ton_relaves":2547206768.0,"top_seia":[{"name":"Ampliación de Capacidad de Extracción y Procesamiento de Mineral Sulfurado de Minera Escondida","inv":3250.0,"tipo":"i4","lat":-24.258231,"lon":-69.078901},{"name":"Modificaciones Operacionales en Planta Concentradora Laguna Seca y Nueva Línea Eléctrica Asociada, al Interior de Minera Escondida","inv":2351.0,"tipo":"i1","lat":-24.346444,"lon":-69.061624},{"name":"Extensión de vida útil con transición hídrica - Compañía Minera Zaldívar","inv":1200.0,"tipo":"i1","lat":-24.192585,"lon":-69.080396},{"name":"Lixiviación de Sulfuros","inv":1126.0,"tipo":"i4","lat":-24.23279,"lon":-69.0},{"name":"Lixiviación de Óxidos de Cobre y Aumento de la Capacidad de Tratamiento de Mineral Sulfurado","inv":817.0,"tipo":"i4","lat":-24.23279,"lon":-69.0}],"top_relaves":[{"faena":"ESCONDIDA","inst":"LAGUNA SECA","estado":"ACTIVO","vol_m3":980882009.0,"ton":2050043399.0,"lat":-24.41856794,"lon":-69.12065542,"tipo":"EMBALSE"},{"faena":"ESCONDIDA","inst":"HAMBURGO","estado":"INACTIVO","vol_m3":301538056.0,"ton":452307084.0,"lat":-24.29633875,"lon":-69.05018998,"tipo":"TRANQUE DE RELAVE"},{"faena":"EL PEÑON","inst":" AMPLIACION EL PEÑON ","estado":"ACTIVO","vol_m3":17858237.0,"ton":28573179.0,"lat":-24.41187756,"lon":-69.48862128,"tipo":"FILTRADO"},{"faena":"ZALDIVAR","inst":"EMBALSE DE RELAVES 3A","estado":"ACTIVO","vol_m3":10855404.0,"ton":16283106.0,"lat":-24.17463238,"lon":-69.03879953,"tipo":"EMBALSE"},{"faena":"ESCONDIDA","inst":"EMBALSE DE RELAVE","estado":"INACTIVO","vol_m3":0.0,"ton":0.0,"lat":-24.34069755,"lon":-69.06809147,"tipo":"EMBALSE"}]},"exploration_sites":[{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-24.217741,"lon":-69.198993,"estado":"ACTIVA"},{"empresa":"MINERA LUNA SpA","tipo":"EXPLORACION DE SUPERFICIE","lat":-24.339488,"lon":-69.307615,"estado":"ACTIVA"}],"seia_projects":[{"name":"Modificaciones Operacionales en Planta Concentradora Laguna Seca y Nueva Línea Eléctrica Asociada, al Interior de Minera Escondida","estado":"Aprobado","inv":2351.0,"lat":-24.346444,"lon":-69.061624,"tipo":"i1"},{"name":"Obras Eléctricas y Área para Extracción de Áridos al Interior de Minera Escondida","estado":"Aprobado","inv":42.8,"lat":-24.472701,"lon":-69.246545,"tipo":"i5"},{"name":"Extensión de vida útil con transición hídrica - Compañía Minera Zaldívar","estado":"Aprobado","inv":1200.0,"lat":-24.192585,"lon":-69.080396,"tipo":"i1"},{"name":"Actualización de Recursos y Reserva Parte II, Explotación Subterránea Pampa Augusta Victoria de Faena Minera El Peñón","estado":"Aprobado","inv":5.6,"lat":-24.000004,"lon":-69.0,"tipo":"i1"},{"name":"Ajustes Operacionales Área Mina","estado":"Aprobado","inv":1.2,"lat":-24.176454,"lon":-69.03118,"tipo":"i1"},{"name":"Extensión del Botadero de Ripios y Modificaciones Operacionales en el Área de la Pila Dinámica de Lixiviación","estado":"Aprobado","inv":470.0,"lat":-24.272234,"lon":-69.102841,"tipo":"i3"},{"name":"Actualización de Recursos y Reservas, Faena Minera el Peñón","estado":"Aprobado","inv":172.4,"lat":-24.0,"lon":-69.0,"tipo":"i1"},{"name":"Prospección Minera Cerro Búfalo","estado":"Aprobado","inv":15.0,"lat":-24.270998,"lon":-68.83701,"tipo":"i2"},{"name":"Extracción de Áridos en Sector Tranque de Relaves de Minera Escondida para periodo 2020-2030","estado":"Aprobado","inv":9.2,"lat":-24.36354,"lon":-69.08705,"tipo":"i5"},{"name":"Continuidad Operacional El Peñón","estado":"Aprobado","inv":132.0,"lat":-24.325704,"lon":-69.48479,"tipo":"i1"},{"name":"Nueva Área de Explotación de Áridos en MEL","estado":"Aprobado","inv":8.2,"lat":-24.367247,"lon":-69.106487,"tipo":"i5"},{"name":"Explotación Subterránea Laguna","estado":"Aprobado","inv":28.0,"lat":-24.469091,"lon":-69.620257,"tipo":"i1"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=6.0km (Scott)","color":"#22c55e","data":{"lat":-24.225904,"lon":-69.1936,"dist_km":8.5,"score_raw":0.062824,"score_2nd":0.038385,"gap":0.024439,"gap_pct":38.9,"score_norm":1.0,"n_exploration":1,"n_seia_approved":10,"inv_approved_MMU":2032.4,"inv_approved_tw_MMU":1167.1,"n_seia_eff":5.56,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"dist_to_M5_km":10.5}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-24.255856,"lon":-69.095056,"dist_km":2.4,"score_raw":259.141437,"score_2nd":157.823396,"gap":101.318041,"gap_pct":39.1,"score_norm":1.0,"n_exploration":1,"n_seia_approved":26,"inv_approved_MMU":12148.8,"inv_approved_tw_MMU":7799.8,"n_seia_eff":14.46,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":4,"dist_to_M5_km":0.0}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-24.405614,"lon":-69.489232,"dist_km":42.4,"score_raw":0.171288,"score_2nd":0.020558,"gap":0.15073,"gap_pct":88.0,"score_norm":1.0,"n_exploration":0,"n_seia_approved":12,"inv_approved_MMU":352.8,"inv_approved_tw_MMU":207.0,"n_seia_eff":6.36,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":2,"components":{"Relave_n":0.002,"SEIA_rej_n":0.567,"AreaProt_n":0.0},"dist_to_M5_km":43.3}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-24.255856,"lon":-69.095056,"dist_km":2.4,"score_raw":0.24299,"score_2nd":0.181323,"gap":0.061667,"gap_pct":25.38,"score_norm":1.0,"n_exploration":1,"n_seia_approved":26,"inv_approved_MMU":12148.8,"inv_approved_tw_MMU":7799.8,"n_seia_eff":14.46,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":4,"components":{"M1n":0.038,"Gtwn":0.486,"Res_n":0.23,"M3n":1.0,"M4n":0.001}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=1.00 δ=max(0.15,1−Π)=0.15","color":"#fb923c","data":{"lat":-24.285808,"lon":-69.226448,"dist_km":12.7,"score_raw":0.003954,"score_2nd":0.003929,"gap":2.4e-05,"gap_pct":0.62,"score_norm":1.0,"n_exploration":2,"n_seia_approved":3,"inv_approved_MMU":700.0,"inv_approved_tw_MMU":419.0,"n_seia_eff":1.83,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"components":{"exp_ratio":0.2,"prosp_grav_n":0.011,"n_fae_local":0.0,"M4n":0.001},"dist_to_M5_km":13.7}}}},"II-1":{"id":"II-1","label":"Antofagasta — Sub-clúster 1","centroid":[-22.15512,-70.14873],"stats":{"n_facilities":132,"n_catA":116,"n_catB":7,"n_explor_surf":9,"n_explor_sub":0,"n_lab":3,"n_explor_total":12,"exploration_ratio":0.061,"n_prod_inst":31,"n_seia_approved":36,"n_seia_pipeline":2,"n_seia_rejected":7,"inv_approved_MMU":2068.3,"inv_pipeline_MMU":1011.0,"n_rel_active":0,"n_rel_inactive":0,"n_rel_abandoned":1,"n_rel_total":2,"vol_relaves_m3":0.0,"ton_relaves":0.0,"top_seia":[{"name":"Proyecto Antucoya","inv":950.0,"tipo":"i4","lat":-22.646638,"lon":-69.836194},{"name":"Modificación de las Instalaciones productivas y transporte de nitratos faena minera Coya Sur","inv":250.0,"tipo":"i1","lat":-22.386221,"lon":-69.622933},{"name":"Plan de Desarrollo Michilla","inv":235.0,"tipo":"i1","lat":-22.695007,"lon":-70.197754},{"name":"Cambio Tecnológico María Elena","inv":106.0,"tipo":"i4","lat":-22.126621,"lon":-69.651204},{"name":"Campamento de construcción ducto e instalaciones de apoyo","inv":75.0,"tipo":"i4","lat":-22.846987,"lon":-70.069318}],"top_relaves":[{"faena":"MICHILLA","inst":"MICHILLA","estado":"ABANDONADO","vol_m3":0.0,"ton":0.0,"lat":-22.74229498,"lon":-70.2879105,"tipo":"TRANQUE DE RELAVE"},{"faena":"PLANTA TRES PUNTAS","inst":"TOCOPILLA","estado":"EN CONSTRUCCION","vol_m3":0.0,"ton":0.0,"lat":-22.12343296,"lon":-70.09681812,"tipo":"TRANQUE DE RELAVE"}]},"exploration_sites":[{"empresa":"MINERA ANTUCOYA LIMITADA","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.622035,"lon":-69.839316,"estado":"ACTIVA"},{"empresa":"MINERA HMC S.A.","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.677885,"lon":-70.186591,"estado":"ACTIVA"},{"empresa":"MINERA CENTINELA","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.730754,"lon":-70.283149,"estado":"ACTIVA"},{"empresa":"ASTRA EXPLORATION CHILE SpA","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.740349,"lon":-69.44303,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.21117,"lon":-69.39251,"estado":"ACTIVA"},{"empresa":"MINERA HMC S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.685621,"lon":-70.182346,"estado":"ACTIVA"},{"empresa":"CIA. MINERA  MANTOS DE LA LUNA S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.283307,"lon":-70.179604,"estado":"ACTIVA"},{"empresa":"MINERA HMC S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.64345,"lon":-70.100965,"estado":"ACTIVA"},{"empresa":"MINERA HMC S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.671724,"lon":-70.163316,"estado":"ACTIVA"},{"empresa":"MINERA HMC S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.762977,"lon":-70.244757,"estado":"ACTIVA"},{"empresa":"MINERA HMC S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.814783,"lon":-70.226297,"estado":"ACTIVA"},{"empresa":"MINERA HMC S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.598308,"lon":-70.115061,"estado":"ACTIVA"}],"seia_projects":[{"name":"Modificación de las Instalaciones productivas y transporte de nitratos faena minera Coya Sur","estado":"Aprobado","inv":250.0,"lat":-22.386221,"lon":-69.622933,"tipo":"i1"},{"name":"Plan de Desarrollo Michilla","estado":"Aprobado","inv":235.0,"lat":-22.695007,"lon":-70.197754,"tipo":"i1"},{"name":"Ore Sorting Botadero Lince","estado":"Aprobado","inv":3.6,"lat":-22.606675,"lon":-70.167647,"tipo":"i1"},{"name":"Distrito Norte","estado":"Aprobado","inv":18.1,"lat":-22.304301,"lon":-70.15937,"tipo":"i1"},{"name":"Pozas de evaporación solar y canchas de acopio de sales de descarte, Faena Coya Sur","estado":"Aprobado","inv":4.6,"lat":-22.401684,"lon":-69.623808,"tipo":"i3"},{"name":"Modificaciones II - Minera Antucoya","estado":"Aprobado","inv":0.0,"lat":-22.645914,"lon":-69.88043,"tipo":"i3"},{"name":"Continuidad Operacional Faena Minera Michilla (Michilla Mina)","estado":"Aprobado","inv":25.0,"lat":-22.676143,"lon":-70.188616,"tipo":"i1"},{"name":"Mina Mantos del Pacifico","estado":"Aprobado","inv":3.8,"lat":-22.537266,"lon":-70.185235,"tipo":"i1"},{"name":"\"Programa de Prospección Geológica La Reina\"","estado":"Aprobado","inv":12.0,"lat":-22.591416,"lon":-70.115972,"tipo":"i4"},{"name":"Modificación DIA Planta de Cal","estado":"Aprobado","inv":20.0,"lat":-22.459941,"lon":-70.250592,"tipo":"i4"},{"name":"Campamento de construcción ducto e instalaciones de apoyo","estado":"Aprobado","inv":75.0,"lat":-22.846987,"lon":-70.069318,"tipo":"i4"},{"name":"Proyecto Minero Agua Dulce Explotación Subterranea","estado":"Aprobado","inv":13.0,"lat":-22.25692,"lon":-70.229838,"tipo":"i4"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=10.7km (Scott)","color":"#22c55e","data":{"lat":-22.287108,"lon":-70.164564,"dist_km":14.8,"score_raw":0.023155,"score_2nd":0.021039,"gap":0.002116,"gap_pct":9.14,"score_norm":0.13,"n_exploration":1,"n_seia_approved":4,"inv_approved_MMU":107.3,"inv_approved_tw_MMU":58.0,"n_seia_eff":2.38,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"dist_to_M5_km":10.3}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-22.375099,"lon":-70.164564,"dist_km":24.5,"score_raw":88.918638,"score_2nd":65.975002,"gap":22.943635,"gap_pct":25.8,"score_norm":0.7791,"n_exploration":1,"n_seia_approved":3,"inv_approved_MMU":94.3,"inv_approved_tw_MMU":49.7,"n_seia_eff":1.74,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"dist_to_M5_km":3.3}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-22.287108,"lon":-70.164564,"dist_km":14.8,"score_raw":0.072792,"score_2nd":0.070576,"gap":0.002216,"gap_pct":3.04,"score_norm":1.0,"n_exploration":1,"n_seia_approved":4,"inv_approved_MMU":107.3,"inv_approved_tw_MMU":58.0,"n_seia_eff":2.38,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"Relave_n":0.0,"SEIA_rej_n":0.243,"AreaProt_n":0.0},"dist_to_M5_km":10.3}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-22.375099,"lon":-70.196233,"dist_km":24.9,"score_raw":0.053976,"score_2nd":0.043441,"gap":0.010535,"gap_pct":19.52,"score_norm":0.1379,"n_exploration":1,"n_seia_approved":5,"inv_approved_MMU":116.1,"inv_approved_tw_MMU":63.7,"n_seia_eff":2.85,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"M1n":0.017,"Gtwn":0.031,"Res_n":0.145,"M3n":0.578,"M4n":0.03}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.36 δ=max(0.15,1−Π)=0.64","color":"#fb923c","data":{"lat":-21.935141,"lon":-69.784539,"dist_km":44.8,"score_raw":0.130752,"score_2nd":0.045688,"gap":0.085064,"gap_pct":65.06,"score_norm":1.0,"n_exploration":0,"n_seia_approved":1,"inv_approved_MMU":7.0,"inv_approved_tw_MMU":3.5,"n_seia_eff":0.51,"n_pipeline":1,"inv_pipeline_MMU":870.0,"n_relaves":0,"components":{"exp_ratio":0.0,"prosp_grav_n":1.0,"n_fae_local":0.0,"M4n":0.001},"dist_to_M5_km":64.7}}}},"II-2":{"id":"II-2","label":"Antofagasta — Sub-clúster 2","centroid":[-22.29443,-68.88305],"stats":{"n_facilities":164,"n_catA":139,"n_catB":10,"n_explor_surf":16,"n_explor_sub":0,"n_lab":6,"n_explor_total":22,"exploration_ratio":0.122,"n_prod_inst":39,"n_seia_approved":132,"n_seia_pipeline":3,"n_seia_rejected":22,"inv_approved_MMU":34802.2,"inv_pipeline_MMU":2510.1,"n_rel_active":4,"n_rel_inactive":0,"n_rel_abandoned":6,"n_rel_total":11,"vol_relaves_m3":1350687196.0,"ton_relaves":2346976457.0,"top_seia":[{"name":"RT Sulfuros","inv":5400.0,"tipo":"i4","lat":-22.200103,"lon":-68.838854},{"name":"Desarrollo Minera Centinela","inv":4350.0,"tipo":"i1","lat":-22.922481,"lon":-69.126107},{"name":"Minerales primarios Minera Spence","inv":2500.0,"tipo":"i1","lat":-22.787347,"lon":-69.243566},{"name":"Mina Chuquicamata Subterránea (e-seia)","inv":2000.0,"tipo":"i4","lat":-22.366162,"lon":-68.836694},{"name":"Proyecto Sierra Gorda","inv":1900.0,"tipo":"i4","lat":-22.843437,"lon":-69.353919}],"top_relaves":[{"faena":"CHUQUICAMATA","inst":"TALABRE","estado":"ACTIVO","vol_m3":1276498171.0,"ton":2246636781.0,"lat":-22.37945843,"lon":-68.76296525,"tipo":"TRANQUE DE RELAVE"},{"faena":"SPENCE","inst":"SPENCE","estado":"ACTIVO","vol_m3":73431276.0,"ton":99132223.0,"lat":-22.75192071,"lon":-69.31676968,"tipo":"TRANQUE DE RELAVE"},{"faena":"PLANTA CALLEJAS ZAMORA","inst":"TRANQUE 4","estado":"ABANDONADO","vol_m3":588181.0,"ton":882272.0,"lat":-22.81011885,"lon":-69.39555573,"tipo":"EMBALSE"},{"faena":"PLANTA CALLEJAS ZAMORA","inst":"DEPOSITO 5","estado":"ACTIVO","vol_m3":169568.0,"ton":325181.0,"lat":-22.81096099,"lon":-69.39727477,"tipo":"EMBALSE"},{"faena":"MINERA CRISTAL LIMITADA","inst":"DEPÓSITO TUINA","estado":"ACTIVO","vol_m3":0.0,"ton":0.0,"lat":-22.53936396,"lon":-68.43530645,"tipo":"EMBALSE"}]},"exploration_sites":[{"empresa":"CORPORACION NACIONAL DEL COBRE (CODELCO)","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.200432,"lon":-68.857419,"estado":"ACTIVA"},{"empresa":"CORPORACION NACIONAL DEL COBRE (CODELCO)","tipo":"MUESTRERA MINA","lat":-22.200835,"lon":-68.863705,"estado":"ACTIVA"},{"empresa":"ECOMETALES LIMITED","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.302276,"lon":-68.841063,"estado":"ACTIVA"},{"empresa":"ECOMETALES LIMITED","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.301518,"lon":-68.8412,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.727435,"lon":-69.113996,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.402254,"lon":-68.950996,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.202565,"lon":-68.880341,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.699781,"lon":-68.563878,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-21.958579,"lon":-69.185041,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.325232,"lon":-68.912484,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.551694,"lon":-69.138166,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.317556,"lon":-68.917674,"estado":"ACTIVA"},{"empresa":"BHP CHILE INC.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.383739,"lon":-68.48065,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.335777,"lon":-68.917809,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.537674,"lon":-69.036722,"estado":"ACTIVA"}],"seia_projects":[{"name":"Modificación Pila de Lixiviación Sulfolix El Abra","estado":"Aprobado","inv":741.0,"lat":-22.001254,"lon":-68.773814,"tipo":"i5"},{"name":"Modificación de las Instalaciones productivas y transporte de nitratos faena minera Coya Sur","estado":"Aprobado","inv":250.0,"lat":-22.386221,"lon":-69.622933,"tipo":"i1"},{"name":"Aumento Vida Útil Áreas de Lixiviación Sulfuros Baja Ley División Chuquicamata","estado":"Aprobado","inv":4.0,"lat":-22.295132,"lon":-68.873794,"tipo":"i3"},{"name":"Obras Complementarias y Ajustes Operacionales Mina Chuquicamata Subterránea","estado":"Aprobado","inv":720.0,"lat":-22.0,"lon":-69.0,"tipo":"i1"},{"name":"Ampliación de Zona de Extracción en Pozo Lastrero 2","estado":"Aprobado","inv":0.5,"lat":-23.000002,"lon":-69.0,"tipo":"i5"},{"name":"PROSPECCIONES PAMPA PACIENCIA","estado":"Aprobado","inv":19.0,"lat":-22.731942,"lon":-69.404486,"tipo":"i2"},{"name":"Adecuación Operacional Spence","estado":"Aprobado","inv":1652.0,"lat":-22.786075,"lon":-69.248133,"tipo":"i1"},{"name":"DELIMITACIÓN DE NUEVOS RECURSOS, PROYECTO QUETENA","estado":"Aprobado","inv":4.8,"lat":-22.411291,"lon":-68.951885,"tipo":"i2"},{"name":"Actualización Matriz de Sustentabilidad de Recursos Geológicos","estado":"Aprobado","inv":458.0,"lat":-22.0,"lon":-69.0,"tipo":"i2"},{"name":"Proyecto Alternativo Depositación de Relaves en Rajo","estado":"Aprobado","inv":448.0,"lat":-23.0,"lon":-69.0,"tipo":"i3"},{"name":"Proyecto Polo Sur y Optimización Minera Centinela","estado":"Aprobado","inv":300.0,"lat":-23.000002,"lon":-69.0,"tipo":"i1"},{"name":"Producción de Áridos Eufemia","estado":"Aprobado","inv":0.1,"lat":-22.600557,"lon":-68.621594,"tipo":"i5"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=15.8km (Scott)","color":"#22c55e","data":{"lat":-22.32215,"lon":-68.91301,"dist_km":4.4,"score_raw":0.154583,"score_2nd":0.118709,"gap":0.035874,"gap_pct":23.21,"score_norm":1.0,"n_exploration":7,"n_seia_approved":52,"inv_approved_MMU":10326.9,"inv_approved_tw_MMU":6317.7,"n_seia_eff":30.54,"n_pipeline":1,"inv_pipeline_MMU":2500.0,"n_relaves":0,"dist_to_M5_km":2.9}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-22.30367,"lon":-68.893037,"dist_km":1.5,"score_raw":509.473833,"score_2nd":399.872663,"gap":109.60117,"gap_pct":21.51,"score_norm":1.0,"n_exploration":7,"n_seia_approved":53,"inv_approved_MMU":9665.6,"inv_approved_tw_MMU":6020.1,"n_seia_eff":30.93,"n_pipeline":1,"inv_pipeline_MMU":2500.0,"n_relaves":0,"dist_to_M5_km":0.0}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-22.32215,"lon":-68.833117,"dist_km":6.0,"score_raw":0.081244,"score_2nd":0.080794,"gap":0.00045,"gap_pct":0.55,"score_norm":0.6007,"n_exploration":5,"n_seia_approved":50,"inv_approved_MMU":10131.6,"inv_approved_tw_MMU":6242.1,"n_seia_eff":29.24,"n_pipeline":1,"inv_pipeline_MMU":2500.0,"n_relaves":1,"components":{"Relave_n":0.0,"SEIA_rej_n":0.27,"AreaProt_n":0.0},"dist_to_M5_km":6.5}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-22.30367,"lon":-68.893037,"dist_km":1.5,"score_raw":0.355986,"score_2nd":0.342703,"gap":0.013284,"gap_pct":3.73,"score_norm":1.0,"n_exploration":7,"n_seia_approved":53,"inv_approved_MMU":9665.6,"inv_approved_tw_MMU":6020.1,"n_seia_eff":30.93,"n_pipeline":1,"inv_pipeline_MMU":2500.0,"n_relaves":0,"components":{"M1n":0.169,"Gtwn":0.14,"Res_n":1.0,"M3n":1.0,"M4n":0.422}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.92 δ=max(0.15,1−Π)=0.15","color":"#fb923c","data":{"lat":-22.37759,"lon":-69.012875,"dist_km":16.2,"score_raw":0.014657,"score_2nd":0.009159,"gap":0.005498,"gap_pct":37.51,"score_norm":0.9246,"n_exploration":5,"n_seia_approved":19,"inv_approved_MMU":2622.5,"inv_approved_tw_MMU":1625.7,"n_seia_eff":11.68,"n_pipeline":1,"inv_pipeline_MMU":2500.0,"n_relaves":2,"components":{"exp_ratio":0.5,"prosp_grav_n":0.0,"n_fae_local":0.0,"M4n":0.011},"dist_to_M5_km":14.8}}}},"II-3":{"id":"II-3","label":"Antofagasta — Sub-clúster 3","centroid":[-24.54541,-70.29334],"stats":{"n_facilities":139,"n_catA":61,"n_catB":1,"n_explor_surf":6,"n_explor_sub":0,"n_lab":1,"n_explor_total":7,"exploration_ratio":0.058,"n_prod_inst":38,"n_seia_approved":20,"n_seia_pipeline":1,"n_seia_rejected":4,"inv_approved_MMU":826.9,"inv_pipeline_MMU":25.0,"n_rel_active":1,"n_rel_inactive":2,"n_rel_abandoned":0,"n_rel_total":3,"vol_relaves_m3":0.0,"ton_relaves":0.0,"top_seia":[{"name":"Proyecto Minero Arbiodo","inv":396.0,"tipo":"i1","lat":-24.982459,"lon":-69.992625},{"name":"Ampliación Aguas Blancas (e-seia)","inv":100.0,"tipo":"i4","lat":-24.138121,"lon":-69.873049},{"name":"Solución Pasivos Ambientales y Reactivación Mina Montecristo y Planta Santo Domingo","inv":84.6,"tipo":"i4","lat":-25.106631,"lon":-70.497215},{"name":"Extensión El Way Este","inv":75.0,"tipo":"i1","lat":-24.016777,"lon":-70.3729},{"name":"Aguas Blancas","inv":60.0,"tipo":"i4","lat":-24.173885,"lon":-69.866873}],"top_relaves":[{"faena":"PLANTA SANTO DOMINGO","inst":"TRANQUE 3","estado":"ACTIVO","vol_m3":0.0,"ton":0.0,"lat":-25.09870918,"lon":-70.49044022,"tipo":"EMBALSE"},{"faena":"PLANTA SANTO DOMINGO","inst":"TRANQUE 2","estado":"INACTIVO","vol_m3":0.0,"ton":0.0,"lat":-25.09917324,"lon":-70.49960789,"tipo":"TRANQUE DE RELAVE"},{"faena":"PLANTA SANTO DOMINGO","inst":"TRANQUE 1","estado":"INACTIVO","vol_m3":0.0,"ton":0.0,"lat":-25.10713255,"lon":-70.50110146,"tipo":"TRANQUE DE RELAVE"}]},"exploration_sites":[{"empresa":"MINERA ALGARROBO SpA","tipo":"EXPLORACION DE SUPERFICIE","lat":-24.939625,"lon":-70.26424,"estado":"ACTIVA"},{"empresa":"EDGARDO DANIEL DIAZ LUONI","tipo":"EXPLORACION DE SUPERFICIE","lat":-24.900894,"lon":-70.487868,"estado":"ACTIVA"},{"empresa":"FABIAN ESPINOZA CASTILLO","tipo":"EXPLORACION DE SUPERFICIE","lat":-24.933438,"lon":-70.419894,"estado":"ACTIVA"},{"empresa":"JAIME OMAR GARATE ARAYA MINERIA EIRL","tipo":"EXPLORACION DE SUPERFICIE","lat":-25.51588,"lon":-70.231009,"estado":"ACTIVA"},{"empresa":"ALONSO ALVARO BERRIOS SANTANDER MINERÍA E.I.R.L","tipo":"EXPLORACION DE SUPERFICIE","lat":-25.398874,"lon":-70.204789,"estado":"ACTIVA"},{"empresa":"FRANJA COSTERA SpA.","tipo":"EXPLORACION DE SUPERFICIE","lat":-24.145014,"lon":-70.353796,"estado":"ACTIVA"},{"empresa":"RAUL ALANIS PALACIO","tipo":"EXPLORACION DE SUPERFICIE","lat":-25.456628,"lon":-70.200967,"estado":"ACTIVA"}],"seia_projects":[{"name":"Proyecto Minero Arbiodo","estado":"Aprobado","inv":396.0,"lat":-24.982459,"lon":-69.992625,"tipo":"i1"},{"name":"Extensión El Way Este","estado":"Aprobado","inv":75.0,"lat":-24.016777,"lon":-70.3729,"tipo":"i1"},{"name":"Continuidad Operacional Proyecto Aguas Blancas","estado":"Aprobado","inv":3.0,"lat":-24.000004,"lon":-70.000004,"tipo":"i1"},{"name":"Explotación Subterránea Laguna","estado":"Aprobado","inv":28.0,"lat":-24.469091,"lon":-69.620257,"tipo":"i1"},{"name":"Procesamiento de Arenas Cuarciferas","estado":"Aprobado","inv":0.3,"lat":-23.927273,"lon":-70.285545,"tipo":"i1"},{"name":"Prospección Minera - Nitona","estado":"Aprobado","inv":4.0,"lat":-24.828856,"lon":-70.139121,"tipo":"i2"},{"name":"Ampliación planta de extracción y procesamiento de áridos en pozo lastrero sector La Varilla","estado":"Aprobado","inv":0.4,"lat":-23.927819,"lon":-70.342071,"tipo":"i5"},{"name":"Prospección Minera Arbiodo","estado":"Aprobado","inv":2.5,"lat":-24.983228,"lon":-69.903106,"tipo":"i2"},{"name":"Solución Pasivos Ambientales y Reactivación Mina Montecristo y Planta Santo Domingo","estado":"Aprobado","inv":84.6,"lat":-25.106631,"lon":-70.497215,"tipo":"i4"},{"name":"Área de Explotación Subterránea, Sector Fortuna","estado":"Aprobado","inv":6.0,"lat":-24.429021,"lon":-69.588139,"tipo":"i4"},{"name":"Modificaciones Ampliación Aguas Blancas (e-seia)","estado":"Aprobado","inv":19.0,"lat":-24.140893,"lon":-69.845835,"tipo":"i4"},{"name":"Planta de Tratamiento de Polvos (e-seia)","estado":"Aprobado","inv":3.2,"lat":-23.826417,"lon":-70.316347,"tipo":"i4"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=8.9km (Scott)","color":"#22c55e","data":{"lat":-24.946687,"lon":-70.277001,"dist_km":44.7,"score_raw":0.033911,"score_2nd":0.031392,"gap":0.002519,"gap_pct":7.43,"score_norm":0.6682,"n_exploration":1,"n_seia_approved":0,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.0,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"dist_to_M5_km":13.6}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-24.976411,"lon":-70.40771,"dist_km":49.3,"score_raw":64.519531,"score_2nd":59.080291,"gap":5.43924,"gap_pct":8.43,"score_norm":1.0,"n_exploration":2,"n_seia_approved":0,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.0,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"dist_to_M5_km":0.0}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-24.471099,"lon":-70.440387,"dist_km":17.0,"score_raw":0.00061,"score_2nd":0.000561,"gap":4.9e-05,"gap_pct":8.09,"score_norm":0.0091,"n_exploration":0,"n_seia_approved":0,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.0,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"Relave_n":0.0,"SEIA_rej_n":0.0,"AreaProt_n":0.003},"dist_to_M5_km":56.3}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-24.976411,"lon":-70.40771,"dist_km":49.3,"score_raw":0.079775,"score_2nd":0.070239,"gap":0.009536,"gap_pct":11.95,"score_norm":1.0,"n_exploration":2,"n_seia_approved":0,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.0,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"M1n":0.221,"Gtwn":0.001,"Res_n":1.0,"M3n":1.0,"M4n":0.0}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.54 δ=max(0.15,1−Π)=0.46","color":"#fb923c","data":{"lat":-24.916963,"lon":-70.505742,"dist_km":46.6,"score_raw":0.01861,"score_2nd":0.01861,"gap":1e-06,"gap_pct":0.0,"score_norm":0.5425,"n_exploration":2,"n_seia_approved":0,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.0,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"exp_ratio":0.2,"prosp_grav_n":0.0,"n_fae_local":0.0,"M4n":0.0},"dist_to_M5_km":11.9}}}},"II-4":{"id":"II-4","label":"Antofagasta — Sub-clúster 4","centroid":[-25.59679,-70.29026],"stats":{"n_facilities":160,"n_catA":27,"n_catB":15,"n_explor_surf":14,"n_explor_sub":0,"n_lab":2,"n_explor_total":16,"exploration_ratio":0.056,"n_prod_inst":36,"n_seia_approved":51,"n_seia_pipeline":2,"n_seia_rejected":8,"inv_approved_MMU":1291.1,"inv_pipeline_MMU":125.0,"n_rel_active":3,"n_rel_inactive":7,"n_rel_abandoned":14,"n_rel_total":24,"vol_relaves_m3":251767446.0,"ton_relaves":356816442.0,"top_seia":[{"name":"Proyecto Minero Arbiodo","inv":396.0,"tipo":"i1","lat":-24.982459,"lon":-69.992625},{"name":"Actualización Proyecto Franke (e-seia)","inv":160.0,"tipo":"i4","lat":-25.831275,"lon":-69.866591},{"name":"Proyecto Franke","inv":100.0,"tipo":"i4","lat":-25.838729,"lon":-69.867254},{"name":"Solución Pasivos Ambientales y Reactivación Mina Montecristo y Planta Santo Domingo","inv":84.6,"tipo":"i4","lat":-25.106631,"lon":-70.497215},{"name":"Continuidad Operacional Mina Barreal Seco","inv":73.4,"tipo":"i1","lat":-25.94527,"lon":-70.064432}],"top_relaves":[{"faena":"SALVADOR","inst":"PAMPA AUSTRAL","estado":"ACTIVO","vol_m3":242440329.0,"ton":339160524.0,"lat":-26.25078973,"lon":-70.08221504,"tipo":"EMBALSE"},{"faena":"LAS CENIZAS TALTAL","inst":"LAS LUCES 2","estado":"INACTIVO","vol_m3":6331078.0,"ton":9496617.0,"lat":-25.66587993,"lon":-70.5834103,"tipo":"TRANQUE DE RELAVE"},{"faena":"LAS CENIZAS TALTAL","inst":"LAS LUCES 3","estado":"ACTIVO","vol_m3":2887120.0,"ton":7995922.0,"lat":-25.67357417,"lon":-70.57175766,"tipo":"ESPESADO"},{"faena":"PLANTA JOSE ANTONIO MORENO","inst":"EMBALSE DE RELAVE","estado":"INACTIVO","vol_m3":108919.0,"ton":163379.0,"lat":-25.38913714,"lon":-70.45435745,"tipo":"EMBALSE"},{"faena":"PLANTA JOSE ANTONIO MORENO","inst":"PUNTA MORADO","estado":"INACTIVO","vol_m3":0.0,"ton":0.0,"lat":-25.38802076,"lon":-70.45628997,"tipo":"TRANQUE DE RELAVE"}]},"exploration_sites":[{"empresa":"SOCIEDAD CONTRACTUAL MINERA BERTA","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.358193,"lon":-70.047415,"estado":"ACTIVA"},{"empresa":"MINERA JATRI SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.220467,"lon":-70.282272,"estado":"ACTIVA"},{"empresa":"KGHM CHILE SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.186874,"lon":-70.144114,"estado":"ACTIVA"},{"empresa":"EMPRESA NACIONAL DE MINERIA (ENAMI)","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.18596,"lon":-70.262111,"estado":"ACTIVA"},{"empresa":"GUIDO CERDA HERRERA","tipo":"EXPLORACION DE SUPERFICIE","lat":-25.678901,"lon":-70.530001,"estado":"ACTIVA"},{"empresa":"MINERA ALGARROBO SpA","tipo":"EXPLORACION DE SUPERFICIE","lat":-24.939625,"lon":-70.26424,"estado":"ACTIVA"},{"empresa":"MINERIA Y CONSTRUCCION ACOR SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-25.598738,"lon":-70.365287,"estado":"ACTIVA"},{"empresa":"MINERA LOS PORTALES S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-25.693712,"lon":-70.521801,"estado":"ACTIVA"},{"empresa":"EDGARDO DANIEL DIAZ LUONI","tipo":"EXPLORACION DE SUPERFICIE","lat":-24.900894,"lon":-70.487868,"estado":"ACTIVA"},{"empresa":"MINERA LAS CENIZAS S.A.","tipo":"MUESTRERA Y/O LABORATORIO","lat":-25.788274,"lon":-70.324917,"estado":"ACTIVA"},{"empresa":"FABIAN ESPINOZA CASTILLO","tipo":"EXPLORACION DE SUPERFICIE","lat":-24.933438,"lon":-70.419894,"estado":"ACTIVA"},{"empresa":"MINERA LAS CENIZAS S.A.","tipo":"MUESTRERA Y/O LABORATORIO","lat":-25.674365,"lon":-70.593683,"estado":"ACTIVA"},{"empresa":"JAIME OMAR GARATE ARAYA MINERIA EIRL","tipo":"EXPLORACION DE SUPERFICIE","lat":-25.51588,"lon":-70.231009,"estado":"ACTIVA"},{"empresa":"ALONSO ALVARO BERRIOS SANTANDER MINERÍA E.I.R.L","tipo":"EXPLORACION DE SUPERFICIE","lat":-25.398874,"lon":-70.204789,"estado":"ACTIVA"},{"empresa":"RAUL ALANIS PALACIO","tipo":"EXPLORACION DE SUPERFICIE","lat":-25.456628,"lon":-70.200967,"estado":"ACTIVA"}],"seia_projects":[{"name":"Proyecto Minero Arbiodo","estado":"Aprobado","inv":396.0,"lat":-24.982459,"lon":-69.992625,"tipo":"i1"},{"name":"Explotación de Hierro San Gabriel (e-seia)","estado":"Aprobado","inv":15.0,"lat":-25.924888,"lon":-70.102321,"tipo":"i4"},{"name":"Explotación China (e-seia)","estado":"Aprobado","inv":10.0,"lat":-25.852142,"lon":-69.925081,"tipo":"i4"},{"name":"Actualización Proyecto Franke (e-seia)","estado":"Aprobado","inv":160.0,"lat":-25.831275,"lon":-69.866591,"tipo":"i4"},{"name":"Proyecto Franke","estado":"Aprobado","inv":100.0,"lat":-25.838729,"lon":-69.867254,"tipo":"i4"},{"name":"Modificación Proyecto Altamira (e-seia)","estado":"Aprobado","inv":4.0,"lat":-25.836329,"lon":-69.856381,"tipo":"i4"},{"name":"Minero Altamira","estado":"Aprobado","inv":40.0,"lat":-25.837723,"lon":-69.855732,"tipo":"i4"},{"name":"Sondajes Mineros Proyecto Carrizalillo","estado":"Aprobado","inv":16.5,"lat":-26.021422,"lon":-70.30933,"tipo":"i2"},{"name":"Explotación Mineral de Hierro Don Eduardo","estado":"Aprobado","inv":15.0,"lat":-26.123633,"lon":-70.273913,"tipo":"i4"},{"name":"Proyecto Minero SS-XAVIER 1","estado":"Aprobado","inv":18.9,"lat":-26.186507,"lon":-70.31099,"tipo":"i4"},{"name":"V ETAPA DEPÓSITO DE RELAVES PAMPA AUSTRAL","estado":"Aprobado","inv":6.0,"lat":-26.265413,"lon":-70.094332,"tipo":"i4"},{"name":"Prospección Don Daniel","estado":"Aprobado","inv":10.0,"lat":-26.28822,"lon":-70.264409,"tipo":"i4"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=16.0km (Scott)","color":"#22c55e","data":{"lat":-25.3991,"lon":-70.205951,"dist_km":23.6,"score_raw":0.086411,"score_2nd":0.075295,"gap":0.011116,"gap_pct":12.86,"score_norm":1.0,"n_exploration":2,"n_seia_approved":0,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.0,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"dist_to_M5_km":45.5}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-25.672825,"lon":-70.576911,"dist_km":30.0,"score_raw":62.248538,"score_2nd":61.796355,"gap":0.452183,"gap_pct":0.73,"score_norm":1.0,"n_exploration":3,"n_seia_approved":4,"inv_approved_MMU":63.1,"inv_approved_tw_MMU":43.8,"n_seia_eff":2.36,"n_pipeline":1,"inv_pipeline_MMU":100.0,"n_relaves":3,"dist_to_M5_km":7.6}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-25.3991,"lon":-70.47574,"dist_km":28.8,"score_raw":0.137567,"score_2nd":0.03328,"gap":0.104286,"gap_pct":75.81,"score_norm":1.0,"n_exploration":0,"n_seia_approved":8,"inv_approved_MMU":9.6,"inv_approved_tw_MMU":7.0,"n_seia_eff":5.69,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":9,"components":{"Relave_n":0.01,"SEIA_rej_n":0.441,"AreaProt_n":0.0},"dist_to_M5_km":34.0}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-25.703239,"lon":-70.509463,"dist_km":25.0,"score_raw":0.244462,"score_2nd":0.216542,"gap":0.02792,"gap_pct":11.42,"score_norm":1.0,"n_exploration":3,"n_seia_approved":4,"inv_approved_MMU":63.1,"inv_approved_tw_MMU":43.8,"n_seia_eff":2.36,"n_pipeline":1,"inv_pipeline_MMU":100.0,"n_relaves":3,"components":{"M1n":0.396,"Gtwn":0.089,"Res_n":0.382,"M3n":0.057,"M4n":0.003}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.35 δ=max(0.15,1−Π)=0.65","color":"#fb923c","data":{"lat":-25.733652,"lon":-69.969886,"dist_km":35.5,"score_raw":0.082074,"score_2nd":0.04081,"gap":0.041264,"gap_pct":50.28,"score_norm":1.0,"n_exploration":0,"n_seia_approved":0,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.0,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"exp_ratio":0.0,"prosp_grav_n":0.606,"n_fae_local":0.0,"M4n":0.001},"dist_to_M5_km":54.2}}}},"II-5":{"id":"II-5","label":"Antofagasta — Sub-clúster 5","centroid":[-23.43083,-70.26153],"stats":{"n_facilities":144,"n_catA":0,"n_catB":0,"n_explor_surf":13,"n_explor_sub":0,"n_lab":3,"n_explor_total":16,"exploration_ratio":0.021,"n_prod_inst":42,"n_seia_approved":109,"n_seia_pipeline":1,"n_seia_rejected":18,"inv_approved_MMU":7220.8,"inv_pipeline_MMU":25.0,"n_rel_active":3,"n_rel_inactive":1,"n_rel_abandoned":4,"n_rel_total":8,"vol_relaves_m3":89951149.0,"ton_relaves":104247962.0,"top_seia":[{"name":"Aumento de Capacidad y Optimización Producción Planta de Litio Carmen","inv":987.0,"tipo":"i1","lat":-23.62949,"lon":-70.261703},{"name":"Ampliación Pampa Blanca","inv":665.0,"tipo":"i4","lat":-23.094532,"lon":-69.709498},{"name":"Proyecto Minero de Cobre Óxidos Marimaca","inv":500.0,"tipo":"i1","lat":-23.186329,"lon":-70.223432},{"name":"Ampliación de la Planta de Carbonato de Litio a 180.000 ton/año","inv":450.0,"tipo":"i1","lat":-23.637838,"lon":-70.25797},{"name":"Proyecto Extensión Lomas Bayas (e-seia)","inv":335.0,"tipo":"i4","lat":-23.432569,"lon":-69.513935}],"top_relaves":[{"faena":"MANTOS BLANCOS","inst":"MANTOS BLANCO","estado":"ACTIVO","vol_m3":89307840.0,"ton":92190867.0,"lat":-23.44444578,"lon":-70.05626323,"tipo":"FILTRADO"},{"faena":"FAENA ALTONORTE","inst":"EMBALSE DE RELAVES","estado":"ACTIVO","vol_m3":643309.0,"ton":1993275.0,"lat":-23.80628984,"lon":-70.34511911,"tipo":"EMBALSE"},{"faena":"MANTOS BLANCOS","inst":"TRANQUE DE RELAVE","estado":"INACTIVO","vol_m3":0.0,"ton":0.0,"lat":-23.44270704,"lon":-70.04574472,"tipo":"TRANQUE DE RELAVE"},{"faena":"MANTOS BLANCOS","inst":"DEPOSITO RELAVES FINOS","estado":"ACTIVO","vol_m3":0.0,"ton":10063820.0,"lat":-23.43343288,"lon":-70.09201865,"tipo":"FILTRADO"},{"faena":"MICHILLA","inst":"MICHILLA","estado":"ABANDONADO","vol_m3":0.0,"ton":0.0,"lat":-22.74229498,"lon":-70.2879105,"tipo":"TRANQUE DE RELAVE"}]},"exploration_sites":[{"empresa":"MINERA HMC S.A.","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.677885,"lon":-70.186591,"estado":"ACTIVA"},{"empresa":"MINERA LARA SOCIEDAD POR ACCIONES","tipo":"EXPLORACION DE SUPERFICIE","lat":-24.004399,"lon":-70.326301,"estado":"ACTIVA"},{"empresa":"COMPLEJO METALÚRGICO ALTONORTE S.A","tipo":"MUESTRERA Y/O LABORATORIO","lat":-23.828341,"lon":-70.317751,"estado":"ACTIVA"},{"empresa":"MINERA CENTINELA","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.730754,"lon":-70.283149,"estado":"ACTIVA"},{"empresa":"COMPAÑIA MINERA JOSEFA SpA","tipo":"EXPLORACION DE SUPERFICIE","lat":-23.248465,"lon":-70.198862,"estado":"ACTIVA"},{"empresa":"MINERA HMC S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.685621,"lon":-70.182346,"estado":"ACTIVA"},{"empresa":"COMPAÑIA MINERA JOSEFA SpA","tipo":"EXPLORACION DE SUPERFICIE","lat":-23.243203,"lon":-70.214971,"estado":"ACTIVA"},{"empresa":"MINERA HMC S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.853077,"lon":-70.225373,"estado":"ACTIVA"},{"empresa":"MINERA DEL COBRE SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-23.281851,"lon":-70.243458,"estado":"ACTIVA"},{"empresa":"FRANJA COSTERA SpA.","tipo":"EXPLORACION DE SUPERFICIE","lat":-24.145014,"lon":-70.353796,"estado":"ACTIVA"},{"empresa":"MINERA HMC S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.671724,"lon":-70.163316,"estado":"ACTIVA"},{"empresa":"MINERA HMC S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.762977,"lon":-70.244757,"estado":"ACTIVA"},{"empresa":"MINERA HMC S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.814783,"lon":-70.226297,"estado":"ACTIVA"},{"empresa":"SCM COMPAÑIA MINERA NORTEARIDOS MINERALS","tipo":"EXPLORACION DE SUPERFICIE","lat":-24.055451,"lon":-70.328054,"estado":"ACTIVA"}],"seia_projects":[{"name":"Prospección Minera para la caracterización del deposito de minerales Cachorro.","estado":"Aprobado","inv":220.0,"lat":-22.951636,"lon":-69.772375,"tipo":"i2"},{"name":"Proyecto Minero de Cobre Óxidos Marimaca","estado":"Aprobado","inv":500.0,"lat":-23.186329,"lon":-70.223432,"tipo":"i1"},{"name":"Modificación Faena Minera Pampa Blanca mediante la Incorporación de nueva área de acopio de sales de descarte","estado":"Aprobado","inv":2.6,"lat":-23.158364,"lon":-69.647206,"tipo":"i3"},{"name":"Extensión El Way Este","estado":"Aprobado","inv":75.0,"lat":-24.016777,"lon":-70.3729,"tipo":"i1"},{"name":"Proyecto minero Comahue","estado":"Aprobado","inv":55.0,"lat":-23.483762,"lon":-70.266089,"tipo":"i1"},{"name":"Adecuación Obras Mineras para Continuidad Operacional de CMLB","estado":"Aprobado","inv":254.0,"lat":-23.432971,"lon":-69.515415,"tipo":"i1"},{"name":"Aumento de Capacidad y Optimización Producción Planta de Litio Carmen","estado":"Aprobado","inv":987.0,"lat":-23.62949,"lon":-70.261703,"tipo":"i1"},{"name":"Continuidad Operacional Proyecto Aguas Blancas","estado":"Aprobado","inv":3.0,"lat":-24.000004,"lon":-70.000004,"tipo":"i1"},{"name":"Modificación del Transporte de Relaves Gruesos y Optimización del Método Constructivo del Muro del Depósito de Relaves Finos","estado":"Aprobado","inv":41.4,"lat":-23.440408,"lon":-70.058649,"tipo":"i3"},{"name":"Prospección MCAL","estado":"Aprobado","inv":55.0,"lat":-23.219968,"lon":-70.199415,"tipo":"i2"},{"name":"Continuidad Operacional Planta Iván","estado":"Aprobado","inv":21.5,"lat":-23.349737,"lon":-70.274762,"tipo":"i3"},{"name":"Ampliación Extracción de Áridos Pozo E4 (km 13","estado":"Aprobado","inv":0.1,"lat":-23.0,"lon":-70.0,"tipo":"i5"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=15.4km (Scott)","color":"#22c55e","data":{"lat":-24.052534,"lon":-70.319608,"dist_km":69.4,"score_raw":0.048794,"score_2nd":0.03634,"gap":0.012454,"gap_pct":25.52,"score_norm":0.6363,"n_exploration":3,"n_seia_approved":2,"inv_approved_MMU":75.3,"inv_approved_tw_MMU":74.0,"n_seia_eff":1.45,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"dist_to_M5_km":95.5}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-23.448593,"lon":-70.048577,"dist_km":21.8,"score_raw":91.400395,"score_2nd":85.014963,"gap":6.385431,"gap_pct":6.99,"score_norm":1.0,"n_exploration":0,"n_seia_approved":18,"inv_approved_MMU":815.1,"inv_approved_tw_MMU":479.3,"n_seia_eff":10.25,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":5,"dist_to_M5_km":31.9}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-23.413067,"lon":-70.087296,"dist_km":17.9,"score_raw":0.108475,"score_2nd":0.069711,"gap":0.038764,"gap_pct":35.74,"score_norm":1.0,"n_exploration":0,"n_seia_approved":19,"inv_approved_MMU":815.6,"inv_approved_tw_MMU":479.6,"n_seia_eff":10.89,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":5,"components":{"Relave_n":0.0,"SEIA_rej_n":0.36,"AreaProt_n":0.001},"dist_to_M5_km":26.5}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-23.199911,"lon":-70.203452,"dist_km":26.4,"score_raw":0.169355,"score_2nd":0.155069,"gap":0.014286,"gap_pct":8.44,"score_norm":1.0,"n_exploration":3,"n_seia_approved":11,"inv_approved_MMU":639.8,"inv_approved_tw_MMU":596.2,"n_seia_eff":7.27,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"M1n":0.113,"Gtwn":0.205,"Res_n":0.214,"M3n":0.009,"M4n":0.026}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.60 δ=max(0.15,1−Π)=0.40","color":"#fb923c","data":{"lat":-23.164385,"lon":-69.97114,"dist_km":41.9,"score_raw":0.04552,"score_2nd":0.022666,"gap":0.022854,"gap_pct":50.21,"score_norm":0.7792,"n_exploration":0,"n_seia_approved":4,"inv_approved_MMU":237.9,"inv_approved_tw_MMU":147.5,"n_seia_eff":2.31,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"exp_ratio":0.0,"prosp_grav_n":0.822,"n_fae_local":0.0,"M4n":0.112},"dist_to_M5_km":24.1}}}},"II-6":{"id":"II-6","label":"Antofagasta — Sub-clúster 6","centroid":[-22.86032,-69.32292],"stats":{"n_facilities":264,"n_catA":18,"n_catB":33,"n_explor_surf":17,"n_explor_sub":0,"n_lab":6,"n_explor_total":23,"exploration_ratio":0.038,"n_prod_inst":75,"n_seia_approved":157,"n_seia_pipeline":7,"n_seia_rejected":21,"inv_approved_MMU":35763.1,"inv_pipeline_MMU":4793.6,"n_rel_active":5,"n_rel_inactive":0,"n_rel_abandoned":9,"n_rel_total":15,"vol_relaves_m3":1854039992.0,"ton_relaves":3201689511.0,"top_seia":[{"name":"Desarrollo Minera Centinela","inv":4350.0,"tipo":"i1","lat":-22.922481,"lon":-69.126107},{"name":"Actualización Proyecto Sierra Gorda","inv":3072.0,"tipo":"i4","lat":-22.913607,"lon":-69.354959},{"name":"Minerales primarios Minera Spence","inv":2500.0,"tipo":"i1","lat":-22.787347,"lon":-69.243566},{"name":"Adecuación Operacional del Depósito de Relaves y Optimización del Proyecto Sierra Gorda","inv":2000.0,"tipo":"i1","lat":-22.926332,"lon":-69.350455},{"name":"Mina Chuquicamata Subterránea (e-seia)","inv":2000.0,"tipo":"i4","lat":-22.366162,"lon":-68.836694}],"top_relaves":[{"faena":"CHUQUICAMATA","inst":"TALABRE","estado":"ACTIVO","vol_m3":1276498171.0,"ton":2246636781.0,"lat":-22.37945843,"lon":-68.76296525,"tipo":"TRANQUE DE RELAVE"},{"faena":"PROYECTO ESPERANZA","inst":"ESPERANZA","estado":"ACTIVO","vol_m3":290449305.0,"ton":450196422.0,"lat":-22.989994,"lon":-69.12313422,"tipo":"ESPESADO"},{"faena":"PROYECTO SIERRA GORDA","inst":"SIERRA GORDA","estado":"ACTIVO","vol_m3":212903491.0,"ton":404516632.0,"lat":-22.85724066,"lon":-69.38984859,"tipo":"ESPESADO"},{"faena":"SPENCE","inst":"SPENCE","estado":"ACTIVO","vol_m3":73431276.0,"ton":99132223.0,"lat":-22.75192071,"lon":-69.31676968,"tipo":"TRANQUE DE RELAVE"},{"faena":"PLANTA CALLEJAS ZAMORA","inst":"TRANQUE 4","estado":"ABANDONADO","vol_m3":588181.0,"ton":882272.0,"lat":-22.81011885,"lon":-69.39555573,"tipo":"EMBALSE"}]},"exploration_sites":[{"empresa":"CORPORACION NACIONAL DEL COBRE (CODELCO)","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.200432,"lon":-68.857419,"estado":"ACTIVA"},{"empresa":"CORPORACION NACIONAL DEL COBRE (CODELCO)","tipo":"MUESTRERA MINA","lat":-22.200835,"lon":-68.863705,"estado":"ACTIVA"},{"empresa":"MINERA ANTUCOYA LIMITADA","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.622035,"lon":-69.839316,"estado":"ACTIVA"},{"empresa":"ANTOFAGASTA MINERALS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-23.029062,"lon":-69.080187,"estado":"ACTIVA"},{"empresa":"ECOMETALES LIMITED","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.302276,"lon":-68.841063,"estado":"ACTIVA"},{"empresa":"ECOMETALES LIMITED","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.301518,"lon":-68.8412,"estado":"ACTIVA"},{"empresa":"SIERRA GORDA SOCIEDAD CONTRACTUAL MINERA","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.87878,"lon":-69.362504,"estado":"ACTIVA"},{"empresa":"ANTOFAGASTA MINERALS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-23.030074,"lon":-69.08009,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.727435,"lon":-69.113996,"estado":"ACTIVA"},{"empresa":"MINERA HMC S.A.","tipo":"MUESTRERA Y/O LABORATORIO","lat":-22.677885,"lon":-70.186591,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.402254,"lon":-68.950996,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.202565,"lon":-68.880341,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.325232,"lon":-68.912484,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-23.164225,"lon":-69.06063,"estado":"ACTIVA"},{"empresa":"ASTRA EXPLORATION CHILE SpA","tipo":"EXPLORACION DE SUPERFICIE","lat":-22.740349,"lon":-69.44303,"estado":"ACTIVA"}],"seia_projects":[{"name":"Prospección Minera para la caracterización del deposito de minerales Cachorro.","estado":"Aprobado","inv":220.0,"lat":-22.951636,"lon":-69.772375,"tipo":"i2"},{"name":"Ampliación Campaña de Sondajes de Exploración, El Abra","estado":"Aprobado","inv":3.5,"lat":-23.445136,"lon":-69.073997,"tipo":"i2"},{"name":"Modificación de las Instalaciones productivas y transporte de nitratos faena minera Coya Sur","estado":"Aprobado","inv":250.0,"lat":-22.386221,"lon":-69.622933,"tipo":"i1"},{"name":"Modificación Faena Minera Pampa Blanca mediante la Incorporación de nueva área de acopio de sales de descarte","estado":"Aprobado","inv":2.6,"lat":-23.158364,"lon":-69.647206,"tipo":"i3"},{"name":"Aumento Vida Útil Áreas de Lixiviación Sulfuros Baja Ley División Chuquicamata","estado":"Aprobado","inv":4.0,"lat":-22.295132,"lon":-68.873794,"tipo":"i3"},{"name":"Ampliación de Zona de Extracción en Pozo Lastrero 2","estado":"Aprobado","inv":0.5,"lat":-23.000002,"lon":-69.0,"tipo":"i5"},{"name":"PROSPECCIONES PAMPA PACIENCIA","estado":"Aprobado","inv":19.0,"lat":-22.731942,"lon":-69.404486,"tipo":"i2"},{"name":"Adecuación Operacional Spence","estado":"Aprobado","inv":1652.0,"lat":-22.786075,"lon":-69.248133,"tipo":"i1"},{"name":"Aumento Movimientos Mina DGM","estado":"Aprobado","inv":153.2,"lat":-23.389004,"lon":-68.819622,"tipo":"i1"},{"name":"Adecuación Obras Mineras para Continuidad Operacional de CMLB","estado":"Aprobado","inv":254.0,"lat":-23.432971,"lon":-69.515415,"tipo":"i1"},{"name":"DELIMITACIÓN DE NUEVOS RECURSOS, PROYECTO QUETENA","estado":"Aprobado","inv":4.8,"lat":-22.411291,"lon":-68.951885,"tipo":"i2"},{"name":"EXPLORACIÓN AVANZADA ZEUS DGM","estado":"Aprobado","inv":10.6,"lat":-23.374709,"lon":-68.815493,"tipo":"i2"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=15.6km (Scott)","color":"#22c55e","data":{"lat":-22.938139,"lon":-69.103343,"dist_km":24.1,"score_raw":0.059769,"score_2nd":0.050313,"gap":0.009456,"gap_pct":15.82,"score_norm":0.564,"n_exploration":4,"n_seia_approved":22,"inv_approved_MMU":8093.9,"inv_approved_tw_MMU":5437.3,"n_seia_eff":13.26,"n_pipeline":1,"inv_pipeline_MMU":7.1,"n_relaves":2,"dist_to_M5_km":22.2}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-22.782501,"lon":-69.306029,"dist_km":8.8,"score_raw":306.900627,"score_2nd":161.625328,"gap":145.275299,"gap_pct":47.34,"score_norm":0.6211,"n_exploration":1,"n_seia_approved":17,"inv_approved_MMU":8382.8,"inv_approved_tw_MMU":5832.0,"n_seia_eff":9.84,"n_pipeline":1,"inv_pipeline_MMU":3.0,"n_relaves":7,"dist_to_M5_km":6.9}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-22.907012,"lon":-69.069562,"dist_km":26.5,"score_raw":0.072692,"score_2nd":0.047604,"gap":0.025088,"gap_pct":34.51,"score_norm":0.8637,"n_exploration":2,"n_seia_approved":21,"inv_approved_MMU":8013.9,"inv_approved_tw_MMU":5382.3,"n_seia_eff":12.57,"n_pipeline":1,"inv_pipeline_MMU":7.1,"n_relaves":2,"components":{"Relave_n":0.0,"SEIA_rej_n":0.242,"AreaProt_n":0.0},"dist_to_M5_km":22.2}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-22.782501,"lon":-69.238467,"dist_km":12.2,"score_raw":0.375437,"score_2nd":0.336797,"gap":0.03864,"gap_pct":10.29,"score_norm":1.0,"n_exploration":1,"n_seia_approved":9,"inv_approved_MMU":6435.1,"inv_approved_tw_MMU":4665.5,"n_seia_eff":5.78,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":1,"components":{"M1n":0.051,"Gtwn":1.0,"Res_n":1.0,"M3n":0.051,"M4n":0.019}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.87 δ=max(0.15,1−Π)=0.15","color":"#fb923c","data":{"lat":-22.969267,"lon":-69.745184,"dist_km":44.9,"score_raw":0.016708,"score_2nd":0.0079,"gap":0.008808,"gap_pct":52.72,"score_norm":1.0,"n_exploration":0,"n_seia_approved":2,"inv_approved_MMU":250.0,"inv_approved_tw_MMU":241.0,"n_seia_eff":1.74,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"exp_ratio":0.0,"prosp_grav_n":1.0,"n_fae_local":0.0,"M4n":0.002},"dist_to_M5_km":55.9}}}},"III-0":{"id":"III-0","label":"Atacama — Sub-clúster 0","centroid":[-28.64066,-70.88323],"stats":{"n_facilities":705,"n_catA":0,"n_catB":12,"n_explor_surf":33,"n_explor_sub":12,"n_lab":0,"n_explor_total":45,"exploration_ratio":0.064,"n_prod_inst":250,"n_seia_approved":66,"n_seia_pipeline":4,"n_seia_rejected":27,"inv_approved_MMU":1382.7,"inv_pipeline_MMU":386.3,"n_rel_active":5,"n_rel_inactive":5,"n_rel_abandoned":16,"n_rel_total":27,"vol_relaves_m3":2954899.0,"ton_relaves":5449181.0,"top_seia":[{"name":"Proyecto Cerro Blanco","inv":380.0,"tipo":"i4","lat":-28.611387,"lon":-71.097513},{"name":"EIA Ampliación y Mejoras Operacionales en Mina Los Colorados","inv":169.0,"tipo":"i4","lat":-28.286136,"lon":-70.81567},{"name":"Explotación Minera y Producción de Clinker y Cemento","inv":150.0,"tipo":"i4","lat":-28.470365,"lon":-71.235023},{"name":"Depósito de Relaves Filtrados, Planta de Pellets","inv":110.0,"tipo":"i3","lat":-28.0,"lon":-71.0},{"name":"Los Colorados Este","inv":93.0,"tipo":"i4","lat":-28.291187,"lon":-70.803603}],"top_relaves":[{"faena":"PLANTA VALLENAR","inst":"TRANQUE DE RELAVE 3","estado":"INACTIVO","vol_m3":2351045.0,"ton":3879224.0,"lat":-28.56499325,"lon":-70.73483734,"tipo":"TRANQUE DE RELAVE"},{"faena":"PLANTA COBRE NORTE","inst":"COBRE NORTE","estado":"ACTIVO","vol_m3":603854.0,"ton":1545563.0,"lat":-28.54813861,"lon":-70.73705008,"tipo":"TRANQUE DE RELAVE"},{"faena":"PLANTA VALLENAR","inst":"TRANQUE 2","estado":"INACTIVO","vol_m3":0.0,"ton":0.0,"lat":-28.56203938,"lon":-70.7426187,"tipo":"TRANQUE DE RELAVE"},{"faena":"PLANTA VALLENAR","inst":"TRANQUE 1","estado":"INACTIVO","vol_m3":0.0,"ton":0.0,"lat":-28.56344499,"lon":-70.73903752,"tipo":"TRANQUE DE RELAVE"},{"faena":"PLANTA VALLENAR","inst":"DRE VALLENAR","estado":"ACTIVO","vol_m3":0.0,"ton":24394.0,"lat":-28.55740867,"lon":-70.74308977,"tipo":"ESPESADO"}]},"exploration_sites":[{"empresa":"ANTOFAGASTA MINERALS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-28.349344,"lon":-70.879347,"estado":"ACTIVA"},{"empresa":"CIA. MRA. DEL PACIFICO S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-29.016511,"lon":-71.006268,"estado":"ACTIVA"},{"empresa":"COMPAÑIA MINERA CHIPANA S.A","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-28.899871,"lon":-71.092352,"estado":"ACTIVA"},{"empresa":"CESAR BERNARDO FORMAS ORTIZ","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-28.60792,"lon":-70.66093,"estado":"ACTIVA"},{"empresa":"SOCIEDAD MINERA LA FRONTERA SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-28.751495,"lon":-70.615346,"estado":"ACTIVA"},{"empresa":"SOCIEDAD MINERA LA FRONTERA SPA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-28.788785,"lon":-70.69034,"estado":"ACTIVA"},{"empresa":"COMPAÑIA RECURSOS ANDINA LIMITADA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-28.112208,"lon":-70.930156,"estado":"ACTIVA"},{"empresa":"COBLAT CHILE SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-28.52228,"lon":-71.086739,"estado":"ACTIVA"},{"empresa":"MINERA CEMIN-PULLALLI SPA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-28.957965,"lon":-70.880538,"estado":"ACTIVA"},{"empresa":"SOUTHERN COPPER CORPORATION CHILE","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-29.095615,"lon":-70.976365,"estado":"ACTIVA"},{"empresa":"CESAR BERNARDO FORMAS ORTIZ","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-28.609013,"lon":-70.6579,"estado":"ACTIVA"},{"empresa":"LUIS PASTEN OGALDE","tipo":"EXPLORACION DE SUPERFICIE","lat":-29.21515,"lon":-71.00228,"estado":"ACTIVA"},{"empresa":"EXEQUIEL DIAZ ALCAYAGA","tipo":"EXPLORACION DE SUPERFICIE","lat":-28.716521,"lon":-70.728249,"estado":"ACTIVA"},{"empresa":"MINERA  SANTORO SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-28.53821,"lon":-70.550028,"estado":"ACTIVA"},{"empresa":"CARLOS REINOSO MARIN","tipo":"EXPLORACION DE SUPERFICIE","lat":-28.66629,"lon":-70.599303,"estado":"ACTIVA"}],"seia_projects":[{"name":"Recuperación de Acopios Antiguos de Planta El Tofo","estado":"Aprobado","inv":1.3,"lat":-29.000004,"lon":-71.0,"tipo":"i1"},{"name":"Continuidad Operacional Distrito Pleito Fase 3","estado":"Aprobado","inv":32.0,"lat":-29.24021,"lon":-71.07076,"tipo":"i1"},{"name":"Continuidad Operacional en Distrito Pleito","estado":"Aprobado","inv":0.7,"lat":-29.23945,"lon":-71.06956,"tipo":"i1"},{"name":"Ampliación Proyecto de Explotación La Cuesta","estado":"Aprobado","inv":2.0,"lat":-28.90511,"lon":-71.089613,"tipo":"i1"},{"name":"Recuperación de Acopios de la faena Algarrobo","estado":"Aprobado","inv":17.2,"lat":-28.800232,"lon":-70.981032,"tipo":"i1"},{"name":"Prospecciones Geológicas Cortadera","estado":"Aprobado","inv":18.4,"lat":-28.787974,"lon":-70.689922,"tipo":"i2"},{"name":"Depósito de Relaves Filtrados, Planta de Pellets","estado":"Aprobado","inv":110.0,"lat":-28.0,"lon":-71.0,"tipo":"i3"},{"name":"Modificación Plan Minero Mina Los Colorados","estado":"Aprobado","inv":2.0,"lat":-28.28525,"lon":-70.816692,"tipo":"i1"},{"name":"Prospecciones La Cobaltera","estado":"Aprobado","inv":20.0,"lat":-28.700811,"lon":-71.212182,"tipo":"i2"},{"name":"Continuidad Operacional Mina Dos Amigos","estado":"Aprobado","inv":10.0,"lat":-28.98237,"lon":-70.893674,"tipo":"i1"},{"name":"Normalización Continuidad Operacional ? Planta Vallenar ? ENAMI","estado":"Aprobado","inv":4.6,"lat":-28.563951,"lon":-70.738839,"tipo":"i1"},{"name":"Reinicio Operacional Planta Dos Amigos","estado":"Aprobado","inv":10.0,"lat":-28.978076,"lon":-70.895556,"tipo":"i3"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=7.2km (Scott)","color":"#22c55e","data":{"lat":-28.663415,"lon":-70.598034,"dist_km":27.9,"score_raw":0.213605,"score_2nd":0.179519,"gap":0.034086,"gap_pct":15.96,"score_norm":1.0,"n_exploration":5,"n_seia_approved":1,"inv_approved_MMU":0.1,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.38,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"dist_to_M5_km":20.9}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-28.572396,"lon":-70.753596,"dist_km":14.8,"score_raw":131.54191,"score_2nd":104.347544,"gap":27.194366,"gap_pct":20.67,"score_norm":1.0,"n_exploration":3,"n_seia_approved":8,"inv_approved_MMU":37.9,"inv_approved_tw_MMU":23.4,"n_seia_eff":4.49,"n_pipeline":2,"inv_pipeline_MMU":17.5,"n_relaves":12,"dist_to_M5_km":16.0}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-28.708924,"lon":-70.805449,"dist_km":10.7,"score_raw":0.145315,"score_2nd":0.082615,"gap":0.0627,"gap_pct":43.15,"score_norm":1.0,"n_exploration":2,"n_seia_approved":8,"inv_approved_MMU":170.9,"inv_approved_tw_MMU":117.8,"n_seia_eff":4.98,"n_pipeline":1,"inv_pipeline_MMU":25.0,"n_relaves":2,"components":{"Relave_n":0.001,"SEIA_rej_n":0.483,"AreaProt_n":0.0},"dist_to_M5_km":0.0}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-28.708924,"lon":-70.805449,"dist_km":10.7,"score_raw":0.126926,"score_2nd":0.103528,"gap":0.023398,"gap_pct":18.43,"score_norm":1.0,"n_exploration":2,"n_seia_approved":8,"inv_approved_MMU":170.9,"inv_approved_tw_MMU":117.8,"n_seia_eff":4.98,"n_pipeline":1,"inv_pipeline_MMU":25.0,"n_relaves":2,"components":{"M1n":0.042,"Gtwn":0.151,"Res_n":1.0,"M3n":0.055,"M4n":1.0}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.00 δ=max(0.15,1−Π)=1.00","color":"#fb923c","data":{"lat":-28.936469,"lon":-70.805449,"dist_km":33.8,"score_raw":0.315432,"score_2nd":0.284882,"gap":0.03055,"gap_pct":9.69,"score_norm":1.0,"n_exploration":6,"n_seia_approved":11,"inv_approved_MMU":48.3,"inv_approved_tw_MMU":29.2,"n_seia_eff":5.96,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":5,"components":{"exp_ratio":0.6,"prosp_grav_n":0.012,"n_fae_local":4.0,"M4n":0.029},"dist_to_M5_km":25.3}}}},"III-1":{"id":"III-1","label":"Atacama — Sub-clúster 1","centroid":[-26.39829,-70.17713],"stats":{"n_facilities":364,"n_catA":32,"n_catB":19,"n_explor_surf":15,"n_explor_sub":5,"n_lab":2,"n_explor_total":22,"exploration_ratio":0.036,"n_prod_inst":141,"n_seia_approved":116,"n_seia_pipeline":2,"n_seia_rejected":28,"inv_approved_MMU":7377.1,"inv_pipeline_MMU":57.0,"n_rel_active":4,"n_rel_inactive":7,"n_rel_abandoned":14,"n_rel_total":28,"vol_relaves_m3":243265969.0,"ton_relaves":341742277.0,"top_seia":[{"name":"Proyecto Santo Domingo","inv":1800.0,"tipo":"i4","lat":-26.441334,"lon":-70.00297},{"name":"Rajo Inca","inv":1000.0,"tipo":"i1","lat":-26.246723,"lon":-69.611191},{"name":"Modificación Proyecto San Antonio","inv":962.0,"tipo":"i4","lat":-26.407538,"lon":-69.509994},{"name":"Proyecto Desarrollo Mantoverde","inv":832.0,"tipo":"i1","lat":-26.565044,"lon":-70.328088},{"name":"Proyecto Diego de Almagro","inv":475.0,"tipo":"i4","lat":-26.380747,"lon":-70.16467}],"top_relaves":[{"faena":"SALVADOR","inst":"PAMPA AUSTRAL","estado":"ACTIVO","vol_m3":242440329.0,"ton":339160524.0,"lat":-26.25078973,"lon":-70.08221504,"tipo":"EMBALSE"},{"faena":"SALVADOR","inst":"CONVERTIDOR TENIENTE","estado":"INACTIVO","vol_m3":664750.0,"ton":1963660.0,"lat":-26.43186992,"lon":-69.47967755,"tipo":"FILTRADO"},{"faena":"DIEGO DE ALMEYDA","inst":"DEPOSITO RELAVE FILTRADO","estado":"ACTIVO","vol_m3":140958.0,"ton":276278.0,"lat":-26.35808682,"lon":-70.0108882,"tipo":"FILTRADO"},{"faena":"PLANTA NENITA I","inst":"EMBALSE","estado":"ACTIVO","vol_m3":19932.0,"ton":29898.0,"lat":-26.75032928,"lon":-69.90172439,"tipo":"EMBALSE"},{"faena":"EL SALADO","inst":"EL SALADO","estado":"INACTIVO","vol_m3":0.0,"ton":0.0,"lat":-26.41556074,"lon":-70.3335714,"tipo":"TRANQUE DE RELAVE"}]},"exploration_sites":[{"empresa":"INCA DE ORO S.A","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.757711,"lon":-69.894281,"estado":"ACTIVA"},{"empresa":"MINERA CRUZ LTDA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-26.605165,"lon":-70.315997,"estado":"ACTIVA"},{"empresa":"TAUFIK MINING COMPANY","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-26.551174,"lon":-70.060174,"estado":"ACTIVA"},{"empresa":"ATACAMA MINERALES DOS SPA.","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-26.740454,"lon":-69.828124,"estado":"ACTIVA"},{"empresa":"INVERSIONES ALFARO SPA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-26.454573,"lon":-70.396379,"estado":"ACTIVA"},{"empresa":"SOCIEDAD CONTRACTUAL MINERA BERTA","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.358193,"lon":-70.047415,"estado":"ACTIVA"},{"empresa":"SOCIEDAD PUNTA DEL COBRE S.A.","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-27.158618,"lon":-70.342525,"estado":"ACTIVA"},{"empresa":"JOSE CORTES GUTIERREZ","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.4651,"lon":-70.44796,"estado":"ACTIVA"},{"empresa":"MINERA JATRI SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.220467,"lon":-70.282272,"estado":"ACTIVA"},{"empresa":"ATACAMA MINERALES DOS SPA.","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.749719,"lon":-69.836879,"estado":"ACTIVA"},{"empresa":"NEW GOLDEN EXPLORATIONS CHILE SpA","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.490659,"lon":-70.0996,"estado":"ACTIVA"},{"empresa":"TRIBECA RESOURCES CHILE SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.561531,"lon":-70.165147,"estado":"ACTIVA"},{"empresa":"KGHM CHILE SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.186874,"lon":-70.144114,"estado":"ACTIVA"},{"empresa":"EMPRESA NACIONAL DE MINERIA (ENAMI)","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.18596,"lon":-70.262111,"estado":"ACTIVA"},{"empresa":"GUIDO CERDA HERRERA","tipo":"EXPLORACION DE SUPERFICIE","lat":-25.678901,"lon":-70.530001,"estado":"ACTIVA"}],"seia_projects":[{"name":"Modificación y Optimización de faena minera Mantoverde, en comuna de Chañaral, y transporte de concentrados a puertos de zona de Mejillones","estado":"Aprobado","inv":150.0,"lat":-26.550118,"lon":-70.330835,"tipo":"i1"},{"name":"Explotación de Hierro San Gabriel (e-seia)","estado":"Aprobado","inv":15.0,"lat":-25.924888,"lon":-70.102321,"tipo":"i4"},{"name":"Explotación China (e-seia)","estado":"Aprobado","inv":10.0,"lat":-25.852142,"lon":-69.925081,"tipo":"i4"},{"name":"Actualización Proyecto Franke (e-seia)","estado":"Aprobado","inv":160.0,"lat":-25.831275,"lon":-69.866591,"tipo":"i4"},{"name":"Modificación Tubería de Agua Proyecto Franke (e-seia)","estado":"Aprobado","inv":10.0,"lat":-26.281613,"lon":-69.588698,"tipo":"i4"},{"name":"Proyecto Franke","estado":"Aprobado","inv":100.0,"lat":-25.838729,"lon":-69.867254,"tipo":"i4"},{"name":"Modificación Proyecto Altamira (e-seia)","estado":"Aprobado","inv":4.0,"lat":-25.836329,"lon":-69.856381,"tipo":"i4"},{"name":"Minero Altamira","estado":"Aprobado","inv":40.0,"lat":-25.837723,"lon":-69.855732,"tipo":"i4"},{"name":"Prospección Minera San Pietro","estado":"Aprobado","inv":15.0,"lat":-26.475222,"lon":-70.096882,"tipo":"i2"},{"name":"Prospección Minera Dionisio","estado":"Aprobado","inv":37.0,"lat":-26.500178,"lon":-69.3921,"tipo":"i2"},{"name":"Prospección Estrellita","estado":"Aprobado","inv":25.0,"lat":-26.452731,"lon":-70.044032,"tipo":"i2"},{"name":"Sondajes Mineros Proyecto Carrizalillo","estado":"Aprobado","inv":16.5,"lat":-26.021422,"lon":-70.30933,"tipo":"i2"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=17.8km (Scott)","color":"#22c55e","data":{"lat":-26.605849,"lon":-70.324589,"dist_km":27.3,"score_raw":0.050266,"score_2nd":0.049829,"gap":0.000437,"gap_pct":0.87,"score_norm":1.0,"n_exploration":1,"n_seia_approved":14,"inv_approved_MMU":1367.2,"inv_approved_tw_MMU":974.4,"n_seia_eff":8.29,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":1,"dist_to_M5_km":4.2}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-26.568111,"lon":-70.324589,"dist_km":23.9,"score_raw":192.086543,"score_2nd":159.020414,"gap":33.066129,"gap_pct":17.21,"score_norm":1.0,"n_exploration":1,"n_seia_approved":14,"inv_approved_MMU":1367.2,"inv_approved_tw_MMU":974.4,"n_seia_eff":8.29,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":1,"dist_to_M5_km":0.0}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-26.492635,"lon":-69.439834,"dist_km":74.2,"score_raw":0.110135,"score_2nd":0.069179,"gap":0.040957,"gap_pct":37.19,"score_norm":1.0,"n_exploration":0,"n_seia_approved":9,"inv_approved_MMU":1371.3,"inv_approved_tw_MMU":854.6,"n_seia_eff":5.35,"n_pipeline":1,"inv_pipeline_MMU":17.0,"n_relaves":3,"components":{"Relave_n":0.0,"SEIA_rej_n":0.367,"AreaProt_n":0.0},"dist_to_M5_km":88.4}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-26.568111,"lon":-70.324589,"dist_km":23.9,"score_raw":0.589102,"score_2nd":0.316604,"gap":0.272497,"gap_pct":46.26,"score_norm":1.0,"n_exploration":1,"n_seia_approved":14,"inv_approved_MMU":1367.2,"inv_approved_tw_MMU":974.4,"n_seia_eff":8.29,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":1,"components":{"M1n":0.215,"Gtwn":1.0,"Res_n":0.631,"M3n":1.0,"M4n":0.615}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.80 δ=max(0.15,1−Π)=0.20","color":"#fb923c","data":{"lat":-26.568111,"lon":-70.156064,"dist_km":19.0,"score_raw":0.006614,"score_2nd":0.006191,"gap":0.000422,"gap_pct":6.38,"score_norm":0.8844,"n_exploration":3,"n_seia_approved":2,"inv_approved_MMU":19.0,"inv_approved_tw_MMU":17.0,"n_seia_eff":1.52,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"exp_ratio":0.3,"prosp_grav_n":0.005,"n_fae_local":3.0,"M4n":0.119},"dist_to_M5_km":16.8}}}},"III-2":{"id":"III-2","label":"Atacama — Sub-clúster 2","centroid":[-27.50868,-70.28633],"stats":{"n_facilities":440,"n_catA":98,"n_catB":27,"n_explor_surf":16,"n_explor_sub":5,"n_lab":1,"n_explor_total":22,"exploration_ratio":0.048,"n_prod_inst":151,"n_seia_approved":127,"n_seia_pipeline":5,"n_seia_rejected":53,"inv_approved_MMU":5434.2,"inv_pipeline_MMU":263.2,"n_rel_active":26,"n_rel_inactive":48,"n_rel_abandoned":60,"n_rel_total":140,"vol_relaves_m3":497674074.0,"ton_relaves":844298346.0,"top_seia":[{"name":"Modernización Fundición HVL - Paipote","inv":1378.2,"tipo":"i1","lat":-27.421056,"lon":-70.259737},{"name":"Optimización y Continuidad Operacional Minera Candelaria","inv":600.0,"tipo":"i1","lat":-27.527109,"lon":-70.331632},{"name":"Proyecto Candelaria Fase I","inv":560.0,"tipo":"i4","lat":-27.51619,"lon":-70.288461},{"name":"Candelaria 2030 - Continuidad Operacional","inv":460.0,"tipo":"i4","lat":-27.527128,"lon":-70.3032},{"name":"Cerro Negro Norte","inv":340.0,"tipo":"i4","lat":-27.133819,"lon":-70.372309}],"top_relaves":[{"faena":"CANDELARIA","inst":"CANDELARIA","estado":"INACTIVO","vol_m3":367279997.0,"ton":550919996.0,"lat":-27.50606323,"lon":-70.31125548,"tipo":"TRANQUE DE RELAVE"},{"faena":"PLANTA SAN JOSE","inst":"LAS CRUCES","estado":"ACTIVO","vol_m3":46724602.0,"ton":77095593.0,"lat":-27.45046498,"lon":-70.32597202,"tipo":"TRANQUE DE RELAVE"},{"faena":"CANDELARIA","inst":"LOS DIQUES","estado":"ACTIVO","vol_m3":18925732.0,"ton":120112038.0,"lat":-27.5363842,"lon":-70.32253022,"tipo":"ESPESADO"},{"faena":"PLANTA MATTA","inst":"TRANQUE DE RELAVE 3","estado":"ACTIVO","vol_m3":17764894.0,"ton":27180288.0,"lat":-27.40252642,"lon":-70.25336756,"tipo":"TRANQUE DE RELAVE"},{"faena":"CERRO NEGRO NORTE","inst":"CERRO NEGRO NORTE","estado":"ACTIVO","vol_m3":17023480.0,"ton":30642264.0,"lat":-27.12767192,"lon":-70.36305707,"tipo":"ESPESADO"}]},"exploration_sites":[{"empresa":"MINERA NITTETSU CHILE LTDA.","tipo":"EXPLORACION DE SUPERFICIE","lat":-27.364166,"lon":-70.222178,"estado":"ACTIVA"},{"empresa":"INCA DE ORO S.A","tipo":"EXPLORACION DE SUPERFICIE","lat":-26.757711,"lon":-69.894281,"estado":"ACTIVA"},{"empresa":"SOCIEDAD PUNTA DEL COBRE S.A.","tipo":"MUESTRERA Y/O LABORATORIO","lat":-27.350616,"lon":-70.243784,"estado":"ACTIVA"},{"empresa":"SOCIEDAD PUNTA DEL COBRE S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-27.523001,"lon":-70.348786,"estado":"ACTIVA"},{"empresa":"COMPAÑIA RECURSOS ANDINA LIMITADA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-28.112208,"lon":-70.930156,"estado":"ACTIVA"},{"empresa":"MINERA ALTAIR S.A.","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-27.593852,"lon":-70.356754,"estado":"ACTIVA"},{"empresa":"ATACAMA MINERALES DOS SPA.","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-26.740454,"lon":-69.828124,"estado":"ACTIVA"},{"empresa":"MINERA NITTETSU CHILE LTDA.","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-27.322482,"lon":-70.282531,"estado":"ACTIVA"},{"empresa":"S. C. M.  ATACAMA KOZAN","tipo":"EXPLORACION DE SUPERFICIE","lat":-27.503711,"lon":-70.272235,"estado":"ACTIVA"},{"empresa":"SOCIEDAD PUNTA DEL COBRE S.A.","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-27.158618,"lon":-70.342525,"estado":"ACTIVA"},{"empresa":"CIA. MRA. Y COM. SALI HOCHSCHILD S.A.","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-27.584411,"lon":-70.404817,"estado":"ACTIVA"},{"empresa":"SOCIEDAD DE TRANSPORTES RIVERA SPA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-27.563754,"lon":-70.325382,"estado":"ACTIVA"},{"empresa":"MINERA EL ENCANTO SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-27.696193,"lon":-70.140085,"estado":"ACTIVA"},{"empresa":"CIA MINERA CARMEN BAJO LTDA","tipo":"EXPLORACION DE SUPERFICIE","lat":-27.381538,"lon":-70.171122,"estado":"ACTIVA"},{"empresa":"COMPAÑIA MINERA TRANSITO","tipo":"EXPLORACION DE SUPERFICIE","lat":-27.543491,"lon":-70.350657,"estado":"ACTIVA"}],"seia_projects":[{"name":"Transporte de Concentrado de Cobre al sector La Negra y Chuquicamata","estado":"Aprobado","inv":0.0,"lat":-27.515721,"lon":-70.299244,"tipo":"i4"},{"name":"Proyecto de Explotación y Procesamiento de Minerales La Farola","estado":"Aprobado","inv":260.0,"lat":-27.584156,"lon":-70.352274,"tipo":"i1"},{"name":"Optimización Operacional Mina Carola","estado":"Aprobado","inv":5.0,"lat":-27.497688,"lon":-70.261297,"tipo":"i1"},{"name":"Optimización Operacional Planta Cerrillos","estado":"Aprobado","inv":2.0,"lat":-27.572712,"lon":-70.247972,"tipo":"i1"},{"name":"Modernización Fundición HVL - Paipote","estado":"Aprobado","inv":1378.2,"lat":-27.421056,"lon":-70.259737,"tipo":"i1"},{"name":"AUMENTO DE TASA DE PROCESAMIENTO PROYECTO DOÑA EMA CONDOR RIFF","estado":"Aprobado","inv":0.5,"lat":-27.232423,"lon":-70.350613,"tipo":"i1"},{"name":"Ajustes operacionales Planta de Magnetita","estado":"Aprobado","inv":31.0,"lat":-27.518638,"lon":-70.32452,"tipo":"i1"},{"name":"Proyecto Minero Tránsito","estado":"Aprobado","inv":3.8,"lat":-27.533256,"lon":-70.353159,"tipo":"i1"},{"name":"Explotación Mina Lunar","estado":"Aprobado","inv":6.0,"lat":-27.224479,"lon":-70.378467,"tipo":"i1"},{"name":"Aprovechamiento de Acopios de Minerales de Hierro Adrianitas-Raúl","estado":"Aprobado","inv":1.7,"lat":-27.176684,"lon":-70.379171,"tipo":"i1"},{"name":"Explotación Minera Morión 48","estado":"Aprobado","inv":26.0,"lat":-26.870568,"lon":-70.106076,"tipo":"i1"},{"name":"MEJORAMIENTO OPERACIONAL DEPOSITACION RELAVES, PLANTA MANUEL ANTONIO MATTA, ENAMI","estado":"Aprobado","inv":18.4,"lat":-27.408278,"lon":-70.254709,"tipo":"i3"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=8.5km (Scott)","color":"#22c55e","data":{"lat":-27.586749,"lon":-70.409559,"dist_km":14.9,"score_raw":0.222775,"score_2nd":0.169563,"gap":0.053212,"gap_pct":23.89,"score_norm":1.0,"n_exploration":9,"n_seia_approved":10,"inv_approved_MMU":899.4,"inv_approved_tw_MMU":838.9,"n_seia_eff":6.7,"n_pipeline":1,"inv_pipeline_MMU":0.0,"n_relaves":1,"dist_to_M5_km":12.5}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-27.493066,"lon":-70.268726,"dist_km":2.5,"score_raw":302.972397,"score_2nd":211.03712,"gap":91.935278,"gap_pct":30.34,"score_norm":1.0,"n_exploration":7,"n_seia_approved":64,"inv_approved_MMU":4059.7,"inv_approved_tw_MMU":2947.8,"n_seia_eff":37.21,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":67,"dist_to_M5_km":4.9}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-27.399383,"lon":-70.339142,"dist_km":13.2,"score_raw":0.511258,"score_2nd":0.160221,"gap":0.351037,"gap_pct":68.66,"score_norm":1.0,"n_exploration":3,"n_seia_approved":36,"inv_approved_MMU":1724.7,"inv_approved_tw_MMU":1573.4,"n_seia_eff":21.05,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":116,"components":{"Relave_n":1.0,"SEIA_rej_n":0.037,"AreaProt_n":0.001},"dist_to_M5_km":14.3}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-27.524294,"lon":-70.303934,"dist_km":2.5,"score_raw":1.024763,"score_2nd":0.423886,"gap":0.600877,"gap_pct":58.64,"score_norm":1.0,"n_exploration":10,"n_seia_approved":59,"inv_approved_MMU":2896.3,"inv_approved_tw_MMU":1800.7,"n_seia_eff":34.02,"n_pipeline":1,"inv_pipeline_MMU":0.0,"n_relaves":47,"components":{"M1n":0.761,"Gtwn":0.752,"Res_n":1.0,"M3n":0.696,"M4n":0.184}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.77 δ=max(0.15,1−Π)=0.23","color":"#fb923c","data":{"lat":-27.274472,"lon":-70.198309,"dist_km":27.5,"score_raw":0.009195,"score_2nd":0.009031,"gap":0.000163,"gap_pct":1.78,"score_norm":1.0,"n_exploration":5,"n_seia_approved":4,"inv_approved_MMU":22.0,"inv_approved_tw_MMU":13.7,"n_seia_eff":2.69,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"exp_ratio":0.5,"prosp_grav_n":0.0,"n_fae_local":9.0,"M4n":0.016},"dist_to_M5_km":29.7}}}},"IV-0":{"id":"IV-0","label":"Coquimbo — Sub-clúster 0","centroid":[-30.08614,-71.07078],"stats":{"n_facilities":196,"n_catA":60,"n_catB":3,"n_explor_surf":2,"n_explor_sub":5,"n_lab":5,"n_explor_total":12,"exploration_ratio":0.041,"n_prod_inst":66,"n_seia_approved":92,"n_seia_pipeline":3,"n_seia_rejected":61,"inv_approved_MMU":1236.5,"inv_pipeline_MMU":90.2,"n_rel_active":22,"n_rel_inactive":40,"n_rel_abandoned":154,"n_rel_total":223,"vol_relaves_m3":210046753.0,"ton_relaves":308976326.0,"top_seia":[{"name":"Proyecto Hipógeno","inv":350.0,"tipo":"i4","lat":-30.256002,"lon":-71.089185},{"name":"Proyecto Minero Arqueros","inv":200.0,"tipo":"i1","lat":-29.779877,"lon":-70.894809},{"name":"Continuidad Operacional Teck CDA","inv":100.0,"tipo":"i1","lat":-30.262095,"lon":-71.098542},{"name":"Modificaciones Menores, Optimización de Procesos Proyecto Minero Puquios","inv":85.0,"tipo":"i4","lat":-29.450598,"lon":-70.718955},{"name":"Proyecto Minero Andacollo-Cobre","inv":63.8,"tipo":"i4","lat":-30.243587,"lon":-71.10002}],"top_relaves":[{"faena":"TECK-CDA","inst":"HIPOGENO","estado":"ACTIVO","vol_m3":170305774.0,"ton":238428084.0,"lat":-30.27133585,"lon":-71.10575468,"tipo":"EMBALSE"},{"faena":"FAENAS EL ROMERAL","inst":"EL TRIGO","estado":"ACTIVO","vol_m3":12777387.0,"ton":29198724.0,"lat":-29.75932412,"lon":-71.23635288,"tipo":"EMBALSE"},{"faena":"TALCUNA","inst":"HUMO CORRAL","estado":"ACTIVO","vol_m3":10591522.0,"ton":15887283.0,"lat":-29.89407826,"lon":-70.95747879,"tipo":"TRANQUE DE RELAVE"},{"faena":"FAENA DELTA","inst":"DELTA","estado":"ACTIVO","vol_m3":6084503.0,"ton":9126755.0,"lat":-30.5086341,"lon":-71.22812158,"tipo":"ESPESADO"},{"faena":"TALCUNA","inst":"SOCORRO 6","estado":"INACTIVO","vol_m3":2533571.0,"ton":3800357.0,"lat":-29.88555295,"lon":-70.89383792,"tipo":"TRANQUE DE RELAVE"}]},"exploration_sites":[{"empresa":"DICAVE LIMITADA","tipo":"EXPLORACION DE SUPERFICIE","lat":-30.663383,"lon":-71.204135,"estado":"ACTIVA"},{"empresa":"COMPAÑÍA MINERA ACMET SPA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-29.966747,"lon":-70.873175,"estado":"ACTIVA"},{"empresa":"CIA MRA SAN GERONIMO","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-29.797117,"lon":-71.029376,"estado":"ACTIVA"},{"empresa":"CIA MRA SAN GERONIMO","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-29.799758,"lon":-71.040073,"estado":"ACTIVA"},{"empresa":"MINERA PAZ SPA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-29.764168,"lon":-71.042371,"estado":"ACTIVA"},{"empresa":"COMPAÑIA MINERA FLORIDA S.A.","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-30.260206,"lon":-71.19923,"estado":"ACTIVA"},{"empresa":"CIA MRA. TECK CARMEN DE ANDACOLLO","tipo":"MUESTRERA Y/O LABORATORIO","lat":-30.263984,"lon":-71.090894,"estado":"ACTIVA"},{"empresa":"CIA MRA. TECK CARMEN DE ANDACOLLO","tipo":"MUESTRERA Y/O LABORATORIO","lat":-30.259589,"lon":-71.091581,"estado":"ACTIVA"},{"empresa":"EMPRESA NACIONAL DE MINERIA (ENAMI)","tipo":"MUESTRERA Y/O LABORATORIO","lat":-30.48947,"lon":-71.222816,"estado":"ACTIVA"},{"empresa":"SOCIEDAD DE SERVICIOS A LA MINERIA OMINT SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-30.000426,"lon":-70.883861,"estado":"ACTIVA"},{"empresa":"EMPRESA NACIONAL DE MINERIA (ENAMI)","tipo":"MUESTRERA Y/O LABORATORIO","lat":-30.486331,"lon":-71.220693,"estado":"ACTIVA"},{"empresa":"EMPRESA NACIONAL DE MINERIA (ENAMI)","tipo":"MUESTRERA Y/O LABORATORIO","lat":-30.489708,"lon":-71.222603,"estado":"ACTIVA"}],"seia_projects":[{"name":"Extensión de Vida Útil Complejo Productivo Sur (Ex Planta Delta), ENAMI","estado":"Aprobado","inv":5.2,"lat":-30.513034,"lon":-71.231065,"tipo":"i1"},{"name":"Mina Yeso Corral","estado":"Aprobado","inv":0.1,"lat":-30.232389,"lon":-70.96472,"tipo":"i1"},{"name":"Modificación Proyecto Planta de Procesamiento de Carbonato de Calcio","estado":"Aprobado","inv":2.0,"lat":-30.26738,"lon":-71.485601,"tipo":"i1"},{"name":"Crecimiento Tranque de Relaves Panules","estado":"Aprobado","inv":0.2,"lat":-29.999997,"lon":-70.999996,"tipo":"i3"},{"name":"Mina Cinabrio - San Andrés","estado":"Aprobado","inv":2.0,"lat":-30.717958,"lon":-71.213292,"tipo":"i1"},{"name":"Depósito de Ripios N°4","estado":"Aprobado","inv":0.4,"lat":-29.817721,"lon":-71.080642,"tipo":"i3"},{"name":"Proyecto Minero Arqueros","estado":"Aprobado","inv":200.0,"lat":-29.779877,"lon":-70.894809,"tipo":"i1"},{"name":"Continuidad Operacional Teck CDA","estado":"Aprobado","inv":100.0,"lat":-30.262095,"lon":-71.098542,"tipo":"i1"},{"name":"Mina San Antonio","estado":"Aprobado","inv":10.5,"lat":-29.800815,"lon":-71.03277,"tipo":"i1"},{"name":"Explotación Mina Verde","estado":"Aprobado","inv":0.3,"lat":-30.100703,"lon":-71.214479,"tipo":"i1"},{"name":"Optimización de las actividades de Procesamiento del Mineral Supérgeno","estado":"Aprobado","inv":1.3,"lat":-30.266639,"lon":-71.085191,"tipo":"i3"},{"name":"Depósito de Relaves Filtrados CM Florida","estado":"Aprobado","inv":2.9,"lat":-30.204315,"lon":-71.24026,"tipo":"i3"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=9.2km (Scott)","color":"#22c55e","data":{"lat":-30.257929,"lon":-71.086052,"dist_km":19.2,"score_raw":0.121909,"score_2nd":0.121742,"gap":0.000168,"gap_pct":0.14,"score_norm":1.0,"n_exploration":3,"n_seia_approved":18,"inv_approved_MMU":568.3,"inv_approved_tw_MMU":317.1,"n_seia_eff":10.32,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":128,"dist_to_M5_km":0.0}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-30.257929,"lon":-71.086052,"dist_km":19.2,"score_raw":268.341636,"score_2nd":58.895242,"gap":209.446394,"gap_pct":78.05,"score_norm":1.0,"n_exploration":3,"n_seia_approved":18,"inv_approved_MMU":568.3,"inv_approved_tw_MMU":317.1,"n_seia_eff":10.32,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":128,"dist_to_M5_km":0.0}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-29.967209,"lon":-70.994419,"dist_km":15.1,"score_raw":0.290201,"score_2nd":0.24422,"gap":0.045982,"gap_pct":15.84,"score_norm":1.0,"n_exploration":2,"n_seia_approved":4,"inv_approved_MMU":4.5,"inv_approved_tw_MMU":2.7,"n_seia_eff":2.39,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":22,"components":{"Relave_n":0.016,"SEIA_rej_n":0.94,"AreaProt_n":0.0},"dist_to_M5_km":33.5}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-30.257929,"lon":-71.086052,"dist_km":19.2,"score_raw":0.835256,"score_2nd":0.290801,"gap":0.544455,"gap_pct":65.18,"score_norm":1.0,"n_exploration":3,"n_seia_approved":18,"inv_approved_MMU":568.3,"inv_approved_tw_MMU":317.1,"n_seia_eff":10.32,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":128,"components":{"M1n":1.0,"Gtwn":1.0,"Res_n":0.458,"M3n":1.0,"M4n":0.768}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.55 δ=max(0.15,1−Π)=0.45","color":"#fb923c","data":{"lat":-29.702919,"lon":-71.055508,"dist_km":42.6,"score_raw":0.027197,"score_2nd":0.027196,"gap":1e-06,"gap_pct":0.01,"score_norm":1.0,"n_exploration":3,"n_seia_approved":3,"inv_approved_MMU":10.8,"inv_approved_tw_MMU":8.8,"n_seia_eff":1.61,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"exp_ratio":0.3,"prosp_grav_n":0.0,"n_fae_local":1.0,"M4n":0.011},"dist_to_M5_km":61.8}}}},"IV-1":{"id":"IV-1","label":"Coquimbo — Sub-clúster 1","centroid":[-31.61541,-71.0451],"stats":{"n_facilities":283,"n_catA":5,"n_catB":0,"n_explor_surf":17,"n_explor_sub":23,"n_lab":1,"n_explor_total":41,"exploration_ratio":0.018,"n_prod_inst":113,"n_seia_approved":33,"n_seia_pipeline":2,"n_seia_rejected":16,"inv_approved_MMU":4895.8,"inv_pipeline_MMU":2030.0,"n_rel_active":21,"n_rel_inactive":43,"n_rel_abandoned":82,"n_rel_total":148,"vol_relaves_m3":859119220.0,"ton_relaves":1295397644.0,"top_seia":[{"name":"Infraestructura Complementaria","inv":1100.0,"tipo":"i1","lat":-31.886094,"lon":-71.497101},{"name":"Proyecto de Expansión 85.000 tpd Minera Los Pelambres","inv":1040.0,"tipo":"i4","lat":-31.725011,"lon":-70.485999},{"name":"Proyecto de Adaptación Operacional","inv":1000.0,"tipo":"i1","lat":-31.999996,"lon":-71.000004},{"name":"Proyecto Integral de Desarrollo","inv":750.0,"tipo":"i4","lat":-31.813649,"lon":-70.581225},{"name":"Proyecto El Espino","inv":624.0,"tipo":"i4","lat":-31.374418,"lon":-71.097774}],"top_relaves":[{"faena":"FAENA LOS PELAMBRES","inst":"EL MAURO","estado":"ACTIVO","vol_m3":597602005.0,"ton":896403008.0,"lat":-31.96527629,"lon":-71.02282728,"tipo":"TRANQUE DE RELAVE"},{"faena":"FAENA LOS PELAMBRES","inst":"LOS QUILLAYES","estado":"ACTIVO","vol_m3":259215938.0,"ton":395304305.0,"lat":-31.84518172,"lon":-70.60553518,"tipo":"TRANQUE DE RELAVE"},{"faena":"BRONCE DE PETORCA","inst":"TERRAZAS 2","estado":"INACTIVO","vol_m3":471454.0,"ton":707181.0,"lat":-32.22546941,"lon":-70.9658858,"tipo":"EMBALSE"},{"faena":"FAENA LAS VACAS","inst":"LAS VACAS SUR","estado":"ACTIVO","vol_m3":438996.0,"ton":821702.0,"lat":-31.87367461,"lon":-71.32058109,"tipo":"EMBALSE"},{"faena":"BRONCE DE PETORCA","inst":"DEPOSITO DE ARENAS","estado":"INACTIVO","vol_m3":265682.0,"ton":398524.0,"lat":-32.19380171,"lon":-70.94456256,"tipo":"TRANQUE DE RELAVE"}]},"exploration_sites":[{"empresa":"EL ESPINO SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-31.375443,"lon":-71.105155,"estado":"ACTIVA"},{"empresa":"SCM MANUELITO MINERALS","tipo":"EXPLORACION DE SUPERFICIE","lat":-31.018712,"lon":-71.272504,"estado":"ACTIVA"},{"empresa":"RAUL RAMIREZ MUÑOZ","tipo":"EXPLORACION DE SUPERFICIE","lat":-30.995751,"lon":-71.259469,"estado":"ACTIVA"},{"empresa":"GALVARINO VEGA CARVAJAL","tipo":"EXPLORACION DE SUPERFICIE","lat":-31.436969,"lon":-71.098903,"estado":"ACTIVA"},{"empresa":"JUAN PEREZ CASTILLO","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-31.451354,"lon":-71.096751,"estado":"ACTIVA"},{"empresa":"SCM LA FLORIDA","tipo":"EXPLORACION DE SUPERFICIE","lat":-30.98321,"lon":-71.124728,"estado":"ACTIVA"},{"empresa":"INVERSIONES SAN AGUSTIN SPA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-31.01202,"lon":-71.139997,"estado":"ACTIVA"},{"empresa":"EL ESPINO SPA","tipo":"MUESTRERA MINA","lat":-31.411172,"lon":-71.088485,"estado":"ACTIVA"},{"empresa":"MINERA BARBA SCM","tipo":"EXPLORACION DE SUPERFICIE","lat":-31.267427,"lon":-71.035547,"estado":"ACTIVA"},{"empresa":"JAVIER CONTRERAS TAVILO","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-31.358821,"lon":-71.136181,"estado":"ACTIVA"},{"empresa":"MINERA VALPARAÍSO SpA.","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-32.344335,"lon":-71.090167,"estado":"ACTIVA"},{"empresa":"JUAN GABRIEL MUÑOZ SALAS","tipo":"EXPLORACION DE SUPERFICIE","lat":-32.12339,"lon":-70.818442,"estado":"ACTIVA"},{"empresa":"SOCIEDAD EXPLOTADORA DULCINEA SPA.","tipo":"EXPLORACION DE SUPERFICIE","lat":-32.134922,"lon":-70.814261,"estado":"ACTIVA"},{"empresa":"JUAN LUIS FIGUEROA QUIROZ","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-32.340171,"lon":-70.946828,"estado":"ACTIVA"},{"empresa":"DAVID ANTONIO ARACENA GODOY","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-32.323082,"lon":-70.953196,"estado":"ACTIVA"}],"seia_projects":[{"name":"Proyecto de Adaptación Operacional","estado":"Aprobado","inv":1000.0,"lat":-31.999996,"lon":-71.000004,"tipo":"i1"},{"name":"Aprovechamiento de ripios para mejoramiento de caminos de MTV","estado":"Aprobado","inv":0.2,"lat":-31.72216,"lon":-71.004395,"tipo":"i3"},{"name":"Manejo de aguas naturales antes de botaderos mina","estado":"Aprobado","inv":7.6,"lat":-31.727887,"lon":-70.500657,"tipo":"i1"},{"name":"Infraestructura Complementaria","estado":"Aprobado","inv":1100.0,"lat":-31.886094,"lon":-71.497101,"tipo":"i1"},{"name":"Prospección Llahuín","estado":"Aprobado","inv":3.5,"lat":-31.335324,"lon":-71.018615,"tipo":"i4"},{"name":"Proyecto El Espino","estado":"Aprobado","inv":624.0,"lat":-31.374418,"lon":-71.097774,"tipo":"i4"},{"name":"Aprovechamiento de Capacidad Instalada","estado":"Aprobado","inv":1.7,"lat":-31.729833,"lon":-70.489391,"tipo":"i4"},{"name":"Producción de Material Granular para Obras Tempranas Cierre de los Tranques de Relaves Los Quillayes y El Chinche","estado":"Aprobado","inv":16.0,"lat":-31.827445,"lon":-70.631499,"tipo":"i1"},{"name":"Embalse Las Vacas Sur","estado":"Aprobado","inv":5.0,"lat":-31.868859,"lon":-71.318827,"tipo":"i4"},{"name":"Planta Las Vacas","estado":"Aprobado","inv":2.0,"lat":-31.866134,"lon":-71.318754,"tipo":"i4"},{"name":"Proyecto Minero Tres Valles","estado":"Aprobado","inv":102.0,"lat":-31.743403,"lon":-71.022811,"tipo":"i4"},{"name":"Modificación Túnel de Prospección Sector Manquehua (e-seia)","estado":"Aprobado","inv":7.0,"lat":-31.652794,"lon":-70.939415,"tipo":"i4"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=9.7km (Scott)","color":"#22c55e","data":{"lat":-31.377315,"lon":-71.101018,"dist_km":27.0,"score_raw":0.177828,"score_2nd":0.172114,"gap":0.005714,"gap_pct":3.21,"score_norm":0.803,"n_exploration":5,"n_seia_approved":6,"inv_approved_MMU":635.7,"inv_approved_tw_MMU":442.9,"n_seia_eff":3.02,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":41,"dist_to_M5_km":0.0}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-31.377315,"lon":-71.101018,"dist_km":27.0,"score_raw":107.669637,"score_2nd":105.466231,"gap":2.203406,"gap_pct":2.05,"score_norm":1.0,"n_exploration":5,"n_seia_approved":6,"inv_approved_MMU":635.7,"inv_approved_tw_MMU":442.9,"n_seia_eff":3.02,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":41,"dist_to_M5_km":0.0}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-31.853505,"lon":-71.32469,"dist_km":37.4,"score_raw":0.089577,"score_2nd":0.05612,"gap":0.033457,"gap_pct":37.35,"score_norm":1.0,"n_exploration":0,"n_seia_approved":2,"inv_approved_MMU":7.0,"inv_approved_tw_MMU":4.3,"n_seia_eff":1.22,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":3,"components":{"Relave_n":0.004,"SEIA_rej_n":0.291,"AreaProt_n":0.001},"dist_to_M5_km":57.0}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-31.377315,"lon":-71.101018,"dist_km":27.0,"score_raw":1.291049,"score_2nd":0.158329,"gap":1.13272,"gap_pct":87.74,"score_norm":1.0,"n_exploration":5,"n_seia_approved":6,"inv_approved_MMU":635.7,"inv_approved_tw_MMU":442.9,"n_seia_eff":3.02,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":41,"components":{"M1n":0.803,"Gtwn":0.922,"Res_n":0.89,"M3n":1.0,"M4n":0.022}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.79 δ=max(0.15,1−Π)=0.21","color":"#fb923c","data":{"lat":-31.726521,"lon":-70.46728,"dist_km":56.1,"score_raw":0.025022,"score_2nd":0.005061,"gap":0.019961,"gap_pct":79.77,"score_norm":1.0,"n_exploration":0,"n_seia_approved":5,"inv_approved_MMU":1178.7,"inv_approved_tw_MMU":437.1,"n_seia_eff":2.59,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"exp_ratio":0.0,"prosp_grav_n":1.0,"n_fae_local":0.0,"M4n":0.036},"dist_to_M5_km":71.5}}}},"IV-2":{"id":"IV-2","label":"Coquimbo — Sub-clúster 2","centroid":[-30.7705,-71.14303],"stats":{"n_facilities":600,"n_catA":61,"n_catB":31,"n_explor_surf":9,"n_explor_sub":4,"n_lab":6,"n_explor_total":19,"exploration_ratio":0.017,"n_prod_inst":247,"n_seia_approved":64,"n_seia_pipeline":1,"n_seia_rejected":40,"inv_approved_MMU":1427.8,"inv_pipeline_MMU":67.0,"n_rel_active":26,"n_rel_inactive":60,"n_rel_abandoned":173,"n_rel_total":266,"vol_relaves_m3":186299462.0,"ton_relaves":263753253.0,"top_seia":[{"name":"Proyecto El Espino","inv":624.0,"tipo":"i4","lat":-31.374418,"lon":-71.097774},{"name":"Proyecto Hipógeno","inv":350.0,"tipo":"i4","lat":-30.256002,"lon":-71.089185},{"name":"Continuidad Operacional Teck CDA","inv":100.0,"tipo":"i1","lat":-30.262095,"lon":-71.098542},{"name":"Proyecto Minero Andacollo-Cobre","inv":63.8,"tipo":"i4","lat":-30.243587,"lon":-71.10002},{"name":"Aumento de Producción Planta - Mina Florida","inv":50.0,"tipo":"i1","lat":-30.228057,"lon":-71.209444}],"top_relaves":[{"faena":"TECK-CDA","inst":"HIPOGENO","estado":"ACTIVO","vol_m3":170305774.0,"ton":238428084.0,"lat":-30.27133585,"lon":-71.10575468,"tipo":"EMBALSE"},{"faena":"FAENA DELTA","inst":"DELTA","estado":"ACTIVO","vol_m3":6084503.0,"ton":9126755.0,"lat":-30.5086341,"lon":-71.22812158,"tipo":"ESPESADO"},{"faena":"ALTOS DE PUNITAQUI","inst":"TAMAYA (EX LOS MANTOS 1-2)","estado":"INACTIVO","vol_m3":3021682.0,"ton":4532523.0,"lat":-30.85978612,"lon":-71.23287202,"tipo":"TRANQUE DE RELAVE"},{"faena":"ALTOS DE PUNITAQUI","inst":"DEPOSITO ESPESADO","estado":"ACTIVO","vol_m3":2473368.0,"ton":3710053.0,"lat":-30.86300374,"lon":-71.22705246,"tipo":"ESPESADO"},{"faena":"FAENA TAMBILLOS","inst":"DEPOSITO FILTRADO","estado":"ACTIVO","vol_m3":1547369.0,"ton":3094737.0,"lat":-30.20369278,"lon":-71.24129522,"tipo":"FILTRADO"}]},"exploration_sites":[{"empresa":"EL ESPINO SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-31.375443,"lon":-71.105155,"estado":"ACTIVA"},{"empresa":"DICAVE LIMITADA","tipo":"EXPLORACION DE SUPERFICIE","lat":-30.663383,"lon":-71.204135,"estado":"ACTIVA"},{"empresa":"ANKATU MINERALS SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-30.896762,"lon":-71.13291,"estado":"ACTIVA"},{"empresa":"SCM MANUELITO MINERALS","tipo":"EXPLORACION DE SUPERFICIE","lat":-31.018712,"lon":-71.272504,"estado":"ACTIVA"},{"empresa":"COMPAÑIA MINERA FLORIDA S.A.","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-30.260206,"lon":-71.19923,"estado":"ACTIVA"},{"empresa":"CIA MRA. TECK CARMEN DE ANDACOLLO","tipo":"MUESTRERA Y/O LABORATORIO","lat":-30.263984,"lon":-71.090894,"estado":"ACTIVA"},{"empresa":"RAUL RAMIREZ MUÑOZ","tipo":"EXPLORACION DE SUPERFICIE","lat":-30.995751,"lon":-71.259469,"estado":"ACTIVA"},{"empresa":"GALVARINO VEGA CARVAJAL","tipo":"EXPLORACION DE SUPERFICIE","lat":-31.436969,"lon":-71.098903,"estado":"ACTIVA"},{"empresa":"JUAN PEREZ CASTILLO","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-31.451354,"lon":-71.096751,"estado":"ACTIVA"},{"empresa":"SCM LA FLORIDA","tipo":"EXPLORACION DE SUPERFICIE","lat":-30.98321,"lon":-71.124728,"estado":"ACTIVA"},{"empresa":"INVERSIONES SAN AGUSTIN SPA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-31.01202,"lon":-71.139997,"estado":"ACTIVA"},{"empresa":"CIA MRA. TECK CARMEN DE ANDACOLLO","tipo":"MUESTRERA Y/O LABORATORIO","lat":-30.259589,"lon":-71.091581,"estado":"ACTIVA"},{"empresa":"EL ESPINO SPA","tipo":"MUESTRERA MINA","lat":-31.411172,"lon":-71.088485,"estado":"ACTIVA"},{"empresa":"EMPRESA NACIONAL DE MINERIA (ENAMI)","tipo":"MUESTRERA Y/O LABORATORIO","lat":-30.48947,"lon":-71.222816,"estado":"ACTIVA"},{"empresa":"SOCIEDAD DE SERVICIOS A LA MINERIA OMINT SPA","tipo":"EXPLORACION DE SUPERFICIE","lat":-30.000426,"lon":-70.883861,"estado":"ACTIVA"}],"seia_projects":[{"name":"Extensión de Vida Útil Complejo Productivo Sur (Ex Planta Delta), ENAMI","estado":"Aprobado","inv":5.2,"lat":-30.513034,"lon":-71.231065,"tipo":"i1"},{"name":"Modificación Proyecto Planta Los Mantos: Implementación depósito de relaves de filtrados y extensión de vida útil","estado":"Aprobado","inv":11.0,"lat":-30.86124,"lon":-71.225738,"tipo":"i3"},{"name":"Mina Yeso Corral","estado":"Aprobado","inv":0.1,"lat":-30.232389,"lon":-70.96472,"tipo":"i1"},{"name":"Modificación Proyecto Planta de Procesamiento de Carbonato de Calcio","estado":"Aprobado","inv":2.0,"lat":-30.26738,"lon":-71.485601,"tipo":"i1"},{"name":"DIA Mina Dalmacia","estado":"Aprobado","inv":12.5,"lat":-30.903544,"lon":-71.271916,"tipo":"i1"},{"name":"Mina Cinabrio - San Andrés","estado":"Aprobado","inv":2.0,"lat":-30.717958,"lon":-71.213292,"tipo":"i1"},{"name":"CONTINUIDAD OPERACIONAL FAENA MINERA TAMBO DE ORO","estado":"Aprobado","inv":1.1,"lat":-30.848831,"lon":-71.222388,"tipo":"i1"},{"name":"Continuidad Operacional Teck CDA","estado":"Aprobado","inv":100.0,"lat":-30.262095,"lon":-71.098542,"tipo":"i1"},{"name":"Explotación Mina Verde","estado":"Aprobado","inv":0.3,"lat":-30.100703,"lon":-71.214479,"tipo":"i1"},{"name":"Optimización de las actividades de Procesamiento del Mineral Supérgeno","estado":"Aprobado","inv":1.3,"lat":-30.266639,"lon":-71.085191,"tipo":"i3"},{"name":"Mina Milagro 20.000 tpm","estado":"Aprobado","inv":8.1,"lat":-30.864454,"lon":-71.224449,"tipo":"i1"},{"name":"Depósito de Relaves Filtrados CM Florida","estado":"Aprobado","inv":2.9,"lat":-30.204315,"lon":-71.24026,"tipo":"i3"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=13.7km (Scott)","color":"#22c55e","data":{"lat":-31.27303,"lon":-71.042191,"dist_km":56.7,"score_raw":0.063041,"score_2nd":0.048011,"gap":0.01503,"gap_pct":23.84,"score_norm":0.5401,"n_exploration":1,"n_seia_approved":3,"inv_approved_MMU":3.7,"inv_approved_tw_MMU":2.4,"n_seia_eff":1.47,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":22,"dist_to_M5_km":10.9}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-30.718514,"lon":-71.203533,"dist_km":8.2,"score_raw":165.412615,"score_2nd":130.913678,"gap":34.498938,"gap_pct":20.86,"score_norm":0.7695,"n_exploration":1,"n_seia_approved":3,"inv_approved_MMU":7.0,"inv_approved_tw_MMU":4.8,"n_seia_eff":2.01,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"dist_to_M5_km":69.8}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-30.718514,"lon":-71.203533,"dist_km":8.2,"score_raw":0.300314,"score_2nd":0.177562,"gap":0.122752,"gap_pct":40.87,"score_norm":1.0,"n_exploration":1,"n_seia_approved":3,"inv_approved_MMU":7.0,"inv_approved_tw_MMU":4.8,"n_seia_eff":2.01,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"Relave_n":0.0,"SEIA_rej_n":1.0,"AreaProt_n":0.001},"dist_to_M5_km":69.8}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-31.342345,"lon":-71.122862,"dist_km":63.6,"score_raw":0.147707,"score_2nd":0.147156,"gap":0.000551,"gap_pct":0.37,"score_norm":0.215,"n_exploration":5,"n_seia_approved":5,"inv_approved_MMU":635.7,"inv_approved_tw_MMU":442.9,"n_seia_eff":2.57,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":27,"components":{"M1n":0.249,"Gtwn":0.119,"Res_n":0.087,"M3n":0.165,"M4n":0.004}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.32 δ=max(0.15,1−Π)=0.68","color":"#fb923c","data":{"lat":-31.342345,"lon":-71.042191,"dist_km":64.3,"score_raw":0.026024,"score_2nd":0.018858,"gap":0.007167,"gap_pct":27.54,"score_norm":0.1771,"n_exploration":5,"n_seia_approved":4,"inv_approved_MMU":627.7,"inv_approved_tw_MMU":439.7,"n_seia_eff":2.17,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":31,"components":{"exp_ratio":0.5,"prosp_grav_n":0.571,"n_fae_local":37.0,"M4n":0.003},"dist_to_M5_km":7.7}}}},"V-0":{"id":"V-0","label":"Valparaíso — Sub-clúster 0","centroid":[-32.52382,-70.96095],"stats":{"n_facilities":1253,"n_catA":165,"n_catB":118,"n_explor_surf":57,"n_explor_sub":76,"n_lab":12,"n_explor_total":145,"exploration_ratio":0.114,"n_prod_inst":337,"n_seia_approved":91,"n_seia_pipeline":4,"n_seia_rejected":47,"inv_approved_MMU":2814.5,"inv_pipeline_MMU":24.2,"n_rel_active":22,"n_rel_inactive":23,"n_rel_abandoned":52,"n_rel_total":98,"vol_relaves_m3":1807376990.0,"ton_relaves":2701039796.0,"top_seia":[{"name":"Proyecto de Adaptación Operacional","inv":1000.0,"tipo":"i1","lat":-31.999996,"lon":-71.000004},{"name":"UNIDAD DE DESTILACIÓN ATMOSFÉRICA Y VACÍO N° 3 Unidad Destilación N°3 (e-seia)","inv":300.0,"tipo":"i5","lat":-32.924792,"lon":-71.505142},{"name":"Depósito de Desmontes El Sauce","inv":250.0,"tipo":"i4","lat":-32.65228,"lon":-71.164347},{"name":"Modificación del Complejo Industrial de Enap Refinerías S.A. (e-seia)","inv":200.0,"tipo":"i5","lat":-32.930531,"lon":-71.504872},{"name":"Sistema de Disposición de Relaves a Largo Plazo. Proyecto Embalse Ovejería","inv":170.0,"tipo":"i4","lat":-33.049346,"lon":-70.799688}],"top_relaves":[{"faena":"LOS BRONCES","inst":"LAS TORTOLAS","estado":"ACTIVO","vol_m3":629727346.0,"ton":913104651.0,"lat":-33.1299916,"lon":-70.73291727,"tipo":"TRANQUE DE RELAVE"},{"faena":"FAENA LOS PELAMBRES","inst":"EL MAURO","estado":"ACTIVO","vol_m3":597602005.0,"ton":896403008.0,"lat":-31.96527629,"lon":-71.02282728,"tipo":"TRANQUE DE RELAVE"},{"faena":"ANDINA","inst":"OVEJERIA","estado":"ACTIVO","vol_m3":424163357.0,"ton":636245035.0,"lat":-33.03969603,"lon":-70.79554575,"tipo":"TRANQUE DE RELAVE"},{"faena":"EL SOLDADO","inst":"TORITO","estado":"ACTIVO","vol_m3":123343378.0,"ton":201162035.0,"lat":-32.64034477,"lon":-71.16279854,"tipo":"TRANQUE DE RELAVE"},{"faena":"LAS CENIZAS CABILDO","inst":"LAS CENIZAS 4","estado":"INACTIVO","vol_m3":10727367.0,"ton":16091051.0,"lat":-32.42317764,"lon":-71.07976928,"tipo":"TRANQUE DE RELAVE"}]},"exploration_sites":[{"empresa":"MINERA LAS CENIZAS S.A.","tipo":"MUESTRERA Y/O LABORATORIO","lat":-32.433328,"lon":-71.076555,"estado":"ACTIVA"},{"empresa":"MINERA LAS CENIZAS S.A.","tipo":"MUESTRERA Y/O LABORATORIO","lat":-32.433326,"lon":-71.078309,"estado":"ACTIVA"},{"empresa":"MINERA CEMIN-PULLALLI SPA","tipo":"MUESTRERA Y/O LABORATORIO","lat":-32.770159,"lon":-70.989119,"estado":"ACTIVA"},{"empresa":"MINERA CEMIN-PULLALLI SPA","tipo":"MUESTRERA Y/O LABORATORIO","lat":-32.770159,"lon":-70.989119,"estado":"ACTIVA"},{"empresa":"ANGLO AMERICAN SUR S.A.","tipo":"MUESTRERA Y/O LABORATORIO","lat":-32.804932,"lon":-70.957164,"estado":"ACTIVA"},{"empresa":"CORPORACION NACIONAL DEL COBRE (CODELCO)","tipo":"MUESTRERA Y/O LABORATORIO","lat":-33.095563,"lon":-70.254477,"estado":"ACTIVA"},{"empresa":"SOC. EXPLORACION Y DESARROLLO MINERO (EXPLODESA)","tipo":"MUESTRERA Y/O LABORATORIO","lat":-32.70272,"lon":-70.985787,"estado":"ACTIVA"},{"empresa":"ANGLO AMERICAN SUR S.A.","tipo":"MUESTRERA Y/O LABORATORIO","lat":-32.658405,"lon":-71.144641,"estado":"ACTIVA"},{"empresa":"MINERA LAS CENIZAS S.A.","tipo":"MUESTRERA Y/O LABORATORIO","lat":-32.432995,"lon":-71.077621,"estado":"ACTIVA"},{"empresa":"MINERA LAS CENIZAS S.A.","tipo":"MUESTRERA Y/O LABORATORIO","lat":-32.434373,"lon":-71.078248,"estado":"ACTIVA"},{"empresa":"GEO SERVICES SPA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-32.546639,"lon":-71.184269,"estado":"ACTIVA"},{"empresa":"INVERSIONES AGROMINS S.A.","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-32.615443,"lon":-70.853492,"estado":"ACTIVA"},{"empresa":"ANGLO AMERICAN SUR S.A.","tipo":"MUESTRERA Y/O LABORATORIO","lat":-32.805467,"lon":-70.95756,"estado":"ACTIVA"},{"empresa":"ACONCAGUA MINING OPERATIONS LTDA.","tipo":"EXPLORACION DE SUPERFICIE","lat":-32.751062,"lon":-70.979837,"estado":"ACTIVA"},{"empresa":"SOCIEDAD MINERA LA RESGUARDO LIMITADA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-32.601715,"lon":-70.955886,"estado":"ACTIVA"}],"seia_projects":[{"name":"Continuidad Operacional Mina Sauce","estado":"Aprobado","inv":15.0,"lat":-32.462533,"lon":-71.059684,"tipo":"i1"},{"name":"Modificación Cantera Hernán Muñoz","estado":"Aprobado","inv":5.0,"lat":-32.939974,"lon":-71.332097,"tipo":"i5"},{"name":"Disposición de Relave en Pasta en Interior Mina","estado":"Aprobado","inv":10.0,"lat":-32.477871,"lon":-71.078504,"tipo":"i1"},{"name":"Aumento vida útil Planta Catemu \"Proyecto AVU\"","estado":"Aprobado","inv":2.0,"lat":-32.770471,"lon":-70.988921,"tipo":"i3"},{"name":"Desarrollo Complejo Cerro Blanco","estado":"Aprobado","inv":60.0,"lat":-33.156066,"lon":-70.831429,"tipo":"i1"},{"name":"Extracción Material Integral desde Pozo Lastrero Fundo La Libertad, Comuna de Limache","estado":"Aprobado","inv":0.1,"lat":-32.92407,"lon":-71.393705,"tipo":"i5"},{"name":"Proyecto de Adaptación Operacional","estado":"Aprobado","inv":1000.0,"lat":-31.999996,"lon":-71.000004,"tipo":"i1"},{"name":"Continuidad Operacional Planta Pullalli","estado":"Aprobado","inv":2.0,"lat":-32.407217,"lon":-71.332056,"tipo":"i3"},{"name":"Cierre Operacional Mina Cardenilla","estado":"Aprobado","inv":2.0,"lat":-33.0,"lon":-71.0,"tipo":"i1"},{"name":"Continuidad Operacional Fase V El Soldado","estado":"Aprobado","inv":40.0,"lat":-32.658355,"lon":-71.148996,"tipo":"i1"},{"name":"OPTIMIZACIÓN OPERACIONAL MINA UVA SUBTERRÁNEA","estado":"Aprobado","inv":5.0,"lat":-32.719519,"lon":-70.969099,"tipo":"i1"},{"name":"Extracción de Áridos Rio Aconcagua","estado":"Aprobado","inv":0.2,"lat":-32.925017,"lon":-71.43744,"tipo":"i5"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=5.9km (Scott)","color":"#22c55e","data":{"lat":-32.506578,"lon":-71.063195,"dist_km":9.8,"score_raw":0.531805,"score_2nd":0.520067,"gap":0.011738,"gap_pct":2.21,"score_norm":1.0,"n_exploration":42,"n_seia_approved":13,"inv_approved_MMU":61.7,"inv_approved_tw_MMU":46.4,"n_seia_eff":8.14,"n_pipeline":1,"inv_pipeline_MMU":0.5,"n_relaves":19,"dist_to_M5_km":3.8}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-32.43761,"lon":-71.063195,"dist_km":13.6,"score_raw":515.727553,"score_2nd":421.927134,"gap":93.800419,"gap_pct":18.19,"score_norm":0.9172,"n_exploration":36,"n_seia_approved":11,"inv_approved_MMU":61.5,"inv_approved_tw_MMU":46.3,"n_seia_eff":7.07,"n_pipeline":1,"inv_pipeline_MMU":0.5,"n_relaves":12,"dist_to_M5_km":3.8}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-32.713481,"lon":-70.981399,"dist_km":21.2,"score_raw":0.175455,"score_2nd":0.125629,"gap":0.049826,"gap_pct":28.4,"score_norm":1.0,"n_exploration":20,"n_seia_approved":16,"inv_approved_MMU":76.7,"inv_approved_tw_MMU":50.9,"n_seia_eff":10.27,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":4,"components":{"Relave_n":0.001,"SEIA_rej_n":0.582,"AreaProt_n":0.003},"dist_to_M5_km":27.9}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-32.472094,"lon":-71.063195,"dist_km":11.2,"score_raw":0.277369,"score_2nd":0.202125,"gap":0.075244,"gap_pct":27.13,"score_norm":1.0,"n_exploration":40,"n_seia_approved":13,"inv_approved_MMU":61.7,"inv_approved_tw_MMU":46.4,"n_seia_eff":8.14,"n_pipeline":1,"inv_pipeline_MMU":0.5,"n_relaves":19,"components":{"M1n":0.646,"Gtwn":0.077,"Res_n":0.323,"M3n":0.75,"M4n":0.497}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.55 δ=max(0.15,1−Π)=0.45","color":"#fb923c","data":{"lat":-32.403127,"lon":-70.736011,"dist_km":25.0,"score_raw":0.057951,"score_2nd":0.047533,"gap":0.010418,"gap_pct":17.98,"score_norm":0.8262,"n_exploration":10,"n_seia_approved":0,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.0,"n_pipeline":0,"inv_pipeline_MMU":0.0,"n_relaves":0,"components":{"exp_ratio":1.0,"prosp_grav_n":0.002,"n_fae_local":7.0,"M4n":0.01},"dist_to_M5_km":31.6}}}},"VI-0":{"id":"VI-0","label":"O'Higgins — Sub-clúster 0","centroid":[-34.09438,-70.42245],"stats":{"n_facilities":95,"n_catA":92,"n_catB":3,"n_explor_surf":2,"n_explor_sub":1,"n_lab":0,"n_explor_total":3,"exploration_ratio":0.032,"n_prod_inst":24,"n_seia_approved":104,"n_seia_pipeline":3,"n_seia_rejected":55,"inv_approved_MMU":8243.4,"inv_pipeline_MMU":510.5,"n_rel_active":5,"n_rel_inactive":12,"n_rel_abandoned":8,"n_rel_total":25,"vol_relaves_m3":1217254365.0,"ton_relaves":2021299746.0,"top_seia":[{"name":"Nuevo Nivel Mina","inv":3278.0,"tipo":"i4","lat":-34.19403,"lon":-70.563616},{"name":"Adecuaciones Ejecución Proyecto NNM","inv":1350.0,"tipo":"i1","lat":-34.080588,"lon":-70.361553},{"name":"Planta de Procesamiento de Relaves","inv":560.0,"tipo":"i4","lat":-34.03059,"lon":-71.026603},{"name":"Explotación Recursos Norte","inv":485.0,"tipo":"i1","lat":-34.07463,"lon":-70.349071},{"name":"Actualizaciones de Ingeniería y Construcción Obras 7ª, 8ª y 9ª Etapas Peraltamiento Embalse Carén","inv":473.0,"tipo":"i5","lat":-34.09814,"lon":-71.168434}],"top_relaves":[{"faena":"EL TENIENTE","inst":"CAREN","estado":"ACTIVO","vol_m3":923273585.0,"ton":1575008728.0,"lat":-34.11273676,"lon":-71.13644727,"tipo":"EMBALSE"},{"faena":"MINERA VALLE CENTRAL S.A.","inst":"COLIGUE","estado":"ACTIVO","vol_m3":151484889.0,"ton":227227333.0,"lat":-34.2620839,"lon":-70.67248087,"tipo":"EMBALSE"},{"faena":"EL TENIENTE","inst":"CAUQUENES","estado":"ACTIVO","vol_m3":136770935.0,"ton":205156403.0,"lat":-34.29186914,"lon":-70.69474343,"tipo":"TRANQUE DE RELAVE"},{"faena":"ALHUE","inst":"TRANQUE DE RELAVE ADOSADO","estado":"INACTIVO","vol_m3":3563057.0,"ton":7090484.0,"lat":-34.04288629,"lon":-71.03178378,"tipo":"TRANQUE DE RELAVE"},{"faena":"ALHUE","inst":"TRANQUE EN PASTA","estado":"ACTIVO","vol_m3":2012414.0,"ton":6762855.0,"lat":-34.04696336,"lon":-71.04028353,"tipo":"EN PASTA"}]},"exploration_sites":[{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-34.04836,"lon":-70.331407,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-34.08267,"lon":-70.327338,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-34.057176,"lon":-70.349855,"estado":"ACTIVA"}],"seia_projects":[{"name":"Revegetación con Especies Nativas en orilla norte del río Cachapoal, para Complementar Actividades de Extracción de Áridos","estado":"Aprobado","inv":0.1,"lat":-34.208842,"lon":-70.730383,"tipo":"i1"},{"name":"Optimización Explotación Rajo Sur","estado":"Aprobado","inv":0.0,"lat":-34.093961,"lon":-70.359187,"tipo":"i1"},{"name":"Minera Florida 100","estado":"Aprobado","inv":35.0,"lat":-34.002445,"lon":-70.994256,"tipo":"i1"},{"name":"Proyecto Extensión Pacífico Superior","estado":"Aprobado","inv":92.0,"lat":-34.082958,"lon":-70.360117,"tipo":"i1"},{"name":"CONTINUIDAD OPERACIONAL EXTRACCION ARIDOS RIO MAIPO TRAMO KM 8,5 A KM 11,2","estado":"Aprobado","inv":1.0,"lat":-34.0,"lon":-71.0,"tipo":"i5"},{"name":"Extracción Mecanizada de Áridos Río Maipo, Kilómetro 112,7 al 115,7","estado":"Aprobado","inv":0.2,"lat":-33.783215,"lon":-70.84956,"tipo":"i5"},{"name":"Explotación Mecanizada de Áridos en Río Cachapoal, Kilómetro 3,6 al 6,2","estado":"Aprobado","inv":0.2,"lat":-34.188681,"lon":-70.801109,"tipo":"i5"},{"name":"Extracción de áridos El Descanso","estado":"Aprobado","inv":6.5,"lat":-33.58133,"lon":-70.797958,"tipo":"i5"},{"name":"EXPLORACIONES MINERA FLORIDA","estado":"Aprobado","inv":20.0,"lat":-34.006454,"lon":-70.989861,"tipo":"i2"},{"name":"Extracción Mecanizada de Aridos Río Cachapoal","estado":"Aprobado","inv":0.8,"lat":-34.221015,"lon":-70.92322,"tipo":"i5"},{"name":"Extracción Mecanizada de Áridos Río Maipo, Tramo A8 y A9","estado":"Aprobado","inv":0.2,"lat":-33.801669,"lon":-70.892083,"tipo":"i5"},{"name":"Optimización Reservas Pozo San Bernardo y Nuevo Plan de Recuperación de Terreno","estado":"Aprobado","inv":17.0,"lat":-33.533069,"lon":-70.726071,"tipo":"i5"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=3.0km (Scott)","color":"#22c55e","data":{"lat":-34.08514,"lon":-70.322029,"dist_km":9.3,"score_raw":0.315266,"score_2nd":0.220406,"gap":0.094859,"gap_pct":30.09,"score_norm":1.0,"n_exploration":3,"n_seia_approved":15,"inv_approved_MMU":2584.3,"inv_approved_tw_MMU":1812.1,"n_seia_eff":9.4,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":2,"dist_to_M5_km":2.1}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-34.08514,"lon":-70.388976,"dist_km":3.2,"score_raw":545.925357,"score_2nd":355.374222,"gap":190.551135,"gap_pct":34.9,"score_norm":1.0,"n_exploration":3,"n_seia_approved":25,"inv_approved_MMU":3323.6,"inv_approved_tw_MMU":2245.4,"n_seia_eff":15.1,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":4,"dist_to_M5_km":4.1}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-34.2145,"lon":-70.545187,"dist_km":17.5,"score_raw":0.069191,"score_2nd":0.068584,"gap":0.000607,"gap_pct":0.88,"score_norm":0.3378,"n_exploration":0,"n_seia_approved":5,"inv_approved_MMU":3308.2,"inv_approved_tw_MMU":1947.1,"n_seia_eff":2.9,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"components":{"Relave_n":0.001,"SEIA_rej_n":0.228,"AreaProt_n":0.003},"dist_to_M5_km":23.4}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-34.08514,"lon":-70.344345,"dist_km":7.3,"score_raw":0.536517,"score_2nd":0.307029,"gap":0.229487,"gap_pct":42.77,"score_norm":1.0,"n_exploration":3,"n_seia_approved":21,"inv_approved_MMU":3288.8,"inv_approved_tw_MMU":2228.0,"n_seia_eff":13.23,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":2,"components":{"M1n":0.357,"Gtwn":0.359,"Res_n":1.0,"M3n":0.14,"M4n":0.011}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.78 δ=max(0.15,1−Π)=0.22","color":"#fb923c","data":{"lat":-34.0297,"lon":-70.232766,"dist_km":18.9,"score_raw":0.012838,"score_2nd":0.012827,"gap":1.1e-05,"gap_pct":0.08,"score_norm":0.472,"n_exploration":3,"n_seia_approved":1,"inv_approved_MMU":485.0,"inv_approved_tw_MMU":341.1,"n_seia_eff":0.7,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"components":{"exp_ratio":0.3,"prosp_grav_n":0.006,"n_fae_local":0.0,"M4n":0.011},"dist_to_M5_km":12.0}}}},"VI-1":{"id":"VI-1","label":"O'Higgins — Sub-clúster 1","centroid":[-34.51165,-70.50799],"stats":{"n_facilities":55,"n_catA":0,"n_catB":0,"n_explor_surf":2,"n_explor_sub":1,"n_lab":0,"n_explor_total":3,"exploration_ratio":0.0,"n_prod_inst":14,"n_seia_approved":74,"n_seia_pipeline":3,"n_seia_rejected":18,"inv_approved_MMU":8143.6,"inv_pipeline_MMU":404.0,"n_rel_active":5,"n_rel_inactive":12,"n_rel_abandoned":6,"n_rel_total":23,"vol_relaves_m3":1217254365.0,"ton_relaves":2021299746.0,"top_seia":[{"name":"Nuevo Nivel Mina","inv":3278.0,"tipo":"i4","lat":-34.19403,"lon":-70.563616},{"name":"Adecuaciones Ejecución Proyecto NNM","inv":1350.0,"tipo":"i1","lat":-34.080588,"lon":-70.361553},{"name":"Planta de Procesamiento de Relaves","inv":560.0,"tipo":"i4","lat":-34.03059,"lon":-71.026603},{"name":"Explotación Recursos Norte","inv":485.0,"tipo":"i1","lat":-34.07463,"lon":-70.349071},{"name":"Actualizaciones de Ingeniería y Construcción Obras 7ª, 8ª y 9ª Etapas Peraltamiento Embalse Carén","inv":473.0,"tipo":"i5","lat":-34.09814,"lon":-71.168434}],"top_relaves":[{"faena":"EL TENIENTE","inst":"CAREN","estado":"ACTIVO","vol_m3":923273585.0,"ton":1575008728.0,"lat":-34.11273676,"lon":-71.13644727,"tipo":"EMBALSE"},{"faena":"MINERA VALLE CENTRAL S.A.","inst":"COLIGUE","estado":"ACTIVO","vol_m3":151484889.0,"ton":227227333.0,"lat":-34.2620839,"lon":-70.67248087,"tipo":"EMBALSE"},{"faena":"EL TENIENTE","inst":"CAUQUENES","estado":"ACTIVO","vol_m3":136770935.0,"ton":205156403.0,"lat":-34.29186914,"lon":-70.69474343,"tipo":"TRANQUE DE RELAVE"},{"faena":"ALHUE","inst":"TRANQUE DE RELAVE ADOSADO","estado":"INACTIVO","vol_m3":3563057.0,"ton":7090484.0,"lat":-34.04288629,"lon":-71.03178378,"tipo":"TRANQUE DE RELAVE"},{"faena":"ALHUE","inst":"TRANQUE EN PASTA","estado":"ACTIVO","vol_m3":2012414.0,"ton":6762855.0,"lat":-34.04696336,"lon":-71.04028353,"tipo":"EN PASTA"}]},"exploration_sites":[{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-34.04836,"lon":-70.331407,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-34.08267,"lon":-70.327338,"estado":"ACTIVA"},{"empresa":"EXPLORACIONES MINERAS ANDINAS S.A.","tipo":"EXPLORACION DE SUPERFICIE","lat":-34.057176,"lon":-70.349855,"estado":"ACTIVA"}],"seia_projects":[{"name":"Revegetación con Especies Nativas en orilla norte del río Cachapoal, para Complementar Actividades de Extracción de Áridos","estado":"Aprobado","inv":0.1,"lat":-34.208842,"lon":-70.730383,"tipo":"i1"},{"name":"Optimización Explotación Rajo Sur","estado":"Aprobado","inv":0.0,"lat":-34.093961,"lon":-70.359187,"tipo":"i1"},{"name":"Minera Florida 100","estado":"Aprobado","inv":35.0,"lat":-34.002445,"lon":-70.994256,"tipo":"i1"},{"name":"Proyecto Extensión Pacífico Superior","estado":"Aprobado","inv":92.0,"lat":-34.082958,"lon":-70.360117,"tipo":"i1"},{"name":"CONTINUIDAD OPERACIONAL EXTRACCION ARIDOS RIO MAIPO TRAMO KM 8,5 A KM 11,2","estado":"Aprobado","inv":1.0,"lat":-34.0,"lon":-71.0,"tipo":"i5"},{"name":"Explotación Mecanizada de Áridos en Río Cachapoal, Kilómetro 3,6 al 6,2","estado":"Aprobado","inv":0.2,"lat":-34.188681,"lon":-70.801109,"tipo":"i5"},{"name":"EXPLORACIONES MINERA FLORIDA","estado":"Aprobado","inv":20.0,"lat":-34.006454,"lon":-70.989861,"tipo":"i2"},{"name":"Extracción Mecanizada de Aridos Río Cachapoal","estado":"Aprobado","inv":0.8,"lat":-34.221015,"lon":-70.92322,"tipo":"i5"},{"name":"Extracción de Áridos Km -6,0 al -7,0 Río Cachapoal","estado":"Aprobado","inv":0.6,"lat":-34.219591,"lon":-70.679965,"tipo":"i5"},{"name":"Extracción de áridos en río Cachapoal, Sector Sifón El Gringo","estado":"Aprobado","inv":0.2,"lat":-34.224897,"lon":-70.540464,"tipo":"i5"},{"name":"Ajustes de Aspectos Constructivos en Proyecto Peraltamiento Embalse Carén, Séptima Etapa","estado":"Aprobado","inv":11.0,"lat":-34.079461,"lon":-71.191865,"tipo":"i1"},{"name":"Adecuaciones Ejecución Proyecto NNM","estado":"Aprobado","inv":1350.0,"lat":-34.080588,"lon":-70.361553,"tipo":"i1"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=3.0km (Scott)","color":"#22c55e","data":{"lat":-34.31761,"lon":-70.451923,"dist_km":22.2,"score_raw":0.0,"score_2nd":0.0,"gap":0.0,"gap_pct":76.8,"score_norm":0.0,"n_exploration":0,"n_seia_approved":1,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.58,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"dist_to_M5_km":0.0}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-34.31761,"lon":-70.451923,"dist_km":22.2,"score_raw":1.788128,"score_2nd":1.767752,"gap":0.020376,"gap_pct":1.14,"score_norm":0.0339,"n_exploration":0,"n_seia_approved":1,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.58,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"dist_to_M5_km":0.0}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-34.46545,"lon":-70.407069,"dist_km":10.6,"score_raw":0.081452,"score_2nd":0.035896,"gap":0.045557,"gap_pct":55.93,"score_norm":0.5201,"n_exploration":0,"n_seia_approved":0,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.0,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"components":{"Relave_n":0.0,"SEIA_rej_n":0.002,"AreaProt_n":0.405},"dist_to_M5_km":16.9}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-34.31761,"lon":-70.451923,"dist_km":22.2,"score_raw":1.4e-05,"score_2nd":9e-06,"gap":5e-06,"gap_pct":37.26,"score_norm":0.0002,"n_exploration":0,"n_seia_approved":1,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.58,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"components":{"M1n":0.0,"Gtwn":0.005,"Res_n":0.003,"M3n":0.034,"M4n":0.008}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.00 δ=max(0.15,1−Π)=1.00","color":"#fb923c","data":{"lat":-34.55785,"lon":-70.519203,"dist_km":5.2,"score_raw":0.131229,"score_2nd":0.104688,"gap":0.026541,"gap_pct":20.23,"score_norm":1.0,"n_exploration":0,"n_seia_approved":0,"inv_approved_MMU":0.0,"inv_approved_tw_MMU":0.0,"n_seia_eff":0.0,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"components":{"exp_ratio":0.0,"prosp_grav_n":1.0,"n_fae_local":14.0,"M4n":0.005},"dist_to_M5_km":27.4}}}},"XV-0":{"id":"XV-0","label":"Arica y Parinacota — Sub-clúster 0","centroid":[-18.85938,-70.25236],"stats":{"n_facilities":43,"n_catA":0,"n_catB":17,"n_explor_surf":0,"n_explor_sub":1,"n_lab":0,"n_explor_total":1,"exploration_ratio":0.023,"n_prod_inst":20,"n_seia_approved":13,"n_seia_pipeline":0,"n_seia_rejected":8,"inv_approved_MMU":123.5,"inv_pipeline_MMU":0.0,"n_rel_active":0,"n_rel_inactive":0,"n_rel_abandoned":0,"n_rel_total":0,"vol_relaves_m3":0.0,"ton_relaves":0.0,"top_seia":[{"name":"Modificación Producción de Yodo SCM Bullmine","inv":33.3,"tipo":"i4","lat":-19.388541,"lon":-69.885307},{"name":"Planta  Cátodos Pampa Camarones","inv":30.5,"tipo":"i4","lat":-18.912979,"lon":-70.217861},{"name":"Modificación Proyecto Planta El Águila","inv":23.7,"tipo":"i5","lat":-18.451508,"lon":-69.881314},{"name":"Producción de Yodo SCM Bullmine (e-seia)","inv":12.5,"tipo":"i4","lat":-19.388554,"lon":-69.884479},{"name":"Optimización y Actualización de Procesos e Instalaciones del Proyecto Minero Pampa Camarones","inv":9.5,"tipo":"i1","lat":-18.912788,"lon":-70.21769}],"top_relaves":[]},"exploration_sites":[{"empresa":"PAMPA CAMARONES SpA","tipo":"EXPLORACIÓN SUBTERRÁNEA","lat":-18.892754,"lon":-70.235466,"estado":"ACTIVA"}],"seia_projects":[{"name":"ACTUALIZACIÓN DE RECURSOS MINA SALAMANQUEJA","estado":"Aprobado","inv":0.1,"lat":-18.92093,"lon":-70.228079,"tipo":"i1"},{"name":"Optimización y Actualización de Procesos e Instalaciones del Proyecto Minero Pampa Camarones","estado":"Aprobado","inv":9.5,"lat":-18.912788,"lon":-70.21769,"tipo":"i1"},{"name":"Ampliación Botadero de Ripios Quiborax S.A.","estado":"Aprobado","inv":0.3,"lat":-18.448509,"lon":-69.880382,"tipo":"i3"},{"name":"Modificación II Producción de Yodo SCM BULLMINE","estado":"Aprobado","inv":2.4,"lat":-19.38828,"lon":-69.88511,"tipo":"i1"},{"name":"Regularización Producción de Yodo SCM Bullmine","estado":"Aprobado","inv":0.8,"lat":-19.389637,"lon":-69.915748,"tipo":"i4"},{"name":"Modificación Producción de Yodo SCM Bullmine","estado":"Aprobado","inv":33.3,"lat":-19.388541,"lon":-69.885307,"tipo":"i4"},{"name":"Modificación Proyecto Planta El Águila","estado":"Aprobado","inv":23.7,"lat":-18.451508,"lon":-69.881314,"tipo":"i5"},{"name":"Planta  Cátodos Pampa Camarones","estado":"Aprobado","inv":30.5,"lat":-18.912979,"lon":-70.217861,"tipo":"i4"},{"name":"Explotación Mina Salamanqueja Explotación Mina Salamanqueja","estado":"Aprobado","inv":6.0,"lat":-18.911512,"lon":-70.217659,"tipo":"i4"},{"name":"Prospección Pampa Camarones","estado":"Aprobado","inv":1.6,"lat":-18.891897,"lon":-70.031705,"tipo":"i4"},{"name":"Producción de Yodo SCM Bullmine (e-seia)","estado":"Aprobado","inv":12.5,"lat":-19.388554,"lon":-69.884479,"tipo":"i4"},{"name":"Poder de Compra de Minerales ENAMI - Arica Parinacota (e-seia)","estado":"Aprobado","inv":2.6,"lat":-18.862796,"lon":-70.217746,"tipo":"i4"}],"models":{"M1":{"name":"KDE Exploración","formula":"M1(p)=√(f̂/d_min²)  f̂=Σexp(−d²/2h²)/(2πh²)  h=3.8km (Scott)","color":"#22c55e","data":{"lat":-18.894912,"lon":-70.239844,"dist_km":4.2,"score_raw":0.200672,"score_2nd":0.044108,"gap":0.156564,"gap_pct":78.02,"score_norm":1.0,"n_exploration":1,"n_seia_approved":5,"inv_approved_MMU":48.7,"inv_approved_tw_MMU":31.2,"n_seia_eff":3.45,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"dist_to_M5_km":2.6}},"M3":{"name":"Cobertura Productiva","formula":"M3(p)=3·Σ(4/max(d,1))²+2·Σ(7/max(d,1.75))²+Σ(12/max(d,3))²","color":"#38bdf8","data":{"lat":-18.918601,"lon":-70.239844,"dist_km":6.7,"score_raw":164.209231,"score_2nd":152.571531,"gap":11.6377,"gap_pct":7.09,"score_norm":1.0,"n_exploration":1,"n_seia_approved":5,"inv_approved_MMU":48.7,"inv_approved_tw_MMU":31.2,"n_seia_eff":3.45,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"dist_to_M5_km":0.0}},"M4":{"name":"Riesgo Ambiental","formula":"M4(p)=0.50·Rₙ+0.30·Xₙ+0.20·Pₙ  R=Σ[w·log(V)·Σpop⁰·³/d²]/d²  X=Σ1/d²  P=Σw·log(ha)/d²","color":"#ef4444","data":{"lat":-18.871224,"lon":-70.214812,"dist_km":4.2,"score_raw":0.069827,"score_2nd":0.068208,"gap":0.001619,"gap_pct":2.32,"score_norm":1.0,"n_exploration":1,"n_seia_approved":5,"inv_approved_MMU":48.7,"inv_approved_tw_MMU":31.2,"n_seia_eff":3.45,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"components":{"Relave_n":0.0,"SEIA_rej_n":0.233,"AreaProt_n":0.0},"dist_to_M5_km":5.9}},"M5":{"name":"Potencial Nuevo Proyecto (NPPI)","formula":"NPPI(p)=∛(M1ₙ·Gtwₙ·Rₙ)·(1+0.5·M3ₙ)/(1+0.5·M4ₙ)","color":"#a78bfa","data":{"lat":-18.918601,"lon":-70.239844,"dist_km":6.7,"score_raw":0.413169,"score_2nd":0.307219,"gap":0.10595,"gap_pct":25.64,"score_norm":1.0,"n_exploration":1,"n_seia_approved":5,"inv_approved_MMU":48.7,"inv_approved_tw_MMU":31.2,"n_seia_eff":3.45,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"components":{"M1n":0.155,"Gtwn":0.175,"Res_n":1.0,"M3n":1.0,"M4n":0.181}}},"M7":{"name":"Cluster Emergente (ECI)","formula":"ECI(p)=(nₑ·σ·δ+0.5·Rprosp·δ)/(1+n_fae/5)/(1+4Π)/(1+0.5·M4ₙ)  Π=0.18 δ=max(0.15,1−Π)=0.82","color":"#fb923c","data":{"lat":-18.989665,"lon":-70.264876,"dist_km":14.5,"score_raw":0.008343,"score_2nd":0.008329,"gap":1.3e-05,"gap_pct":0.16,"score_norm":1.0,"n_exploration":1,"n_seia_approved":4,"inv_approved_MMU":46.1,"inv_approved_tw_MMU":29.8,"n_seia_eff":2.9,"n_pipeline":0,"inv_pipeline_MMU":0,"n_relaves":0,"components":{"exp_ratio":0.1,"prosp_grav_n":0.0,"n_fae_local":6.0,"M4n":0.016},"dist_to_M5_km":8.3}}}}},"validation":{"catA_hit_rate_pct":51.3,"catA_hits":20,"catA_total":39,"baseline_pct":25.0,"lift":2.05},"radius_km":12};
 
 // ── STATE ────────────────────────────────────────────────────────────────────
+function switchTab(tabId) {
+  document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`.sidebar-tab[onclick*="${tabId}"]`).classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
 let selectedCluster = null;
 let currentYear     = RAW.config.default_year;
 let flags = {sub:false,cen:false,des:false,rel:false,seia:false,sigexotros:false,train:false,ruido:false,ap:false,fibra:false,senal:false,pue:false,pob:false,opt:false};
@@ -970,14 +1016,22 @@ function setProdMode(mode){
 }
 
 // ── MAP ───────────────────────────────────────────────────────────────────────
+// ── CHART.JS GLOBAL DEFAULTS (iPhone White) ──────────────────────────────────
+if(window.Chart){
+  Chart.defaults.color = 'oklch(45% 0.02 250)'; // --text2
+  Chart.defaults.font.family = "-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif";
+  Chart.defaults.plugins.tooltip.backgroundColor = 'oklch(20% 0.01 250 / 0.9)'; // --text with opacity
+  Chart.defaults.scale.grid.color = 'oklch(90% 0.01 250 / 0.5)'; // subtle light grid
+}
+
 const map = L.map('map',{zoomControl:true,preferCanvas:true}).setView([-29,-70],5);
 
 const baseMaps = {
-  "Dark (Carto)": L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+  "Light (Carto)": L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
     attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a> © <a href="https://carto.com">CARTO</a>',
     maxZoom:19
   }),
-  "Light (Carto)": L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+  "Voyager (Carto)": L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
     attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a> © <a href="https://carto.com">CARTO</a>',
     maxZoom:19
   }),
@@ -989,13 +1043,31 @@ const baseMaps = {
     attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a> © <a href="https://opentopomap.org">OpenTopoMap</a>',
     maxZoom:17
   }),
-  "Voyager (Carto)": L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
+  "Dark (Carto)": L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
     attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a> © <a href="https://carto.com">CARTO</a>',
     maxZoom:19
   }),
 };
-baseMaps["Dark (Carto)"].addTo(map);
-L.control.layers(baseMaps, null, {position:'topright', collapsed:true}).addTo(map);
+baseMaps["Light (Carto)"].addTo(map);
+L.control.layers(baseMaps, null, {position:'topright', collapsed:false}).addTo(map);
+
+/* Custom style for basemap control */
+const style = document.createElement('style');
+style.innerHTML = `
+  .leaflet-control-layers-expanded {
+    padding: 12px 16px !important;
+    border-radius: 16px !important;
+    border: 1px solid var(--bg4) !important;
+    background: var(--bg) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
+    font-family: inherit !important;
+  }
+  .leaflet-control-layers-list { margin: 0 !important; }
+  .leaflet-control-layers-base label { margin-bottom: 8px !important; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 500; color: var(--text2);}
+  .leaflet-control-layers-base label:last-child { margin-bottom: 0 !important; }
+  .leaflet-control-layers-base input { accent-color: var(--accent); scale: 1.2; cursor: pointer; }
+`;
+document.head.appendChild(style);
 
 const lgs = {
   areasProtegidas: L.featureGroup(),           // áreas protegidas (toggle, off by default)
