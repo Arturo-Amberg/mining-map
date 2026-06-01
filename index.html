@@ -3901,7 +3901,7 @@ Object.keys(PILAR_META).forEach(pid=>{
     .sort((a,b)=>{
       const va = OPT.clusters[a].pillar_scores[key];
       const vb = OPT.clusters[b].pillar_scores[key];
-      return pid==='FM' ? va-vb : vb-va;  // FM: lower=better
+      return vb-va;  // all pillars: higher=better (FM: more friction = rank #1)
     });
   PILAR_RANKS[pid]={};
   sorted.forEach((cid,i)=>{ PILAR_RANKS[pid][cid]=i+1; });
@@ -4002,7 +4002,7 @@ function rebuildPilarMarkers(){
       const d=m.data;
       const rawScore=cl.pillar_scores?.[meta.key]||0;
       const norm=normPilar(pid,rawScore);
-      const r=pid==='FM'?1-norm:norm;
+      const r=norm;
       const sz=Math.round(7+r*8);
       const rank=PILAR_RANKS[pid]?.[cid]||n;
       const icon=L.divIcon({
@@ -4014,7 +4014,7 @@ function rebuildPilarMarkers(){
       const mk=L.marker([d.lat,d.lon],{icon,zIndexOffset:700+Object.keys(PILAR_META).indexOf(pid)*10});
       mk.on('click',(e)=>{L.DomEvent.stopPropagation(e);showPilarScorecard(cid);});
       mk.on('mouseover',(e)=>{
-        const pct=pid==='FM'?Math.round((1-norm)*100):Math.round(norm*100);
+        const pct=Math.round(norm*100);
         showTip(e,`<b style="color:${meta.color}">${pid} · ${meta.label}</b><br>${cl.label||cid}<br>Rank #${rank}/${n} &nbsp; ${pct}%`);
       });
       mk.on('mouseout',()=>hideTip());
@@ -4074,7 +4074,7 @@ function renderPilarInline(pid, cid) {
   
   const rawScore=cl.pillar_scores?.[key]??0;
   const norm=normPilar(pid,rawScore);
-  const pct=pid==='FM'?Math.round((1-norm)*100):Math.round(norm*100);
+  const pct=Math.round(norm*100);
   const rank=PILAR_RANKS[pid]?.[cid]||n;
   const rankMedal=rank===1?'🥇 ':rank===2?'🥈 ':rank===3?'🥉 ':'';
   const rankLabel=`${rankMedal}#${rank}/${n}`;
@@ -4103,9 +4103,9 @@ function renderPilarInline(pid, cid) {
     else if(pct>=40) explain='Potencial moderado: algunos proyectos activos.';
     else explain='Zona madura con poca exploración nueva.';
   } else if(pid==='FM'){
-    if(pct>=70) explain='Baja fricción ambiental → menor resistencia regulatoria.';
+    if(pct>=70) explain='Alta fricción ambiental: relaves activos, rechazos SEIA → riesgo regulatorio elevado.';
     else if(pct>=40) explain='Fricción moderada: pasivos ambientales presentes.';
-    else explain='Alta fricción: relaves activos, rechazos SEIA → riesgo alto.';
+    else explain='Baja fricción ambiental → menor resistencia regulatoria.';
   } else if(pid==='RE'){
     if(pct>=70) explain='Infraestructura abundante (agua, energía, puertos).';
     else if(pct>=40) explain='Recursos parciales: alguna infraestructura disponible.';
@@ -4159,7 +4159,7 @@ function renderPilarInline(pid, cid) {
        const nameTop = clTop.label||cidTop;
        const rawScoreTop = OPT.clusters[cidTop]?.pillar_scores?.[key]??0;
        const normTop = normPilar(pid, rawScoreTop);
-       const pctTop = pid==='FM' ? Math.round((1-normTop)*100) : Math.round(normTop*100);
+       const pctTop = Math.round(normTop*100);
        const isCurrent = (cidTop === cid) ? 'font-weight:700;color:#0f172a;' : '';
        return `<div style="${isCurrent}">${rankTop}. ${nameTop} <span style="float:right;color:${meta.color};font-weight:700">${pctTop}%</span></div>`;
     }).join('');
