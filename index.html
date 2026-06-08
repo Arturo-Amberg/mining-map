@@ -2725,11 +2725,15 @@ function fillClusterDetail(cid){
     window._resActiveTab = tab;
     const btnRec = document.getElementById('res-tab-rec');
     const btnRes = document.getElementById('res-tab-res');
-    if (btnRec && btnRes) {
-      const ON  = 'border:1px solid var(--blue-border);background:var(--blue-tint);color:var(--accent);';
-      const OFF = 'border:1px solid var(--bg4);background:var(--bg);color:var(--text2);';
-      btnRec.style.cssText = btnRec.style.cssText.replace(/border:[^;]+;background:[^;]+;color:[^;]+;/, tab==='rec'?ON:OFF);
-      btnRes.style.cssText = btnRes.style.cssText.replace(/border:[^;]+;background:[^;]+;color:[^;]+;/, tab==='res'?ON:OFF);
+    if (btnRec) {
+      btnRec.style.background   = tab==='rec' ? 'var(--blue-tint)' : 'var(--bg)';
+      btnRec.style.borderColor  = tab==='rec' ? 'var(--blue-border)' : 'var(--bg4)';
+      btnRec.style.color        = tab==='rec' ? 'var(--accent)' : 'var(--text2)';
+    }
+    if (btnRes) {
+      btnRes.style.background   = tab==='res' ? 'var(--blue-tint)' : 'var(--bg)';
+      btnRes.style.borderColor  = tab==='res' ? 'var(--blue-border)' : 'var(--bg4)';
+      btnRes.style.color        = tab==='res' ? 'var(--accent)' : 'var(--text2)';
     }
     renderResPanel(tab);
   };
