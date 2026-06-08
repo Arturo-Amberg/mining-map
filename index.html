@@ -664,9 +664,17 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 
       <!-- ── 5. FAENAS DEL CLÚSTER ──────────────────────────────────────── -->
 
-      <!-- ── RESERVAS DE COBRE (SERNAGEOMIN) ──────────────────────────── -->
-      <div class="sec" id="sec-reservas">Reservas de Cobre
-        <span id="reserves-total-badge" style="margin-left:auto;font-size:10px;font-weight:600;color:var(--accent)"></span>
+      <!-- ── RECURSOS Y RESERVAS DE COBRE (SERNAGEOMIN) ───────────────── -->
+      <div class="sec" id="sec-reservas">Recursos y Reservas Cu</div>
+      <div id="reserves-tabs" style="display:flex;gap:5px;margin-bottom:8px">
+        <button id="res-tab-rec" onclick="switchResTab('rec')"
+          style="flex:1;padding:5px 0;border-radius:8px;border:1px solid var(--blue-border);
+                 background:var(--blue-tint);color:var(--accent);font-size:11px;font-weight:600;
+                 cursor:pointer;font-family:inherit">Recursos</button>
+        <button id="res-tab-res" onclick="switchResTab('res')"
+          style="flex:1;padding:5px 0;border-radius:8px;border:1px solid var(--bg4);
+                 background:var(--bg);color:var(--text2);font-size:11px;font-weight:600;
+                 cursor:pointer;font-family:inherit">Reservas</button>
       </div>
       <div id="reserves-panel" style="margin-bottom:8px"></div>
 
@@ -2702,53 +2710,79 @@ function fillClusterDetail(cid){
 
   // ── Recursos y Reservas de Cobre (SERNAGEOMIN) ──────────────────────────
   const _resCu = cl.reserves_cu || {total_rec_mt:0, total_res_mt:0, deposits:[]};
-  const _resSec        = document.getElementById('sec-reservas');
-  const _resPanel      = document.getElementById('reserves-panel');
-  const _resTotalBadge = document.getElementById('reserves-total-badge');
+  const _resSec = document.getElementById('sec-reservas');
+  const _resTabs = document.getElementById('reserves-tabs');
+  const _resPanel = document.getElementById('reserves-panel');
   const _hasRes = _resCu.total_rec_mt > 0 || _resCu.total_res_mt > 0;
-  if (_resSec)        _resSec.style.display        = _hasRes ? '' : 'none';
-  if (_resPanel)      _resPanel.style.display      = _hasRes ? '' : 'none';
-  if (_resTotalBadge) _resTotalBadge.textContent   = _hasRes
-    ? `Rec: ${_resCu.total_rec_mt.toFixed(1)} Mt · Res: ${_resCu.total_res_mt.toFixed(1)} Mt`
-    : '';
-  if (_resPanel && _resCu.deposits && _resCu.deposits.length > 0) {
-    const _maxCu = Math.max(..._resCu.deposits.map(d=>d.rec_mt||0), 1);
-    _resPanel.innerHTML = _resCu.deposits.map(dep => {
-      const barW   = Math.round((dep.rec_mt||0) / _maxCu * 100);
-      const barW2  = dep.rec_mt > 0 ? Math.round((dep.res_mt||0) / dep.rec_mt * 100) : 0;
-      const recLey = dep.rec_ley != null ? ` @ ${dep.rec_ley}%` : '';
-      const resLey = dep.res_ley != null ? ` @ ${dep.res_ley}%` : '';
-      const recStr = dep.rec_mt > 0 ? `${dep.rec_mt.toFixed(1)} Mt${recLey}` : '—';
-      const resStr = dep.res_mt > 0 ? `${dep.res_mt.toFixed(1)} Mt${resLey}` : '—';
-      return `<div style="margin-bottom:9px;padding:7px 8px;background:var(--bg);border-radius:8px;border:1px solid var(--sep)">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
+  if (_resSec)  _resSec.style.display  = _hasRes ? '' : 'none';
+  if (_resTabs) _resTabs.style.display = _hasRes ? '' : 'none';
+  if (_resPanel) _resPanel.style.display = _hasRes ? '' : 'none';
+
+  window._resDepData = _resCu.deposits || [];
+  window._resActiveTab = window._resActiveTab || 'rec';
+
+  window.switchResTab = function(tab) {
+    window._resActiveTab = tab;
+    const btnRec = document.getElementById('res-tab-rec');
+    const btnRes = document.getElementById('res-tab-res');
+    if (btnRec && btnRes) {
+      const ON  = 'border:1px solid var(--blue-border);background:var(--blue-tint);color:var(--accent);';
+      const OFF = 'border:1px solid var(--bg4);background:var(--bg);color:var(--text2);';
+      btnRec.style.cssText = btnRec.style.cssText.replace(/border:[^;]+;background:[^;]+;color:[^;]+;/, tab==='rec'?ON:OFF);
+      btnRes.style.cssText = btnRes.style.cssText.replace(/border:[^;]+;background:[^;]+;color:[^;]+;/, tab==='res'?ON:OFF);
+    }
+    renderResPanel(tab);
+  };
+
+  window.renderResPanel = function(tab) {
+    const panel = document.getElementById('reserves-panel');
+    if (!panel) return;
+    const deps = window._resDepData;
+    const isRec = tab === 'rec';
+    const key   = isRec ? 'rec_mt' : 'res_mt';
+    const leyKey = isRec ? 'rec_ley' : 'res_ley';
+    const tonKey = isRec ? 'rec_ton' : 'res_ton';
+    const label  = isRec ? 'Recursos' : 'Reservas';
+    const total  = isRec ? _resCu.total_rec_mt : _resCu.total_res_mt;
+
+    const filtered = deps.filter(d => (d[key]||0) > 0);
+    if (filtered.length === 0) {
+      panel.innerHTML = `<div style="font-size:11px;color:var(--text3);padding:8px 4px;font-style:italic">Sin datos de ${label.toLowerCase()} reportados</div>`;
+      return;
+    }
+
+    const maxVal = Math.max(...filtered.map(d => d[key]), 1);
+    panel.innerHTML = filtered.map(dep => {
+      const val    = dep[key] || 0;
+      const ley    = dep[leyKey];
+      const ton    = dep[tonKey];
+      const barW   = Math.round(val / maxVal * 100);
+      const leyStr = ley != null ? `<span style="font-size:10px;color:var(--text2)"> @ ${ley}% Cu</span>` : '';
+      const tonStr = ton != null ? `<span style="font-size:10px;color:var(--text3)"> · ${ton.toLocaleString()} Mt mineral</span>` : '';
+      return `<div style="margin-bottom:7px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px">
           <span style="font-size:11px;font-weight:600;color:var(--text)">${dep.name}</span>
           <span style="font-size:9px;color:var(--text3)">${dep.dist_km} km</span>
         </div>
-        <div style="display:grid;grid-template-columns:56px 1fr;gap:2px 6px;font-size:10px;margin-bottom:4px">
-          <span style="color:var(--text3);font-weight:600">Recursos</span>
-          <span style="color:var(--text);font-weight:600">${recStr}</span>
-          <span style="color:var(--text3);font-weight:600">Reservas</span>
-          <span style="color:${dep.res_mt>0?'var(--accent)':'var(--text3)'};">${resStr}</span>
+        <div style="font-size:11px;font-weight:700;color:var(--accent);margin-bottom:3px">
+          ${val.toFixed(1)} Mt Cu${leyStr}${tonStr}
         </div>
-        <div style="height:4px;border-radius:2px;background:var(--bg3);overflow:hidden;margin-bottom:2px">
-          <div style="height:100%;border-radius:2px;background:var(--accent);opacity:0.45;width:${barW}%"></div>
-        </div>
-        <div style="height:4px;border-radius:2px;background:var(--bg3);overflow:hidden">
-          <div style="height:100%;border-radius:2px;background:var(--accent);width:${barW2}%"></div>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:2px;font-size:9px;color:var(--text3)">
-          <span>▒ Recursos</span><span>█ Reservas</span>
+        <div style="height:6px;border-radius:3px;background:var(--bg3);overflow:hidden">
+          <div style="height:100%;border-radius:3px;background:var(--accent);width:${barW}%"></div>
         </div>
       </div>`;
     }).join('') +
-    `<div style="font-size:10px;color:var(--text3);margin-top:4px;padding:5px 6px;background:var(--bg2);border-radius:6px;line-height:1.5">
-      <b>Recursos</b> = base geológica total (incluye reservas) · <b>Reservas</b> = subconjunto económicamente explotable<br>
-      Fuente: SERNAGEOMIN EMC
+    `<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text2);
+                 margin-top:6px;padding-top:6px;border-top:1px solid var(--sep)">
+      <span>Total ${label}: <b style="color:var(--text)">${total.toFixed(1)} Mt Cu</b></span>
+      <span style="color:var(--text3);font-style:italic">SERNAGEOMIN EMC</span>
     </div>`;
-  }
+  };
+
+  if (_hasRes) renderResPanel(window._resActiveTab || 'rec');
 
   const fList=document.getElementById('faena-list-det');
+
   fList.innerHTML='';
   fSorted.forEach(f=>{
     const ec=RAW.config.estado_colors[f.estado]||'#6b7280';
